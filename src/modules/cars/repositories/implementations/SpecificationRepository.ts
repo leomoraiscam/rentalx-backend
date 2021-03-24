@@ -16,9 +16,9 @@ class SpecificationsRepository implements ISpecificationRepository {
   }
 
   async findByName(name: string): Promise<Specification> {
-    const specificationAlredyExist = this.repository.findOne({ name });
+    const specification = await this.repository.findOne({ name });
 
-    return specificationAlredyExist;
+    return specification;
   }
 
   async create({ name, description }: ICreateSpecificationDTO): Promise<void> {
