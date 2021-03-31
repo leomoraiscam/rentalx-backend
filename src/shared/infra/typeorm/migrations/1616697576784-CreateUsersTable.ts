@@ -17,7 +17,7 @@ export default class CreateUsersTable1616697576784
             type: 'varchar',
           },
           {
-            name: 'usernam  ',
+            name: 'username',
             type: 'varchar',
             isUnique: true,
           },
