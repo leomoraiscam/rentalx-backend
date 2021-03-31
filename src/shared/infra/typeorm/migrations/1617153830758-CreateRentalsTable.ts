@@ -28,6 +28,7 @@ export default class CreateRentalsTable1617153830758
           {
             name: 'end_date',
             type: 'timestamp',
+            isNullable: true,
           },
           {
             name: 'expected_return_date',
@@ -36,6 +37,7 @@ export default class CreateRentalsTable1617153830758
           {
             name: 'total',
             type: 'numeric',
+            isNullable: true,
           },
           {
             name: 'created_at',
