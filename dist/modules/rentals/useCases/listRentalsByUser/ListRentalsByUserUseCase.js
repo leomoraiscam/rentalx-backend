@@ -7,7 +7,7 @@ exports.default = void 0;
 
 var _tsyringe = require("tsyringe");
 
-var _IRentalsRepository = _interopRequireDefault(require("@modules/rentals/repositories/IRentalsRepository"));
+var _IRentalsRepository = _interopRequireDefault(require("../../repositories/IRentalsRepository"));
 
 var _dec, _dec2, _dec3, _dec4, _class;
 

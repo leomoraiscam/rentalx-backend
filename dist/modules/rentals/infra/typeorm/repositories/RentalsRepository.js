@@ -7,7 +7,7 @@ exports.default = void 0;
 
 var _typeorm = require("typeorm");
 
-var _Rentals = _interopRequireDefault(require("@modules/rentals/infra/typeorm/entities/Rentals"));
+var _Rentals = _interopRequireDefault(require("../entities/Rentals"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

@@ -11,7 +11,7 @@ var _fs = _interopRequireDefault(require("fs"));
 
 var _tsyringe = require("tsyringe");
 
-var _ICategoriesRepository = _interopRequireDefault(require("@modules/cars/repositories/ICategoriesRepository"));
+var _ICategoriesRepository = _interopRequireDefault(require("../../repositories/ICategoriesRepository"));
 
 var _dec, _dec2, _dec3, _dec4, _class;
 

@@ -7,7 +7,7 @@ exports.default = void 0;
 
 var _typeorm = require("typeorm");
 
-var _Category = _interopRequireDefault(require("@modules/cars/infra/typeorm/entities/Category"));
+var _Category = _interopRequireDefault(require("../entities/Category"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

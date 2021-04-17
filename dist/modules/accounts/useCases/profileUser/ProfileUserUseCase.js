@@ -7,9 +7,9 @@ exports.default = void 0;
 
 var _tsyringe = require("tsyringe");
 
-var _UserMap = _interopRequireDefault(require("@modules/accounts/mapper/UserMap"));
+var _UserMap = _interopRequireDefault(require("../../mapper/UserMap"));
 
-var _IUsersRepository = _interopRequireDefault(require("@modules/accounts/repositories/IUsersRepository"));
+var _IUsersRepository = _interopRequireDefault(require("../../repositories/IUsersRepository"));
 
 var _dec, _dec2, _dec3, _dec4, _class;
 

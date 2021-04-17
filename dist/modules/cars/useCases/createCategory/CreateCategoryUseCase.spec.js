@@ -1,8 +1,8 @@
 "use strict";
 
-var _CategoriesRepositoryInMemory = _interopRequireDefault(require("@modules/cars/repositories/in-memory/CategoriesRepositoryInMemory"));
+var _CategoriesRepositoryInMemory = _interopRequireDefault(require("../../repositories/in-memory/CategoriesRepositoryInMemory"));
 
-var _AppError = _interopRequireDefault(require("@shared/errors/AppError"));
+var _AppError = _interopRequireDefault(require("../../../../shared/errors/AppError"));
 
 var _CreateCategoryUseCase = _interopRequireDefault(require("./CreateCategoryUseCase"));
 

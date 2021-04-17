@@ -7,7 +7,7 @@ exports.default = void 0;
 
 var _express = require("express");
 
-var _CreateSpecificationController = _interopRequireDefault(require("@modules/cars/useCases/createSpecification/CreateSpecificationController"));
+var _CreateSpecificationController = _interopRequireDefault(require("../../../../modules/cars/useCases/createSpecification/CreateSpecificationController"));
 
 var _ensureAuthenticated = _interopRequireDefault(require("../middlewares/ensureAuthenticated"));
 

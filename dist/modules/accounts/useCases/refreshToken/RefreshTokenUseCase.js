@@ -9,11 +9,11 @@ var _jsonwebtoken = require("jsonwebtoken");
 
 var _tsyringe = require("tsyringe");
 
-var _auth = _interopRequireDefault(require("@config/auth"));
+var _auth = _interopRequireDefault(require("../../../../config/auth"));
 
-var _IDateProvider = _interopRequireDefault(require("@shared/container/providers/DateProvider/IDateProvider"));
+var _IDateProvider = _interopRequireDefault(require("../../../../shared/container/providers/DateProvider/IDateProvider"));
 
-var _AppError = _interopRequireDefault(require("@shared/errors/AppError"));
+var _AppError = _interopRequireDefault(require("../../../../shared/errors/AppError"));
 
 var _IUsersTokensRepository = _interopRequireDefault(require("../../repositories/IUsersTokensRepository"));
 

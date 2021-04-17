@@ -7,7 +7,7 @@ exports.default = void 0;
 
 var _tsyringe = require("tsyringe");
 
-var _ICarsRepository = _interopRequireDefault(require("@modules/cars/repositories/ICarsRepository"));
+var _ICarsRepository = _interopRequireDefault(require("../../repositories/ICarsRepository"));
 
 var _dec, _dec2, _dec3, _dec4, _class;
 

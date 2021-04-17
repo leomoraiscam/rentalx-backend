@@ -7,7 +7,7 @@ exports.default = void 0;
 
 var _tsyringe = require("tsyringe");
 
-var _AppError = _interopRequireDefault(require("@shared/errors/AppError"));
+var _AppError = _interopRequireDefault(require("../../../../shared/errors/AppError"));
 
 var _ICarsRepository = _interopRequireDefault(require("../../repositories/ICarsRepository"));
 

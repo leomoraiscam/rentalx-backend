@@ -9,13 +9,13 @@ var _bcryptjs = require("bcryptjs");
 
 var _tsyringe = require("tsyringe");
 
-var _IUsersRepository = _interopRequireDefault(require("@modules/accounts/repositories/IUsersRepository"));
+var _IUsersRepository = _interopRequireDefault(require("../../repositories/IUsersRepository"));
 
-var _IUsersTokensRepository = _interopRequireDefault(require("@modules/accounts/repositories/IUsersTokensRepository"));
+var _IUsersTokensRepository = _interopRequireDefault(require("../../repositories/IUsersTokensRepository"));
 
-var _IDateProvider = _interopRequireDefault(require("@shared/container/providers/DateProvider/IDateProvider"));
+var _IDateProvider = _interopRequireDefault(require("../../../../shared/container/providers/DateProvider/IDateProvider"));
 
-var _AppError = _interopRequireDefault(require("@shared/errors/AppError"));
+var _AppError = _interopRequireDefault(require("../../../../shared/errors/AppError"));
 
 var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _class;
 

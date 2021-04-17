@@ -1,14 +1,14 @@
 "use strict";
 
-var _UsersRepositoryInMemory = _interopRequireDefault(require("@modules/accounts/repositories/in-memory/UsersRepositoryInMemory"));
+var _UsersRepositoryInMemory = _interopRequireDefault(require("../../repositories/in-memory/UsersRepositoryInMemory"));
 
-var _UsersTokensRepositoryInMemory = _interopRequireDefault(require("@modules/accounts/repositories/in-memory/UsersTokensRepositoryInMemory"));
+var _UsersTokensRepositoryInMemory = _interopRequireDefault(require("../../repositories/in-memory/UsersTokensRepositoryInMemory"));
 
-var _DayjsDateProvider = _interopRequireDefault(require("@shared/container/providers/DateProvider/implementations/DayjsDateProvider"));
+var _DayjsDateProvider = _interopRequireDefault(require("../../../../shared/container/providers/DateProvider/implementations/DayjsDateProvider"));
 
-var _MailProviderInMemory = _interopRequireDefault(require("@shared/container/providers/MailProvider/in-memory/MailProviderInMemory"));
+var _MailProviderInMemory = _interopRequireDefault(require("../../../../shared/container/providers/MailProvider/in-memory/MailProviderInMemory"));
 
-var _AppError = _interopRequireDefault(require("@shared/errors/AppError"));
+var _AppError = _interopRequireDefault(require("../../../../shared/errors/AppError"));
 
 var _SendForgotPasswordMailUseCase = _interopRequireDefault(require("./SendForgotPasswordMailUseCase"));
 

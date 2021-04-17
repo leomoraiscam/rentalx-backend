@@ -2,11 +2,11 @@
 
 var _dayjs = _interopRequireDefault(require("dayjs"));
 
-var _CarsRepositoryInMemory = _interopRequireDefault(require("@modules/cars/repositories/in-memory/CarsRepositoryInMemory"));
+var _CarsRepositoryInMemory = _interopRequireDefault(require("../../../cars/repositories/in-memory/CarsRepositoryInMemory"));
 
-var _DayjsDateProvider = _interopRequireDefault(require("@shared/container/providers/DateProvider/implementations/DayjsDateProvider"));
+var _DayjsDateProvider = _interopRequireDefault(require("../../../../shared/container/providers/DateProvider/implementations/DayjsDateProvider"));
 
-var _AppError = _interopRequireDefault(require("@shared/errors/AppError"));
+var _AppError = _interopRequireDefault(require("../../../../shared/errors/AppError"));
 
 var _RentalsRepositoryInMemory = _interopRequireDefault(require("../../repositories/in-Memory/RentalsRepositoryInMemory"));
 

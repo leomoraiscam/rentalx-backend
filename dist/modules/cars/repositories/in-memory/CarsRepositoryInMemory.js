@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _Car = _interopRequireDefault(require("@modules/cars/infra/typeorm/entities/Car"));
+var _Car = _interopRequireDefault(require("../../infra/typeorm/entities/Car"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

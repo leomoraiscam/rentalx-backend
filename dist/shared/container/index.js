@@ -2,21 +2,21 @@
 
 var _tsyringe = require("tsyringe");
 
-require("@shared/container/providers");
+require("./providers");
 
-var _UsersRepository = _interopRequireDefault(require("@modules/accounts/infra/typeorm/repositories/UsersRepository"));
+var _UsersRepository = _interopRequireDefault(require("../../modules/accounts/infra/typeorm/repositories/UsersRepository"));
 
-var _UsersTokensRepository = _interopRequireDefault(require("@modules/accounts/infra/typeorm/repositories/UsersTokensRepository"));
+var _UsersTokensRepository = _interopRequireDefault(require("../../modules/accounts/infra/typeorm/repositories/UsersTokensRepository"));
 
-var _CarsRepository = _interopRequireDefault(require("@modules/cars//infra/typeorm/repositories/CarsRepository"));
+var _CarsRepository = _interopRequireDefault(require("../../modules/cars/infra/typeorm/repositories/CarsRepository"));
 
-var _SpecificationRepository = _interopRequireDefault(require("@modules/cars//infra/typeorm/repositories/SpecificationRepository"));
+var _SpecificationRepository = _interopRequireDefault(require("../../modules/cars/infra/typeorm/repositories/SpecificationRepository"));
 
-var _CarsImagesRepository = _interopRequireDefault(require("@modules/cars/infra/typeorm/repositories/CarsImagesRepository"));
+var _CarsImagesRepository = _interopRequireDefault(require("../../modules/cars/infra/typeorm/repositories/CarsImagesRepository"));
 
-var _CategoriesRepository = _interopRequireDefault(require("@modules/cars/infra/typeorm/repositories/CategoriesRepository"));
+var _CategoriesRepository = _interopRequireDefault(require("../../modules/cars/infra/typeorm/repositories/CategoriesRepository"));
 
-var _RentalsRepository = _interopRequireDefault(require("@modules/rentals/infra/typeorm/repositories/RentalsRepository"));
+var _RentalsRepository = _interopRequireDefault(require("../../modules/rentals/infra/typeorm/repositories/RentalsRepository"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

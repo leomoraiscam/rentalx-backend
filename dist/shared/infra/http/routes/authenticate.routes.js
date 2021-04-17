@@ -7,9 +7,9 @@ exports.default = void 0;
 
 var _express = require("express");
 
-var _AuthenticatedUserController = _interopRequireDefault(require("@modules/accounts/useCases/authenticateUser/AuthenticatedUserController"));
+var _AuthenticatedUserController = _interopRequireDefault(require("../../../../modules/accounts/useCases/authenticateUser/AuthenticatedUserController"));
 
-var _RefreshTokenController = _interopRequireDefault(require("@modules/accounts/useCases/refreshToken/RefreshTokenController"));
+var _RefreshTokenController = _interopRequireDefault(require("../../../../modules/accounts/useCases/refreshToken/RefreshTokenController"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

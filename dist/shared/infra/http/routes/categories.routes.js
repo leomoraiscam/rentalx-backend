@@ -9,11 +9,11 @@ var _express = require("express");
 
 var _multer = _interopRequireDefault(require("multer"));
 
-var _CreateCategoryController = _interopRequireDefault(require("@modules/cars/useCases/createCategory/CreateCategoryController"));
+var _CreateCategoryController = _interopRequireDefault(require("../../../../modules/cars/useCases/createCategory/CreateCategoryController"));
 
-var _importCategoryController = _interopRequireDefault(require("@modules/cars/useCases/importCategory/importCategoryController"));
+var _importCategoryController = _interopRequireDefault(require("../../../../modules/cars/useCases/importCategory/importCategoryController"));
 
-var _ListCategoriesController = _interopRequireDefault(require("@modules/cars/useCases/listCategories/ListCategoriesController"));
+var _ListCategoriesController = _interopRequireDefault(require("../../../../modules/cars/useCases/listCategories/ListCategoriesController"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

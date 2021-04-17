@@ -7,7 +7,7 @@ exports.default = void 0;
 
 var _typeorm = require("typeorm");
 
-var _User = _interopRequireDefault(require("@modules/accounts/infra/typeorm/entities/User"));
+var _User = _interopRequireDefault(require("../entities/User"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

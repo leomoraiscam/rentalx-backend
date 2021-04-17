@@ -7,11 +7,11 @@ exports.default = ensureAuthenticated;
 
 var _jsonwebtoken = require("jsonwebtoken");
 
-var _auth = _interopRequireDefault(require("@config/auth"));
+var _auth = _interopRequireDefault(require("../../../../config/auth"));
 
-var _UsersTokensRepository = _interopRequireDefault(require("@modules/accounts/infra/typeorm/repositories/UsersTokensRepository"));
+var _UsersTokensRepository = _interopRequireDefault(require("../../../../modules/accounts/infra/typeorm/repositories/UsersTokensRepository"));
 
-var _AppError = _interopRequireDefault(require("@shared/errors/AppError"));
+var _AppError = _interopRequireDefault(require("../../../errors/AppError"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

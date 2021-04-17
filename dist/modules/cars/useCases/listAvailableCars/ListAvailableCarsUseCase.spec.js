@@ -1,6 +1,6 @@
 "use strict";
 
-var _CarsRepositoryInMemory = _interopRequireDefault(require("@modules/cars/repositories/in-memory/CarsRepositoryInMemory"));
+var _CarsRepositoryInMemory = _interopRequireDefault(require("../../repositories/in-memory/CarsRepositoryInMemory"));
 
 var _ListAvailableCarsUseCase = _interopRequireDefault(require("./ListAvailableCarsUseCase"));
 

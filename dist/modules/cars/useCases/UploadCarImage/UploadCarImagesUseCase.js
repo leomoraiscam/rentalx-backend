@@ -7,9 +7,9 @@ exports.default = void 0;
 
 var _tsyringe = require("tsyringe");
 
-var _ICarsImagesRepository = _interopRequireDefault(require("@modules/cars/repositories/ICarsImagesRepository"));
+var _ICarsImagesRepository = _interopRequireDefault(require("../../repositories/ICarsImagesRepository"));
 
-var _IStorageProvider = _interopRequireDefault(require("@shared/container/providers/StorageProvider/IStorageProvider"));
+var _IStorageProvider = _interopRequireDefault(require("../../../../shared/container/providers/StorageProvider/IStorageProvider"));
 
 var _dec, _dec2, _dec3, _dec4, _dec5, _class;
 

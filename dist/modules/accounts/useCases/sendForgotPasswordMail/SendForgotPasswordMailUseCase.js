@@ -11,15 +11,15 @@ var _tsyringe = require("tsyringe");
 
 var _uuid = require("uuid");
 
-var _IUsersRepository = _interopRequireDefault(require("@modules/accounts/repositories/IUsersRepository"));
+var _IUsersRepository = _interopRequireDefault(require("../../repositories/IUsersRepository"));
 
-var _IUsersTokensRepository = _interopRequireDefault(require("@modules/accounts/repositories/IUsersTokensRepository"));
+var _IUsersTokensRepository = _interopRequireDefault(require("../../repositories/IUsersTokensRepository"));
 
-var _IDateProvider = _interopRequireDefault(require("@shared/container/providers/DateProvider/IDateProvider"));
+var _IDateProvider = _interopRequireDefault(require("../../../../shared/container/providers/DateProvider/IDateProvider"));
 
-var _IMailProvider = _interopRequireDefault(require("@shared/container/providers/MailProvider/IMailProvider"));
+var _IMailProvider = _interopRequireDefault(require("../../../../shared/container/providers/MailProvider/IMailProvider"));
 
-var _AppError = _interopRequireDefault(require("@shared/errors/AppError"));
+var _AppError = _interopRequireDefault(require("../../../../shared/errors/AppError"));
 
 var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _class;
 

@@ -7,9 +7,9 @@ exports.default = void 0;
 
 var _tsyringe = require("tsyringe");
 
-var _ICategoriesRepository = _interopRequireDefault(require("@modules/cars/repositories/ICategoriesRepository"));
+var _ICategoriesRepository = _interopRequireDefault(require("../../repositories/ICategoriesRepository"));
 
-var _AppError = _interopRequireDefault(require("@shared/errors/AppError"));
+var _AppError = _interopRequireDefault(require("../../../../shared/errors/AppError"));
 
 var _dec, _dec2, _dec3, _dec4, _class;
 

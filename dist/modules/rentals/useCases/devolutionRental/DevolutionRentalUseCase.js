@@ -7,13 +7,13 @@ exports.default = void 0;
 
 var _tsyringe = require("tsyringe");
 
-var _ICarsRepository = _interopRequireDefault(require("@modules/cars/repositories/ICarsRepository"));
+var _ICarsRepository = _interopRequireDefault(require("../../../cars/repositories/ICarsRepository"));
 
-var _IRentalsRepository = _interopRequireDefault(require("@modules/rentals/repositories/IRentalsRepository"));
+var _IRentalsRepository = _interopRequireDefault(require("../../repositories/IRentalsRepository"));
 
-var _IDateProvider = _interopRequireDefault(require("@shared/container/providers/DateProvider/IDateProvider"));
+var _IDateProvider = _interopRequireDefault(require("../../../../shared/container/providers/DateProvider/IDateProvider"));
 
-var _AppError = _interopRequireDefault(require("@shared/errors/AppError"));
+var _AppError = _interopRequireDefault(require("../../../../shared/errors/AppError"));
 
 var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _class;
 

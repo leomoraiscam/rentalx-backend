@@ -9,13 +9,13 @@ var _express = require("express");
 
 var _multer = _interopRequireDefault(require("multer"));
 
-var _upload = _interopRequireDefault(require("@config/upload"));
+var _upload = _interopRequireDefault(require("../../../../config/upload"));
 
-var _CreateUserController = _interopRequireDefault(require("@modules/accounts/useCases/createUser/CreateUserController"));
+var _CreateUserController = _interopRequireDefault(require("../../../../modules/accounts/useCases/createUser/CreateUserController"));
 
-var _ProfileUserController = _interopRequireDefault(require("@modules/accounts/useCases/profileUser/ProfileUserController"));
+var _ProfileUserController = _interopRequireDefault(require("../../../../modules/accounts/useCases/profileUser/ProfileUserController"));
 
-var _UpdateUserAvatarController = _interopRequireDefault(require("@modules/accounts/useCases/updateUserAvatar/UpdateUserAvatarController"));
+var _UpdateUserAvatarController = _interopRequireDefault(require("../../../../modules/accounts/useCases/updateUserAvatar/UpdateUserAvatarController"));
 
 var _ensureAuthenticated = _interopRequireDefault(require("../middlewares/ensureAuthenticated"));
 
