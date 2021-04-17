@@ -1,6 +1,9 @@
 node_modules
+.vscode
 coverage
 dist
+tmp/*
+!tmp/.gitkeep
 
 readme.md
 
