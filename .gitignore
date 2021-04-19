@@ -8,3 +8,4 @@ tmp/*
 readme.md
 
 .env
+ormconfig.json
