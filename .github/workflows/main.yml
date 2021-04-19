@@ -44,14 +44,14 @@ jobs:
             yarn 
       
       - name: Run migrations on AWS and production script
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        port: ${{ secrets.SSH_PORT }}
-        key: ${{secrets.SSH_KEY}}
-        script: |
-          cd ~/repositories/rentalx-backend
-          yarn
-          yarn typeorm migration:run
-          pm2 restart rentx
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{secrets.SSH_KEY}}
+          script: |
+            cd ~/repositories/rentalx-backend
+            yarn
+            yarn typeorm migration:run
+            pm2 restart rentx
