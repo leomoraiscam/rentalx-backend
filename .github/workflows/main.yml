@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Setup Node.js
+      - name: Setup Node.js Environment
         uses: actions/setup-node@v2
         with:
           node-version: 12.x
@@ -19,7 +19,7 @@ jobs:
       - name: Install Depedencies 
         run: yarn
         
-      - name: Build
+      - name: Run Build
         run: yarn build
         
       - name: Copy dist to AWS
@@ -31,3 +31,27 @@ jobs:
           key: ${{secrets.SSH_KEY}}
           source: ".,!node_modules"
           target: "~/repositories/rentalx-backend"
+
+      - name: Install dependences on AWS 
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{secrets.SSH_KEY}}
+        script: |
+          cd ~/repositories/rentalx-backend
+          yarn 
+      
+       - name: Run migrations on AWS and production script
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{secrets.SSH_KEY}}
+          script: |
+            cd ~/repositories/rentalx-backend
+            yarn
+            yarn typeorm migration:run
+            pm2 restart rentx
