@@ -39,9 +39,9 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           port: ${{ secrets.SSH_PORT }}
           key: ${{secrets.SSH_KEY}}
-        script: |
-          cd ~/repositories/rentalx-backend
-          yarn 
+          script: |
+            cd ~/repositories/rentalx-backend
+            yarn 
       
        - name: Run migrations on AWS and production script
         uses: appleboy/ssh-action@master
