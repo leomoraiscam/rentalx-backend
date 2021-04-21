@@ -14,11 +14,15 @@ services:
     volumes:
       - pgdata:/data/postgres
     command: -p 5454
+    networks:
+      - rentx_env_nw
 
   redis:
     image: redis:alpine
     ports: 
       - 6379:6379
+    networks:
+      - rentx_env_nw
 
   app:
     build: .
@@ -33,7 +37,13 @@ services:
       - database
     depends_on:
       - database
+      - redis
+    networks:
+      - rentx_env_nw
 
 volumes:
   pgdata:
     driver: local
+
+networks:
+  rentx_env_nw:
