@@ -1,6 +1,6 @@
 import { Connection, createConnection, getConnectionOptions } from 'typeorm';
 
-export default async (host = 'database'): Promise<Connection> => {
+export default async (host = process.env.PG_HOST): Promise<Connection> => {
   const defaultOptions = await getConnectionOptions();
 
   return createConnection(
