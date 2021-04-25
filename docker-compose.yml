@@ -46,4 +46,4 @@ volumes:
     driver: local
 
 networks:
-  rentx_env_nw:
+  rentx_env_nw: 

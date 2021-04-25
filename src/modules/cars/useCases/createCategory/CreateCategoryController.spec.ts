@@ -1,4 +1,5 @@
 import { hash } from 'bcryptjs';
+import redis from 'redis';
 import request from 'supertest';
 import { Connection } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
@@ -7,6 +8,7 @@ import app from '@shared/infra/http/app';
 import createConnection from '@shared/infra/typeorm';
 
 let connection: Connection;
+let redisVar: redis.RedisClient;
 
 describe('Create Category Controller', () => {
   beforeAll(async () => {

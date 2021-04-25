@@ -7,7 +7,7 @@ exports.default = void 0;
 
 var _typeorm = require("typeorm");
 
-var _default = async (host = 'database') => {
+var _default = async (host = process.env.PG_HOST) => {
   const defaultOptions = await (0, _typeorm.getConnectionOptions)();
   return (0, _typeorm.createConnection)(Object.assign(defaultOptions, {
     host: process.env.NODE_ENV === 'test' ? 'localhost' : host,
