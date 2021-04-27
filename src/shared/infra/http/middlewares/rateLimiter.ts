@@ -5,7 +5,7 @@ import redis from 'redis';
 import AppError from '@shared/errors/AppError';
 
 const redisClient = redis.createClient({
-  host: process.env.REDIS_HOST,
+  host: process.env.NODE_ENV === 'test' ? 'localhost' : process.env.REDIS_HOST,
   port: Number(process.env.REDIS_PORT),
   password: process.env.REDIS_PASS || undefined,
 });
@@ -23,10 +23,14 @@ export default async function reateLimiter(
   next: NextFunction
 ): Promise<void> {
   try {
-    await limiter.consume(request.ip);
+    if (process.env.NODE_ENV !== 'test') {
+      await limiter.consume(request.ip);
+    }
 
     return next();
   } catch (error) {
     throw new AppError('To many requests', 429);
   }
 }
+
+export { redisClient };

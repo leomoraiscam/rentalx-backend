@@ -4,6 +4,7 @@ import { Connection } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 
 import app from '@shared/infra/http/app';
+import { redisClient } from '@shared/infra/http/middlewares/rateLimiter';
 import createConnection from '@shared/infra/typeorm';
 
 let connection: Connection;
@@ -44,6 +45,7 @@ describe('List Category Controller', () => {
   afterAll(async () => {
     await connection.dropDatabase();
     await connection.close();
+    redisClient.quit();
   });
 
   it('should be able list all categories', async () => {

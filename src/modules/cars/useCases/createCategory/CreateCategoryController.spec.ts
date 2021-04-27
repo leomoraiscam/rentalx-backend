@@ -1,14 +1,13 @@
 import { hash } from 'bcryptjs';
-import redis from 'redis';
 import request from 'supertest';
 import { Connection } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 
 import app from '@shared/infra/http/app';
+import { redisClient } from '@shared/infra/http/middlewares/rateLimiter';
 import createConnection from '@shared/infra/typeorm';
 
 let connection: Connection;
-let redisVar: redis.RedisClient;
 
 describe('Create Category Controller', () => {
   beforeAll(async () => {
@@ -46,6 +45,7 @@ describe('Create Category Controller', () => {
   afterAll(async () => {
     await connection.dropDatabase();
     await connection.close();
+    redisClient.quit();
   });
 
   it('should be able create a new category in db', async () => {
