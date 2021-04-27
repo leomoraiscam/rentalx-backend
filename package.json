@@ -8,7 +8,7 @@
     "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/shared/infra/http/server.ts",
     "typeorm": "ts-node-dev -r tsconfig-paths/register ./node_modules/typeorm/cli",
     "seed:admin": "ts-node-dev -r tsconfig-paths/register src/shared/infra/typeorm/seed/admin.ts",
-    "db:test": "ts-node-dev -r tsconfig-paths/register src/shared/infra/typeorm/seed/database.ts",
+    "seed:db:test": "ts-node-dev -r tsconfig-paths/register src/shared/infra/typeorm/seed/database_pg.ts",
     "test": "NODE_ENV=test jest --runInBand --detectOpenHandles",
     "commit": "cz"
   },
@@ -42,6 +42,7 @@
     "@types/mime": "^2.0.3",
     "@types/multer": "^1.4.5",
     "@types/nodemailer": "^6.4.1",
+    "@types/pg": "^7.14.11",
     "@types/redis": "^2.8.28",
     "@types/supertest": "^2.0.11",
     "@types/swagger-ui-express": "^4.1.2",

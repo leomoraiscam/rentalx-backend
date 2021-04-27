@@ -1,18 +1,24 @@
-import { createConnection } from 'typeorm';
+import { Client } from 'pg';
 
-async function createDatabase() {
-  const connection = await createConnection({
-    type: 'postgres',
-    host: 'localhost',
-    port: 5454,
-    username: 'docker',
-    password: 'ignite',
-    database: 'rentx_test',
-  });
+const pgclient = new Client({
+  host: 'localhost',
+  port: 5432,
+  user: 'postgres',
+  password: 'psqldb@20',
+  database: 'postgres',
+});
 
-  await connection.query(`CREATE DATABASE rentx_test`);
+pgclient.connect();
 
-  await connection.close();
-}
+const table = 'CREATE DATABASE rentx_test';
 
-createDatabase().then(() => console.log('✔️ Database of test created'));
+pgclient.query(table, (err, res) => {
+  if (err) {
+    console.error('Error: ', err);
+  }
+
+  if (res.command === 'CREATE') {
+    console.log('✔️ Database of test created');
+    pgclient.end();
+  }
+});
