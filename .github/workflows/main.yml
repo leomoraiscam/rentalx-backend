@@ -16,7 +16,8 @@ jobs:
         env:
           POSTGRES_PASSWORD: postgres
           POSTGRES_USERNAME: postgres
-     
+          POSTGRES_DB: postgres
+
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -44,7 +45,11 @@ jobs:
 
         env:
           PG_HOST_TEST: localhost
-          PG_PORT_TEST: 5432    
+          PG_PORT_TEST: 5432 
+          POSTGRES_PASSWORD: postgres
+          PG_USERNAME_TEST: postgres
+          PG_DATABASE_TEST: rentx_test
+
 
       - name: Copy dist to AWS
         uses: appleboy/scp-action@master
