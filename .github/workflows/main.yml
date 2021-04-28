@@ -46,7 +46,7 @@ jobs:
         env:
           PG_HOST_TEST: localhost
           PG_PORT_TEST: 5432 
-          POSTGRES_PASSWORD: psqldb@20
+          POSTGRES_PASSWORD: postgres
           PG_USERNAME_TEST: postgres
           PG_DATABASE_TEST: postgres
 
