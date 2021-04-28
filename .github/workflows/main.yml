@@ -59,6 +59,7 @@ jobs:
           PG_PASSWORD_TEST: postgres
           PG_USERNAME_TEST: postgres
           PG_DATABASE_TEST: rentx_test
+          DISK: local
 
       - name: Copy dist to AWS
         uses: appleboy/scp-action@master
