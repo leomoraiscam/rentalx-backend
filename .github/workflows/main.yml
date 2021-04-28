@@ -44,9 +44,6 @@ jobs:
         env:
           PG_HOST_TEST: localhost
           PG_PORT_TEST: 5432    
-          PG_USERNAME_TEST=postgres
-          PG_PASSWORD_TEST=postgres
-          PG_DATABASE_TEST=rentx_test
 
       - name: Copy dist to AWS
         uses: appleboy/scp-action@master
