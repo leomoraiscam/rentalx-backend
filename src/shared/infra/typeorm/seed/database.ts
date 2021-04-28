@@ -15,6 +15,7 @@ const table = 'CREATE DATABASE rentx_test';
 pgclient.query(table, (err, res) => {
   if (err) {
     console.error('Error: ', err);
+    pgclient.end();
   }
 
   if (res.command === 'CREATE') {
