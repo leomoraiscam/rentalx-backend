@@ -1,11 +1,11 @@
 import { Client } from 'pg';
 
 const pgclient = new Client({
-  host: process.env.POSTGRES_HOST,
-  port: Number(process.env.POSTGRES_PORT),
-  user: process.env.POSTGRES_USERNAME,
-  password: process.env.POSTGRES_PASSWORD,
-  database: process.env.POSTGRES_DB,
+  host: process.env.PG_HOST_TEST,
+  port: Number(process.env.PG_PORT_TEST),
+  user: process.env.PG_USERNAME_TEST,
+  password: process.env.PG_PASSWORD_TEST,
+  database: process.env.PG_DATABASE_TEST,
 });
 
 pgclient.connect();

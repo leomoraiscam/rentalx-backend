@@ -41,14 +41,11 @@ jobs:
         run: yarn seed:db:test
 
         env:
-          POSTGRES_HOST: localhost
-          POSTGRES_PORT: 5432 
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_USERNAME: postgres
-          POSTGRES_DB: postgres
-
-      - name: Run Test
-        run: yarn test   
+          PG_HOST_TEST: localhost
+          PG_PORT_TEST: 5432 
+          PG_PASSWORD_TEST: postgres
+          PG_USERNAME_TEST: postgres
+          PG_DATABASE_TEST: postgres
 
       - name: Run Build
         run: yarn build
