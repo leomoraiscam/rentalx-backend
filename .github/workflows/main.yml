@@ -10,9 +10,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
     services:
       postgres:
         image: postgres
@@ -36,7 +33,7 @@ jobs:
 
     steps:
       - name: Ckeckout repository
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
         with:
           fetch-depth: 0 
 
@@ -46,7 +43,7 @@ jobs:
           node-version: 12.x
     
       - name: Check commit message
-        run: wagoid/commitlint-github-action@v3
+        uses: wagoid/commitlint-github-action@v3
                   
       - name: Install Depedencies 
         run: yarn
