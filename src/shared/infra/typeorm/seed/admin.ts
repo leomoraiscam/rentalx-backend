@@ -36,4 +36,5 @@ async function create() {
   await connection.close();
 }
 
+// eslint-disable-next-line
 create().then(() => console.log('✔️ User admin created'));

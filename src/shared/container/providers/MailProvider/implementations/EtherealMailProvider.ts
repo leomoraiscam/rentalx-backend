@@ -26,6 +26,7 @@ class EtherealMailProvider implements IMailProvider {
         this.client = transporter;
       })
       .catch((error) => {
+        // eslint-disable-next-line
         console.error(error);
       });
   }
@@ -49,10 +50,11 @@ class EtherealMailProvider implements IMailProvider {
       html: templateHTML,
     });
 
+    // eslint-disable-next-line
     console.log('Message sent: %s', message.messageId);
     // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-
     // Preview only available when sending through an Ethereal account
+    // eslint-disable-next-line
     console.log('Preview URL: %s', nodemailer.getTestMessageUrl(message));
     // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
   }

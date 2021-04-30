@@ -1,5 +1,3 @@
-import { isThrowStatement } from 'typescript';
-
 import ICreateUserTokenDTO from '../../dtos/ICreateUserTokenDTO';
 import UserTokens from '../../infra/typeorm/entities/UserTokens';
 import IUsersTokensRepository from '../IUsersTokensRepository';

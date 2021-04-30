@@ -14,11 +14,13 @@ const table = 'CREATE DATABASE rentx_test';
 
 pgclient.query(table, (err, res) => {
   if (err) {
+    // eslint-disable-next-line
     console.error('Error: ', err);
     pgclient.end();
   }
 
   if (res.command === 'CREATE') {
+    // eslint-disable-next-line
     console.log('✔️ Database of test created');
     pgclient.end();
   }
