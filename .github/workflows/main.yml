@@ -42,12 +42,15 @@ jobs:
         with:
           node-version: 12.x
     
-      - name: Check commit message
-        uses: wagoid/commitlint-github-action@v3
-                  
       - name: Install Depedencies 
         run: yarn
 
+      - name: Check commit message
+        uses: wagoid/commitlint-github-action@v3
+        
+      - name: Run Check Lint
+        run: yarn lint
+      
       - name: Create Database Test
         run: yarn seed:db:test
 
@@ -69,9 +72,11 @@ jobs:
           PG_DATABASE_TEST: rentx_test
           DISK: local
 
-      - name: Run Check Lint
-        run: yarn lint
-
+      - name: Run Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+        
       - name: Run Build
         run: yarn build
 
