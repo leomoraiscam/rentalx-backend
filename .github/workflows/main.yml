@@ -10,6 +10,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     services:
       postgres:
         image: postgres
@@ -32,13 +35,19 @@ jobs:
           - 6379:6379
 
     steps:
+      - name: Ckeckout repository
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 
 
       - name: Setup Node.js Environment
         uses: actions/setup-node@v2
         with:
           node-version: 12.x
-          
+    
+      - name: Check commit message
+        uses: wagoid/commitlint-github-action@v1
+                  
       - name: Install Depedencies 
         run: yarn
 
