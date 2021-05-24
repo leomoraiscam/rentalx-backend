@@ -31,6 +31,8 @@ class SendForgotPasswordMailUseCase {
       'forgot'
     );
 
+    console.log('emailTemplateDynamic', emailTemplateDynamic);
+
     const templatePath = path.resolve(
       __dirname,
       '..',
