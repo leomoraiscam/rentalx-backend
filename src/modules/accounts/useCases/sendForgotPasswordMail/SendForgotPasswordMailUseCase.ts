@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import IUserRepository from '@modules/accounts/repositories/IUsersRepository';
 import IUsersTokensRepository from '@modules/accounts/repositories/IUsersTokensRepository';
+import IEmailRepository from '@modules/emails/repositories/IEmailRepository';
 import IDateProvider from '@shared/container/providers/DateProvider/IDateProvider';
 import IMailProvider from '@shared/container/providers/MailProvider/IMailProvider';
 import AppError from '@shared/errors/AppError';
@@ -18,11 +19,17 @@ class SendForgotPasswordMailUseCase {
     @inject('DayjsDateProvider')
     private dayjsDateProvider: IDateProvider,
     @inject('EtherealMailProvider')
-    private mailProvider: IMailProvider
+    private mailProvider: IMailProvider,
+    @inject('EmailsRepository')
+    private emailRepository: IEmailRepository
   ) {}
 
   async execute(email: string): Promise<void> {
     const user = await this.usersRepository.findByEmail(email);
+
+    const emailTemplateDynamic = await this.emailRepository.findMailByType(
+      'forgot'
+    );
 
     const templatePath = path.resolve(
       __dirname,

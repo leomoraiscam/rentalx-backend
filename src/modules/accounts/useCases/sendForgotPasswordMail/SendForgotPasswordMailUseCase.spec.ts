@@ -1,5 +1,6 @@
 import UserRepositoryInMemory from '@modules/accounts/repositories/in-memory/UsersRepositoryInMemory';
 import UsersTokensRepositoryInMemory from '@modules/accounts/repositories/in-memory/UsersTokensRepositoryInMemory';
+import EmailRepositoryInMemory from '@modules/emails/repositories/in-memory/EmailRepositoryInMemory';
 import DayjsDateProvider from '@shared/container/providers/DateProvider/implementations/DayjsDateProvider';
 import MailProviderInMemory from '@shared/container/providers/MailProvider/in-memory/MailProviderInMemory';
 import AppError from '@shared/errors/AppError';
@@ -11,6 +12,7 @@ let userRepositoryInMemory: UserRepositoryInMemory;
 let usersTokensRepositoryInMemory: UsersTokensRepositoryInMemory;
 let dayjsDateProvider: DayjsDateProvider;
 let mailProviderInMemory: MailProviderInMemory;
+let emailRepositoryInMemory: EmailRepositoryInMemory;
 
 describe('Send forgot mail', () => {
   beforeEach(() => {
@@ -18,11 +20,13 @@ describe('Send forgot mail', () => {
     usersTokensRepositoryInMemory = new UsersTokensRepositoryInMemory();
     dayjsDateProvider = new DayjsDateProvider();
     mailProviderInMemory = new MailProviderInMemory();
+    emailRepositoryInMemory = new EmailRepositoryInMemory();
     sendForgotPasswordMailUseCase = new SendForgotPasswordMailUseCase(
       userRepositoryInMemory,
       usersTokensRepositoryInMemory,
       dayjsDateProvider,
-      mailProviderInMemory
+      mailProviderInMemory,
+      emailRepositoryInMemory
     );
   });
 

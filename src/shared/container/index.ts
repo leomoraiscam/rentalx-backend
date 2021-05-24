@@ -14,6 +14,8 @@ import ICarsImagesRepository from '@modules/cars/repositories/ICarsImagesReposit
 import ICarsRepository from '@modules/cars/repositories/ICarsRepository';
 import ICategoryRepository from '@modules/cars/repositories/ICategoriesRepository';
 import ISpecificationRepository from '@modules/cars/repositories/ISpecificationRepository';
+import EmailRepository from '@modules/emails/infra/typeorm/repositories/EmailRepositoty';
+import IEmailRepository from '@modules/emails/repositories/IEmailRepository';
 import RentalsRepository from '@modules/rentals/infra/typeorm/repositories/RentalsRepository';
 import IRentalsRepository from '@modules/rentals/repositories/IRentalsRepository';
 
@@ -44,4 +46,9 @@ container.registerSingleton<IRentalsRepository>(
 container.registerSingleton<IUsersTokensRepository>(
   'UsersTokensRepository',
   UsersTokensRepository
+);
+
+container.registerSingleton<IEmailRepository>(
+  'EmailsRepository',
+  EmailRepository
 );
