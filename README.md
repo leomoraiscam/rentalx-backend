@@ -7,22 +7,22 @@
 </h3>
 
 <p align="center">
-  <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/ruandsx/gobarber-backend?color=%23FF9000">
+  <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/ruandsx/gobarber-backend?color=%23DC1637">
 
   <a href="https://www.linkedin.com/in/leonardo-morais-456518182/" target="_blank" rel="noopener noreferrer">
-    <img alt="Made by" src="https://img.shields.io/badge/made%20by-leonardo Morais-%23FF9000">
+    <img alt="Made by" src="https://img.shields.io/badge/made%20by-leonardo Morais-%23DC1637">
   </a>
 
-  <img alt="Repository size" src="https://img.shields.io/github/repo-size/leomoraiscam/gobarber-backend?color=%23FF9000">
+  <img alt="Repository size" src="https://img.shields.io/github/repo-size/leomoraiscam/gobarber-backend?color=%23DC1637">
 
 
   <a href="https://github.com/ruandsx/gobarber-backend/commits/master">
-    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/leomoraiscam/gobarber-backend?color=%23FF9000">
+    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/leomoraiscam/gobarber-backend?color=%23DC1637">
   </a>
 
-  <img alt="AWS version" src="https://img.shields.io/badge/aws-api--v2-green.svg?color=%23FF9000">
+  <img alt="AWS version" src="https://img.shields.io/badge/aws-api--v2-green.svg?color=%23DC1637">
 
-  <img alt="GitHub" src="https://img.shields.io/github/license/leomoraiscam/gobarber-backend?color=%23FF9000">
+  <img alt="GitHub" src="https://img.shields.io/github/license/leomoraiscam/gobarber-backend?color=%23DC1637">
 </p>
 
 <p align="center">
