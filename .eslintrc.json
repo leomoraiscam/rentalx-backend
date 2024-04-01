@@ -15,11 +15,7 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": [
-    "@typescript-eslint",
-    "eslint-plugin-import-helpers",
-    "prettier"
-  ],
+  "plugins": ["@typescript-eslint", "eslint-plugin-import-helpers", "prettier"],
   "rules": {
     "prettier/prettier": "error",
     "camelcase": "off",
@@ -36,7 +32,7 @@
       }
     ],
     "class-methods-use-this": "off",
-    "import/prefer-default-export": "warn",
+    "import/prefer-default-export": "off",
     "no-shadow": "off",
     "no-console": "error",
     "no-useless-constructor": "off",
@@ -64,7 +60,7 @@
   },
   "settings": {
     "import/resolver": {
-        "typescript": {}
+      "typescript": {}
     }
   }
 }

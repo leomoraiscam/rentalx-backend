@@ -1,39 +1,47 @@
-import { hash } from 'bcryptjs';
 import { inject, injectable } from 'tsyringe';
 
-import IUserRepository from '@modules/accounts/repositories/IUsersRepository';
+import { ICreateUserDTO } from '@modules/accounts/dtos/ICreateUserDTO';
+import { User } from '@modules/accounts/infra/typeorm/entities/User';
+import { IUserRepository } from '@modules/accounts/repositories/IUserRepository';
+import { IHashProvider } from '@shared/container/providers/HashProvider/models/IHashProvider';
 import AppError from '@shared/errors/AppError';
 
-import { ICreateUserDTO } from '../../dtos/ICreateUserDTO';
-
 @injectable()
-class CreateUserUseCase {
+export class CreateUserUseCase {
   constructor(
     @inject('UserRepository')
-    private usersRepository: IUserRepository
+    private userRepository: IUserRepository,
+    @inject('HashProvider')
+    private hashProvider: IHashProvider
   ) {}
 
   async execute({
     name,
     email,
     password,
-    driver_license,
-  }: ICreateUserDTO): Promise<void> {
-    const user = await this.usersRepository.findByEmail(email);
+    driverLicense,
+  }: ICreateUserDTO): Promise<User> {
+    const user = await this.userRepository.findByEmail(email);
 
     if (user) {
-      throw new AppError('User altedy exist', 400);
+      throw new AppError('User with this email already exists', 409);
     }
 
-    const passwordHash = await hash(password, 8);
+    const existedUserWithDriveLicense = await this.userRepository.findByDriverLicense(
+      driverLicense
+    );
 
-    await this.usersRepository.create({
+    if (existedUserWithDriveLicense) {
+      throw new AppError('This document already exists for some user', 409);
+    }
+
+    const hashPassword = await this.hashProvider.generateHash(password);
+
+    return this.userRepository.create({
       name,
       email,
-      password: passwordHash,
-      driver_license,
+      password: hashPassword,
+      driverLicense,
     });
   }
 }
-
-export default CreateUserUseCase;

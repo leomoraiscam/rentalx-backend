@@ -1,11 +1,11 @@
-version: "3.7"
+version: '3.7'
 
 services:
-  database: 
+  database:
     image: postgres
     container_name: database_ignite
     restart: always
-    ports: 
+    ports:
       - 5454:5454
     environment:
       - POSTGRES_USER=docker
@@ -19,7 +19,7 @@ services:
 
   redis:
     image: redis:alpine
-    ports: 
+    ports:
       - 6379:6379
     networks:
       - rentx_env_nw
@@ -28,12 +28,12 @@ services:
     build: .
     container_name: rentx
     restart: always
-    ports: 
+    ports:
       - 3333:3333
       - 9229:9229
-    volumes: 
+    volumes:
       - .:/usr/app
-    links: 
+    links:
       - database
     depends_on:
       - database
@@ -46,4 +46,4 @@ volumes:
     driver: local
 
 networks:
-  rentx_env_nw: 
+  rentx_env_nw:
