@@ -13,7 +13,7 @@
     "test": "NODE_ENV=test jest --runInBand --detectOpenHandles",
     "lint": "eslint src --ext .ts .",
     "commit": "cz",
-    "coveralls": "cat ./coverage/lcov.info | coveralls" 
+    "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "husky": {
     "hooks": {
@@ -50,6 +50,7 @@
     "@types/supertest": "^2.0.11",
     "@types/swagger-ui-express": "^4.1.2",
     "@types/uuid": "^8.3.0",
+    "@types/winston": "^2.4.4",
     "@typescript-eslint/eslint-plugin": "^4.8.2",
     "@typescript-eslint/parser": "^4.8.2",
     "babel-plugin-module-resolver": "^4.1.0",
@@ -99,7 +100,8 @@
     "swagger-ui-express": "^4.1.6",
     "tsyringe": "^4.5.0",
     "typeorm": "^0.2.31",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "winston": "^3.13.0"
   },
   "config": {
     "commitizen": {
