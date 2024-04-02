@@ -1,7 +1,5 @@
-interface ICreateUserTokenDTO {
-  user_id: string;
-  expires_date: Date;
-  refresh_token: string;
+export interface ICreateUserTokenDTO {
+  userId: string;
+  expiresDate: Date;
+  refreshToken: string;
 }
-
-export default ICreateUserTokenDTO;
