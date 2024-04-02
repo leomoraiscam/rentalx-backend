@@ -1,21 +1,22 @@
 import { Router } from 'express';
 
-import authenticateRoutes from './authenticate.routes';
+import { accountsRouter } from './accounts.routes';
 import carsRoutes from './cars.routes';
 import categoriesRoutes from './categories.routes';
-import passwordRoutes from './password.routes';
+import { passwordRouter } from './password.routes';
 import rentalRoutes from './rental.routes';
+import { sessionsRouter } from './sessions.routes';
 import speficationRoutes from './specification.routes';
-import userRoutes from './users.routes';
 
-const routes = Router();
+const router = Router();
 
-routes.use('/categories', categoriesRoutes);
-routes.use('/specifications', speficationRoutes);
-routes.use('/users', userRoutes);
-routes.use(authenticateRoutes);
-routes.use('/cars', carsRoutes);
-routes.use('/rentals', rentalRoutes);
-routes.use('/password', passwordRoutes);
+router.use('/sessions', sessionsRouter);
+router.use('/accounts', accountsRouter);
+router.use('/password', passwordRouter);
 
-export default routes;
+router.use('/categories', categoriesRoutes);
+router.use('/specifications', speficationRoutes);
+router.use('/cars', carsRoutes);
+router.use('/rentals', rentalRoutes);
+
+export { router };
