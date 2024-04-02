@@ -15,21 +15,21 @@ export class UserToken {
   @PrimaryColumn('uuid')
   id: string;
 
-  @Column()
-  refresh_token: string;
+  @Column({ name: 'refresh_token' })
+  refreshToken: string;
 
-  @Column()
-  user_id: string;
+  @Column({ name: 'user_id' })
+  userId: string;
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @Column()
-  expires_date: Date;
+  @Column({ name: 'expires_date' })
+  expiresDate: Date;
 
-  @CreateDateColumn()
-  created_at: Date;
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
 
   constructor() {
     if (!this.id) {
