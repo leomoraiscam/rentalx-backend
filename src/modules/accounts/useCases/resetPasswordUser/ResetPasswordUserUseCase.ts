@@ -1,8 +1,8 @@
 import { hash } from 'bcryptjs';
 import { inject, injectable } from 'tsyringe';
 
-import IUserRepository from '@modules/accounts/repositories/IUsersRepository';
-import IUsersTokensRepository from '@modules/accounts/repositories/IUsersTokensRepository';
+import { IUserRepository } from '@modules/accounts/repositories/IUserRepository';
+import { IUserTokenRepository } from '@modules/accounts/repositories/IUserTokenRepository';
 import IDateProvider from '@shared/container/providers/DateProvider/IDateProvider';
 import AppError from '@shared/errors/AppError';
 
@@ -15,7 +15,7 @@ interface IRequest {
 class ResetPasswordUserUseCase {
   constructor(
     @inject('UsersTokensRepository')
-    private usersTokensRepository: IUsersTokensRepository,
+    private usersTokensRepository: IUserTokenRepository,
     @inject('DayjsDateProvider')
     private dayjsDateProvider: IDateProvider,
     @inject('UserRepository')

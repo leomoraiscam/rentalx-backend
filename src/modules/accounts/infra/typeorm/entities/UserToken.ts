@@ -8,8 +8,10 @@ import {
 } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 
+import { User } from './User';
+
 @Entity('users_tokens')
-class User {
+export class UserToken {
   @PrimaryColumn('uuid')
   id: string;
 
@@ -35,5 +37,3 @@ class User {
     }
   }
 }
-
-export default User;

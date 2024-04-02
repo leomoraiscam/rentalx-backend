@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-import UsersRepository from '@modules/accounts/infra/typeorm/repositories/UsersRepository';
+import { UserRepository } from '@modules/accounts/infra/typeorm/repositories/UserRepository';
 import AppError from '@shared/errors/AppError';
 
 export default async function ensureAdmin(
@@ -10,9 +10,9 @@ export default async function ensureAdmin(
 ): Promise<void> {
   const { id } = request.user;
 
-  const usersRepository = new UsersRepository();
+  const userRepository = new UserRepository();
 
-  const user = await usersRepository.findById(id);
+  const user = await userRepository.findById(id);
 
   if (!user.isAdmin) {
     throw new AppError('Users isnt not admin!');

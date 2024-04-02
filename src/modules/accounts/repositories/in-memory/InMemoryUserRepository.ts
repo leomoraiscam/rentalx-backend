@@ -13,7 +13,7 @@ export class InMemoryUserRepository implements IUserRepository {
     return this.users.find((user) => user.email === email);
   }
 
-  async findByDriverLicense(driverLicense: string): Promise<User> {
+  async findByDriverLicense(driverLicense: string): Promise<User | null> {
     return this.users.find((user) => user.driverLicense === driverLicense);
   }
 

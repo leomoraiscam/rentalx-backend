@@ -5,7 +5,7 @@ import auth from '@config/auth';
 import IDateProvider from '@shared/container/providers/DateProvider/IDateProvider';
 import AppError from '@shared/errors/AppError';
 
-import IUsersTokensRepository from '../../repositories/IUsersTokensRepository';
+import { IUserTokenRepository } from '../../repositories/IUserTokenRepository';
 
 interface IPayload {
   sub: string;
@@ -15,7 +15,7 @@ interface IPayload {
 class RefreshTokenUseCase {
   constructor(
     @inject('UsersTokensRepository')
-    private usersTokensRepository: IUsersTokensRepository,
+    private usersTokensRepository: IUserTokenRepository,
     @inject('DayjsDateProvider')
     private dayjsDateProvider: IDateProvider
   ) {}

@@ -1,42 +1,38 @@
 import { getRepository, Repository } from 'typeorm';
 
-import IUsersTokensRepository from '@modules/accounts/repositories/IUsersTokensRepository';
+import { IUserTokenRepository } from '@modules/accounts/repositories/IUserTokenRepository';
 
 import ICreateUserTokenDTO from '../../../dtos/ICreateUserTokenDTO';
-import UserTokens from '../entities/UserTokens';
+import { UserToken } from '../entities/UserToken';
 
-class UsersTokensRepository implements IUsersTokensRepository {
-  private repository: Repository<UserTokens>;
+export class UserTokenRepository implements IUserTokenRepository {
+  private repository: Repository<UserToken>;
 
   constructor() {
-    this.repository = getRepository(UserTokens);
+    this.repository = getRepository(UserToken);
   }
 
   async findByUserIdAndRefreshToken(
     user_id: string,
     refresh_token: string
-  ): Promise<UserTokens> {
-    const userTokens = await this.repository.findOne({
+  ): Promise<UserToken | null> {
+    return this.repository.findOne({
       user_id,
       refresh_token,
     });
-
-    return userTokens;
   }
 
-  async findByRefreshToken(refresh_token: string): Promise<UserTokens> {
-    const userToken = await this.repository.findOne({
+  async findByRefreshToken(refresh_token: string): Promise<UserToken | null> {
+    return this.repository.findOne({
       refresh_token,
     });
-
-    return userToken;
   }
 
   async create({
     user_id,
     refresh_token,
     expires_date,
-  }: ICreateUserTokenDTO): Promise<UserTokens> {
+  }: ICreateUserTokenDTO): Promise<UserToken> {
     const userToken = this.repository.create({
       user_id,
       refresh_token,
@@ -52,5 +48,3 @@ class UsersTokensRepository implements IUsersTokensRepository {
     await this.repository.delete(id);
   }
 }
-
-export default UsersTokensRepository;

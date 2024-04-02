@@ -1,6 +1,6 @@
 import { inject, injectable } from 'tsyringe';
 
-import IUserRepository from '@modules/accounts/repositories/IUsersRepository';
+import { IUserRepository } from '@modules/accounts/repositories/IUserRepository';
 import IStorageProvider from '@shared/container/providers/StorageProvider/IStorageProvider';
 
 interface IRequest {

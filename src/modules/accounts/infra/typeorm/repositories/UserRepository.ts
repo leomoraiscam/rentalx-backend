@@ -19,7 +19,7 @@ export class UserRepository implements IUserRepository {
     return this.repository.findOne({ email });
   }
 
-  async findByDriverLicense(driverLicense: string): Promise<User> {
+  async findByDriverLicense(driverLicense: string): Promise<User | null> {
     return this.repository.findOne({
       driverLicense,
     });
