@@ -1,3 +1,4 @@
+import * as dotenv from 'dotenv';
 import { container } from 'tsyringe';
 
 import IDateProvider from './DateProvider/IDateProvider';
@@ -7,6 +8,8 @@ import EtherealMailProvider from './MailProvider/implementations/EtherealMailPro
 import LocalStorageProvider from './StorageProvider/implementations/LocalStorageProvider';
 import S3StorageProvider from './StorageProvider/implementations/S3StorageProvider';
 import IStorageProvider from './StorageProvider/IStorageProvider';
+
+dotenv.config();
 
 container.registerSingleton<IDateProvider>(
   'DayjsDateProvider',

@@ -1,9 +1,9 @@
 import 'reflect-metadata';
-import 'dotenv/config';
 import cors from 'cors';
 import express, { Response, Request, NextFunction } from 'express';
 import swaggerUi from 'swagger-ui-express';
 
+import 'dotenv';
 import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
 
