@@ -1,38 +1,39 @@
-import ICreateUserTokenDTO from '../../dtos/ICreateUserTokenDTO';
+import { IFindTokensByUserIdDTO } from '@modules/accounts/dtos/IFindTokensByUserIdDTO';
+
+import { ICreateUserTokenDTO } from '../../dtos/ICreateUserTokenDTO';
 import { UserToken } from '../../infra/typeorm/entities/UserToken';
 import { IUserTokenRepository } from '../IUserTokenRepository';
 
 export class InMemoryUserTokenRepository implements IUserTokenRepository {
   private userTokens: UserToken[] = [];
 
-  async findByUserIdAndRefreshToken(
-    user_id: string,
-    refresh_token: string
-  ): Promise<UserToken | null> {
+  async findByUserIdAndRefreshToken({
+    refreshToken,
+    userId,
+  }: IFindTokensByUserIdDTO): Promise<UserToken | null> {
     return this.userTokens.find(
       (userToken) =>
-        userToken.user_id === user_id &&
-        userToken.refresh_token === refresh_token
+        userToken.userId === userId && userToken.refreshToken === refreshToken
     );
   }
 
-  async findByRefreshToken(refresh_token: string): Promise<UserToken | null> {
+  async findByRefreshToken(refreshToken: string): Promise<UserToken | null> {
     return this.userTokens.find(
-      (userToken) => userToken.refresh_token === refresh_token
+      (userToken) => userToken.refreshToken === refreshToken
     );
   }
 
   async create({
-    user_id,
-    refresh_token,
-    expires_date,
+    userId,
+    refreshToken,
+    expiresDate,
   }: ICreateUserTokenDTO): Promise<UserToken> {
     const userToken = new UserToken();
 
     Object.assign(userToken, {
-      user_id,
-      refresh_token,
-      expires_date,
+      userId,
+      refreshToken,
+      expiresDate,
     });
 
     this.userTokens.push(userToken);
