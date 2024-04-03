@@ -6,7 +6,7 @@ import {
   JoinColumn,
   ManyToOne,
 } from 'typeorm';
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidV4 } from 'uuid';
 
 import { User } from './User';
 
@@ -33,7 +33,7 @@ export class UserToken {
 
   constructor() {
     if (!this.id) {
-      this.id = uuidv4();
+      this.id = uuidV4();
     }
   }
 }

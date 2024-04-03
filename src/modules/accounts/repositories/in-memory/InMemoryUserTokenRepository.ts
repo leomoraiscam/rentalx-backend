@@ -1,7 +1,7 @@
+import { ICreateUserTokenDTO } from '@modules/accounts/dtos/ICreateUserTokenDTO';
 import { IFindTokensByUserIdDTO } from '@modules/accounts/dtos/IFindTokensByUserIdDTO';
+import { UserToken } from '@modules/accounts/infra/typeorm/entities/UserToken';
 
-import { ICreateUserTokenDTO } from '../../dtos/ICreateUserTokenDTO';
-import { UserToken } from '../../infra/typeorm/entities/UserToken';
 import { IUserTokenRepository } from '../IUserTokenRepository';
 
 export class InMemoryUserTokenRepository implements IUserTokenRepository {

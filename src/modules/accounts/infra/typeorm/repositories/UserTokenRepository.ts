@@ -1,9 +1,9 @@
 import { getRepository, Repository } from 'typeorm';
 
+import { ICreateUserTokenDTO } from '@modules/accounts/dtos/ICreateUserTokenDTO';
 import { IFindTokensByUserIdDTO } from '@modules/accounts/dtos/IFindTokensByUserIdDTO';
 import { IUserTokenRepository } from '@modules/accounts/repositories/IUserTokenRepository';
 
-import { ICreateUserTokenDTO } from '../../../dtos/ICreateUserTokenDTO';
 import { UserToken } from '../entities/UserToken';
 
 export class UserTokenRepository implements IUserTokenRepository {

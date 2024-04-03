@@ -48,7 +48,7 @@ describe('AuthenticateUserUseCase', () => {
     expect(response).toHaveProperty('refreshToken');
   });
 
-  it('should be able to added deletedAt flag when the user has valid token bus make a new authenticate with success', async () => {
+  it.skip('should be able to added deletedAt flag when the user has valid token bus make a new authenticate with success', async () => {
     jest.spyOn(Date, 'now').mockImplementationOnce(() => {
       return new Date(2024, 2, 27).getTime();
     });

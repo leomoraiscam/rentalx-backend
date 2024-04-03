@@ -3,11 +3,10 @@ import { inject, injectable } from 'tsyringe';
 
 import { auth } from '@config/auth';
 import { IRefreshedTokenDTO } from '@modules/accounts/dtos/IRefreshedTokenDTO';
+import { IUserTokenRepository } from '@modules/accounts/repositories/IUserTokenRepository';
 import IDateProvider from '@shared/container/providers/DateProvider/IDateProvider';
 import { ILoggerProvider } from '@shared/container/providers/LoggerProvider/models/ILoggerProvider';
 import AppError from '@shared/errors/AppError';
-
-import { IUserTokenRepository } from '../../repositories/IUserTokenRepository';
 
 interface IPayload {
   sub: string;

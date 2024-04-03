@@ -29,7 +29,7 @@ describe('CreateUserUseCase', () => {
     expect(user).toHaveProperty('id');
   });
 
-  it('should not be able to create a new user when already exist email for a user', async () => {
+  it('should not be able to create a new user when email already exist', async () => {
     await inMemoryUserRepository.create({
       name: 'Teresa Hammond',
       email: 'fal@kecahpos.jm',
@@ -47,7 +47,7 @@ describe('CreateUserUseCase', () => {
     ).rejects.toBeInstanceOf(AppError);
   });
 
-  it('should not be able to create a new user when already exist driver license for a user', async () => {
+  it('should not be able to create a new user when driver license already exist', async () => {
     await inMemoryUserRepository.create({
       name: 'Jennie McCoy',
       email: 'hiv@metja.lk',

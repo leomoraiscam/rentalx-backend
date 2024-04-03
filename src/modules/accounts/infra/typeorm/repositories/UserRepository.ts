@@ -20,9 +20,7 @@ export class UserRepository implements IUserRepository {
   }
 
   async findByDriverLicense(driverLicense: string): Promise<User | null> {
-    return this.repository.findOne({
-      driverLicense,
-    });
+    return this.repository.findOne({ driverLicense });
   }
 
   async create(data: ICreateUserDTO): Promise<User> {
