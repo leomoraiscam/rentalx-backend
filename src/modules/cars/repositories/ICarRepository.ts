@@ -1,17 +1,15 @@
 import Car from '@modules/cars/infra/typeorm/entities/Car';
 
-import ICreateCarsDTO from '../dtos/ICreateCarsDTO';
+import { ICreateCarDTO } from '../dtos/ICreateCarDTO';
 
-interface ICarsRepository {
-  create(data: ICreateCarsDTO): Promise<Car>;
+export interface ICarRepository {
+  findById(id: string): Promise<Car>;
   findByLicensePlate(license_plate: string): Promise<Car>;
   findAvailable(
     category_id?: string,
     brand?: string,
     name?: string
   ): Promise<Car[]>;
-  findById(id: string): Promise<Car>;
+  create(data: ICreateCarDTO): Promise<Car>;
   updateAvailable(id: string, available: boolean): Promise<void>;
 }
-
-export default ICarsRepository;
