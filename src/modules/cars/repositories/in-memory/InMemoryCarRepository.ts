@@ -1,9 +1,9 @@
 import Car from '@modules/cars/infra/typeorm/entities/Car';
 
-import ICreateCarsDTO from '../../dtos/ICreateCarsDTO';
-import ICarsRepository from '../ICarsRepository';
+import { ICreateCarDTO } from '../../dtos/ICreateCarDTO';
+import { ICarRepository } from '../ICarRepository';
 
-class CarsRepositoryInMemory implements ICarsRepository {
+export class InMemoryCarRepository implements ICarRepository {
   car: Car[] = [];
 
   async findAvailable(
@@ -36,27 +36,29 @@ class CarsRepositoryInMemory implements ICarsRepository {
     return car;
   }
 
-  async create({
-    name,
-    description,
-    brand,
-    fine_amount,
-    license_plate,
-    daily_rate,
-    category_id,
-    id,
-  }: ICreateCarsDTO): Promise<Car> {
+  async create(data: ICreateCarDTO): Promise<Car> {
+    const {
+      name,
+      description,
+      brand,
+      categoryId,
+      dailyRate,
+      fineAmount,
+      licensePlate,
+      specifications,
+    } = data;
+
     const car = new Car();
 
     Object.assign(car, {
       name,
       description,
       brand,
-      fine_amount,
-      license_plate,
-      daily_rate,
-      category_id,
-      id,
+      categoryId,
+      dailyRate,
+      fineAmount,
+      licensePlate,
+      specifications,
     });
 
     this.car.push(car);
@@ -70,5 +72,3 @@ class CarsRepositoryInMemory implements ICarsRepository {
     this.car[findIndex].available = available;
   }
 }
-
-export default CarsRepositoryInMemory;
