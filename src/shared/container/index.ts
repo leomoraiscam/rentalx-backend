@@ -21,26 +21,20 @@ container.registerSingleton<ICategoryRepository>(
   'CategoryRepository',
   CategoryRepository
 );
-
 container.registerSingleton<ISpecificationRepository>(
   'SpecificationRepository',
   SpecificationRepository
 );
-
 container.registerSingleton<IUserRepository>('UserRepository', UserRepository);
-
 container.registerSingleton<ICarRepository>('CarRepository', CarRepository);
-
 container.registerSingleton<ICarImageRepository>(
   'CarImageRepository',
   CarImageRepository
 );
-
 container.registerSingleton<IRentalRepository>(
   'RentalRepository',
   RentalRepository
 );
-
 container.registerSingleton<IUserTokenRepository>(
   'UserTokenRepository',
   UserTokenRepository

@@ -5,7 +5,7 @@ import nodemailer, { Transporter } from 'nodemailer';
 import { injectable } from 'tsyringe';
 
 import { ISendMailDTO } from '../dtos/ISendMailDTO';
-import { IMailProvider } from '../IMailProvider';
+import { IMailProvider } from '../models/IMailProvider';
 
 @injectable()
 export class EtherealMailProvider implements IMailProvider {

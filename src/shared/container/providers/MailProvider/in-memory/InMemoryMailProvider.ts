@@ -1,5 +1,5 @@
 import { ISendMailDTO } from '../dtos/ISendMailDTO';
-import { IMailProvider } from '../IMailProvider';
+import { IMailProvider } from '../models/IMailProvider';
 
 export class InMemoryMailProvider implements IMailProvider {
   private messages: ISendMailDTO<unknown>[] = [];
