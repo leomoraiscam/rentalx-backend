@@ -1,5 +1,5 @@
 import { InMemoryStorageProvider } from '@shared/container/providers/StorageProvider/in-memory/InMemoryStorageProvider';
-import AppError from '@shared/errors/AppError';
+import { AppError } from '@shared/errors/AppError';
 
 import { InMemoryUserRepository } from '../../repositories/in-memory/InMemoryUserRepository';
 import { UpdateUserAvatarUseCase } from './UpdateUserAvatarUseCase';

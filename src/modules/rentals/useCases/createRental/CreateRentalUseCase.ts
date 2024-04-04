@@ -3,8 +3,8 @@ import { inject, injectable } from 'tsyringe';
 import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
 import { ICreateRentalDTO } from '@modules/rentals/dtos/ICreateRentalDTO';
 import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
-import IDateProvider from '@shared/container/providers/DateProvider/IDateProvider';
-import AppError from '@shared/errors/AppError';
+import { IDateProvider } from '@shared/container/providers/DateProvider/models/IDateProvider';
+import { AppError } from '@shared/errors/AppError';
 
 import { IRentalRepository } from '../../repositories/IRentalRepository';
 

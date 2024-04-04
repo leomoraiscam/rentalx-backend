@@ -4,9 +4,9 @@ import { inject, injectable } from 'tsyringe';
 import { auth } from '@config/auth';
 import { IRefreshedTokenDTO } from '@modules/accounts/dtos/IRefreshedTokenDTO';
 import { IUserTokenRepository } from '@modules/accounts/repositories/IUserTokenRepository';
-import IDateProvider from '@shared/container/providers/DateProvider/IDateProvider';
+import { IDateProvider } from '@shared/container/providers/DateProvider/models/IDateProvider';
 import { ILoggerProvider } from '@shared/container/providers/LoggerProvider/models/ILoggerProvider';
-import AppError from '@shared/errors/AppError';
+import { AppError } from '@shared/errors/AppError';
 
 interface IPayload {
   sub: string;

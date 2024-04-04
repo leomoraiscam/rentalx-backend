@@ -4,7 +4,7 @@ import { ICreateUserDTO } from '@modules/accounts/dtos/ICreateUserDTO';
 import { User } from '@modules/accounts/infra/typeorm/entities/User';
 import { IUserRepository } from '@modules/accounts/repositories/IUserRepository';
 import { IHashProvider } from '@shared/container/providers/HashProvider/models/IHashProvider';
-import AppError from '@shared/errors/AppError';
+import { AppError } from '@shared/errors/AppError';
 
 @injectable()
 export class CreateUserUseCase {

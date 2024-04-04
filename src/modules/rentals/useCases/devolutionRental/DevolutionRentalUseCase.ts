@@ -4,8 +4,8 @@ import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
 import { ICreateDevolutionCarDTO } from '@modules/rentals/dtos/ICreateDevolutionCarDTO';
 import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
-import IDateProvider from '@shared/container/providers/DateProvider/IDateProvider';
-import AppError from '@shared/errors/AppError';
+import { IDateProvider } from '@shared/container/providers/DateProvider/models/IDateProvider';
+import { AppError } from '@shared/errors/AppError';
 
 @injectable()
 export class DevolutionRentalUseCase {

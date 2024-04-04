@@ -4,7 +4,7 @@ import { ICreateCarSpecificationsDTO } from '@modules/cars/dtos/ICreateCarSpecif
 import { Car } from '@modules/cars/infra/typeorm/entities/Car';
 import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
 import { ISpecificationRepository } from '@modules/cars/repositories/ISpecificationRepository';
-import AppError from '@shared/errors/AppError';
+import { AppError } from '@shared/errors/AppError';
 
 @injectable()
 export class CreateCarSpecificationsUseCase {

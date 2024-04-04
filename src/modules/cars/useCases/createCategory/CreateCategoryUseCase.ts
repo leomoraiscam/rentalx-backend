@@ -3,7 +3,7 @@ import { injectable, inject } from 'tsyringe';
 import { ICreateCategoryDTO } from '@modules/cars/dtos/ICreateCategoryDTO';
 import { Category } from '@modules/cars/infra/typeorm/entities/Category';
 import { ICategoryRepository } from '@modules/cars/repositories/ICategoryRepository';
-import AppError from '@shared/errors/AppError';
+import { AppError } from '@shared/errors/AppError';
 
 @injectable()
 export class CreateCategoryUseCase {

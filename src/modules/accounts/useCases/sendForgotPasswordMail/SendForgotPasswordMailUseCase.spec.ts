@@ -2,7 +2,7 @@ import { InMemoryUserRepository } from '@modules/accounts/repositories/in-memory
 import { InMemoryUserTokenRepository } from '@modules/accounts/repositories/in-memory/InMemoryUserTokenRepository';
 import { InMemoryDateProvider } from '@shared/container/providers/DateProvider/in-memory/InMemoryDateProvider';
 import { InMemoryMailProvider } from '@shared/container/providers/MailProvider/in-memory/InMemoryMailProvider';
-import AppError from '@shared/errors/AppError';
+import { AppError } from '@shared/errors/AppError';
 
 import { SendForgotPasswordMailUseCase } from './SendForgotPasswordMailUseCase';
 

@@ -3,8 +3,8 @@ import { inject, injectable } from 'tsyringe';
 import { IUpdateUserAvatarDTO } from '@modules/accounts/dtos/IUpdateUserAvatarDTO';
 import { User } from '@modules/accounts/infra/typeorm/entities/User';
 import { IUserRepository } from '@modules/accounts/repositories/IUserRepository';
-import IStorageProvider from '@shared/container/providers/StorageProvider/IStorageProvider';
-import AppError from '@shared/errors/AppError';
+import { IStorageProvider } from '@shared/container/providers/StorageProvider/models/IStorageProvider';
+import { AppError } from '@shared/errors/AppError';
 
 @injectable()
 export class UpdateUserAvatarUseCase {

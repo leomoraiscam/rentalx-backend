@@ -6,10 +6,10 @@ import { IAuthenticatedUserDTO } from '@modules/accounts/dtos/IAuthenticatedUser
 import { IAuthenticationUserDTO } from '@modules/accounts/dtos/IAuthenticationUserDTO';
 import { IUserRepository } from '@modules/accounts/repositories/IUserRepository';
 import { IUserTokenRepository } from '@modules/accounts/repositories/IUserTokenRepository';
-import IDateProvider from '@shared/container/providers/DateProvider/IDateProvider';
+import { IDateProvider } from '@shared/container/providers/DateProvider/models/IDateProvider';
 import { IHashProvider } from '@shared/container/providers/HashProvider/models/IHashProvider';
 import { ILoggerProvider } from '@shared/container/providers/LoggerProvider/models/ILoggerProvider';
-import AppError from '@shared/errors/AppError';
+import { AppError } from '@shared/errors/AppError';
 
 @injectable()
 export class AuthenticateUserUseCase {

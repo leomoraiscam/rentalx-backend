@@ -3,9 +3,9 @@ import { inject, injectable } from 'tsyringe';
 import { IResetPasswordDTO } from '@modules/accounts/dtos/IResetPasswordDTO';
 import { IUserRepository } from '@modules/accounts/repositories/IUserRepository';
 import { IUserTokenRepository } from '@modules/accounts/repositories/IUserTokenRepository';
-import IDateProvider from '@shared/container/providers/DateProvider/IDateProvider';
+import { IDateProvider } from '@shared/container/providers/DateProvider/models/IDateProvider';
 import { IHashProvider } from '@shared/container/providers/HashProvider/models/IHashProvider';
-import AppError from '@shared/errors/AppError';
+import { AppError } from '@shared/errors/AppError';
 
 @injectable()
 export class ResetPasswordUseCase {
