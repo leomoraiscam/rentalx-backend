@@ -2,9 +2,9 @@ import { getRepository, Repository } from 'typeorm';
 
 import { ICreateCategoryDTO } from '@modules/cars/dtos/ICreateCategoryDTO';
 import { Category } from '@modules/cars/infra/typeorm/entities/Category';
-import { ICategoriesRepository } from '@modules/cars/repositories/ICategoryRepository';
+import { ICategoryRepository } from '@modules/cars/repositories/ICategoryRepository';
 
-export class CategoryRepository implements ICategoriesRepository {
+export class CategoryRepository implements ICategoryRepository {
   private repository: Repository<Category>;
 
   constructor() {

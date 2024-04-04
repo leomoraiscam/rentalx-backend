@@ -1,9 +1,9 @@
 import { ICreateCategoryDTO } from '@modules/cars/dtos/ICreateCategoryDTO';
 
 import { Category } from '../../infra/typeorm/entities/Category';
-import { ICategoriesRepository } from '../ICategoryRepository';
+import { ICategoryRepository } from '../ICategoryRepository';
 
-export class InMemoryCategoryRepository implements ICategoriesRepository {
+export class InMemoryCategoryRepository implements ICategoryRepository {
   private categories: Category[] = [];
 
   async findByName(name: string): Promise<Category> {
