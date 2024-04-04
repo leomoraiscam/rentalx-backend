@@ -2,7 +2,7 @@ import { Entity, PrimaryColumn, Column, CreateDateColumn } from 'typeorm';
 import { v4 as uuidV4 } from 'uuid';
 
 @Entity('specifications')
-class Specification {
+export class Specification {
   @PrimaryColumn('uuid')
   id?: string;
 
@@ -12,8 +12,8 @@ class Specification {
   @Column()
   description: string;
 
-  @CreateDateColumn()
-  created_at: Date;
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
 
   constructor() {
     if (!this.id) {
@@ -21,5 +21,3 @@ class Specification {
     }
   }
 }
-
-export default Specification;

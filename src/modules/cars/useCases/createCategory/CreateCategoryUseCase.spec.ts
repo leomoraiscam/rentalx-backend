@@ -1,53 +1,39 @@
-import CategoryRepositoryInMemory from '@modules/cars/repositories/in-memory/CategoriesRepositoryInMemory';
+import { InMemoryCategoryRepository } from '@modules/cars/repositories/in-memory/InMemoryCategoryRepository';
 import AppError from '@shared/errors/AppError';
 
-import CreateCategoryUseCase from './CreateCategoryUseCase';
+import { CreateCategoryUseCase } from './CreateCategoryUseCase';
 
+let inMemoryCategoryRepository: InMemoryCategoryRepository;
 let createCategoryUseCase: CreateCategoryUseCase;
-let categoryRepositoryInMemory: CategoryRepositoryInMemory;
 
-describe('Create Category', () => {
+describe('CreateCategoryUseCase', () => {
   beforeEach(() => {
-    categoryRepositoryInMemory = new CategoryRepositoryInMemory();
+    inMemoryCategoryRepository = new InMemoryCategoryRepository();
     createCategoryUseCase = new CreateCategoryUseCase(
-      categoryRepositoryInMemory
+      inMemoryCategoryRepository
     );
   });
 
-  it('should be able to create a new category', async () => {
-    const category = {
-      name: 'Category Test',
-      description: 'Category description Test',
-    };
-
-    await createCategoryUseCase.execute({
-      name: category.name,
-      description: category.description,
+  it('should be able to create an category when receive correct data', async () => {
+    const category = await createCategoryUseCase.execute({
+      name: 'Executive',
+      description: 'cars executives',
     });
 
-    const categoryCreated = await categoryRepositoryInMemory.findByName(
-      category.name
-    );
-
-    expect(categoryCreated).toHaveProperty('id');
+    expect(category).toHaveProperty('id');
   });
 
-  it('should not be able to create a new category with name exists', async () => {
-    const category = {
-      name: 'Category Test',
-      description: 'Category description Test',
-    };
-
-    await createCategoryUseCase.execute({
-      name: category.name,
-      description: category.description,
+  it('should be not able to create an category when category already exists', async () => {
+    await inMemoryCategoryRepository.create({
+      name: 'SUV',
+      description: 'SUV`s cars',
     });
 
     await expect(
       createCategoryUseCase.execute({
-        name: category.name,
-        description: category.description,
+        name: 'SUV',
+        description: 'SUV`s cars',
       })
-    ).rejects.toEqual(new AppError('Category alredy exist'));
+    ).rejects.toBeInstanceOf(AppError);
   });
 });

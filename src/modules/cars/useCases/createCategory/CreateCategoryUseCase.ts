@@ -1,34 +1,27 @@
 import { injectable, inject } from 'tsyringe';
 
-import ICategoriesRepository from '@modules/cars/repositories/ICategoriesRepository';
+import { ICreateCategoryDTO } from '@modules/cars/dtos/ICreateCategoryDTO';
+import { Category } from '@modules/cars/infra/typeorm/entities/Category';
+import { ICategoryRepository } from '@modules/cars/repositories/ICategoryRepository';
 import AppError from '@shared/errors/AppError';
 
-interface IRequest {
-  name: string;
-  description: string;
-}
-
 @injectable()
-class CreateCategoryUseCase {
+export class CreateCategoryUseCase {
   constructor(
     @inject('CategoryRepository')
-    private categoriesRepository: ICategoriesRepository
+    private categoryRepository: ICategoryRepository
   ) {}
 
-  async execute({ name, description }: IRequest): Promise<void> {
-    const categoryAlredyExist = await this.categoriesRepository.findByName(
-      name
-    );
+  async execute({ name, description }: ICreateCategoryDTO): Promise<Category> {
+    const category = await this.categoryRepository.findByName(name);
 
-    if (categoryAlredyExist) {
-      throw new AppError('Category alredy exist');
+    if (category) {
+      throw new AppError('Category with this name already exists', 409);
     }
 
-    await this.categoriesRepository.create({
+    return this.categoryRepository.create({
       name,
       description,
     });
   }
 }
-
-export default CreateCategoryUseCase;

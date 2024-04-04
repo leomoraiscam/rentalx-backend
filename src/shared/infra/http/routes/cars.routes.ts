@@ -2,10 +2,10 @@ import { Router } from 'express';
 import multer from 'multer';
 
 import uploadConfig from '@config/upload';
-import CreateCarController from '@modules/cars/useCases/createCar/CreateCarController';
-import CreateCarSpecificationsController from '@modules/cars/useCases/createCarSpecification/CreateCarSpecificationController';
-import ListAvailableCarsController from '@modules/cars/useCases/listAvailableCars/ListAvailableCarsController';
-import UploadCarImagesController from '@modules/cars/useCases/UploadCarImage/UploadCarImagesController';
+import { CreateCarController } from '@modules/cars/useCases/createCar/CreateCarController';
+import { CreateCarSpecificationsController } from '@modules/cars/useCases/createCarSpecification/CreateCarSpecificationController';
+import { ListAvailableCarsController } from '@modules/cars/useCases/listAvailableCars/ListAvailableCarsController';
+import { UploadCarImagesController } from '@modules/cars/useCases/uploadCarImages/UploadCarImagesController';
 
 import ensureAdmin from '../middlewares/ensureAdmin';
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';

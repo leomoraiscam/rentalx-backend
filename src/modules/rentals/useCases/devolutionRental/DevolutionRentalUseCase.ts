@@ -1,67 +1,71 @@
 import { inject, injectable } from 'tsyringe';
 
-import ICarsRepository from '@modules/cars/repositories/ICarsRepository';
-import Rental from '@modules/rentals/infra/typeorm/entities/Rentals';
-import IRentalsRepository from '@modules/rentals/repositories/IRentalsRepository';
+import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
+import { ICreateDevolutionCarDTO } from '@modules/rentals/dtos/ICreateDevolutionCarDTO';
+import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
+import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
 import IDateProvider from '@shared/container/providers/DateProvider/IDateProvider';
 import AppError from '@shared/errors/AppError';
 
-interface IRequest {
-  id: string;
-  user_id: string;
-}
-
 @injectable()
-class DevolutionRentalUseCase {
+export class DevolutionRentalUseCase {
   constructor(
-    @inject('RentalsRepository')
-    private rentalsRepository: IRentalsRepository,
-    @inject('CarsRepository')
-    private carsRepository: ICarsRepository,
-    @inject('DayjsDateProvider')
+    @inject('RentalRepository')
+    private rentalRepository: IRentalRepository,
+    @inject('CarRepository')
+    private carRepository: ICarRepository,
+    @inject('DateProvider')
     private dateProvider: IDateProvider
   ) {}
 
-  async execute({ id }: IRequest): Promise<Rental> {
-    const rental = await this.rentalsRepository.findById(id);
-    const car = await this.carsRepository.findById(rental.car_id);
+  async execute({ id }: ICreateDevolutionCarDTO): Promise<Rental> {
+    const minimumDaily = 1;
 
-    const minimun_daily = 1;
+    const rental = await this.rentalRepository.findById(id);
 
     if (!rental) {
-      throw new AppError('Rental does not exist');
+      throw new AppError('Rental not found', 404);
+    }
+
+    const car = await this.carRepository.findById(rental.carId);
+
+    if (!car) {
+      throw new AppError('Car not found', 404);
     }
 
     const dateNow = this.dateProvider.dateNow();
 
-    let daily = this.dateProvider.compareInDays(rental.start_date, dateNow);
+    let daily = this.dateProvider.compareInDays(rental.startDate, dateNow);
 
     if (daily <= 0) {
-      daily = minimun_daily;
+      daily = minimumDaily;
     }
 
     const delay = this.dateProvider.compareInDays(
       dateNow,
-      rental.expected_return_date
+      rental.expectedReturnDate
     );
 
     let total = 0;
 
     if (delay > 0) {
-      const calculate_fine = delay * car.fine_amount;
-      total = calculate_fine;
+      const calculateFine = delay * car.fineAmount;
+      total = calculateFine;
     }
 
-    total += daily * car.daily_rate;
+    total += daily * car.dailyRate;
 
-    rental.end_date = this.dateProvider.dateNow();
+    rental.endDate = this.dateProvider.dateNow();
     rental.total = total;
 
-    await this.rentalsRepository.create(rental);
-    await this.carsRepository.updateAvailable(car.id, true);
+    await Promise.all([
+      this.rentalRepository.create(rental),
+      this.carRepository.updateAvailable({
+        id: car.id,
+        available: true,
+      }),
+    ]);
 
     return rental;
   }
 }
-
-export default DevolutionRentalUseCase;

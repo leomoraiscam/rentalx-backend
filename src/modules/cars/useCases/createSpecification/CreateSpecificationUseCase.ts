@@ -1,34 +1,27 @@
 import { inject, injectable } from 'tsyringe';
 
-import ISpecificationRepository from '@modules/cars/repositories/ISpecificationRepository';
+import { ICreateSpecificationDTO } from '@modules/cars/dtos/ICreateSpecificationDTO';
+import { Specification } from '@modules/cars/infra/typeorm/entities/Specification';
+import { ISpecificationRepository } from '@modules/cars/repositories/ISpecificationRepository';
 import AppError from '@shared/errors/AppError';
 
-interface IRequest {
-  name: string;
-  description: string;
-}
-
 @injectable()
-class CreateSpecificationUseCase {
+export class CreateSpecificationUseCase {
   constructor(
-    @inject('SpecificationsRepository')
+    @inject('SpecificationRepository')
     private specificationRepository: ISpecificationRepository
   ) {}
 
-  async execute({ name, description }: IRequest): Promise<void> {
-    const categoryAlredyExist = await this.specificationRepository.findByName(
-      name
-    );
+  async execute({
+    name,
+    description,
+  }: ICreateSpecificationDTO): Promise<Specification> {
+    const specification = await this.specificationRepository.findByName(name);
 
-    if (categoryAlredyExist) {
-      throw new AppError('Specification alredy exist');
+    if (specification) {
+      throw new AppError('Specification with this name already exists', 409);
     }
 
-    await this.specificationRepository.create({
-      name,
-      description,
-    });
+    return this.specificationRepository.create({ name, description });
   }
 }
-
-export default CreateSpecificationUseCase;

@@ -1,21 +1,29 @@
-import Car from '@modules/cars/infra/typeorm/entities/Car';
+import { IQueryListAvailableCarsDTO } from '@modules/cars/dtos/IQueryListAvailableCarsDTO';
+import { IUpdateAvailableStatusCarDTO } from '@modules/cars/dtos/IUpdateAvailableStatusCarDTO';
+import { Car } from '@modules/cars/infra/typeorm/entities/Car';
 
 import { ICreateCarDTO } from '../../dtos/ICreateCarDTO';
 import { ICarRepository } from '../ICarRepository';
 
 export class InMemoryCarRepository implements ICarRepository {
-  car: Car[] = [];
+  private car: Car[] = [];
 
-  async findAvailable(
-    category_id?: string,
-    brand?: string,
-    name?: string
-  ): Promise<Car[]> {
+  async findById(id: string): Promise<Car | null> {
+    return this.car.find((car) => car.id === id);
+  }
+
+  async findByLicensePlate(licensePlate: string): Promise<Car | null> {
+    return this.car.find((car) => car.licensePlate === licensePlate);
+  }
+
+  async findAvailable(data: IQueryListAvailableCarsDTO): Promise<Car[] | null> {
+    const { brand, categoryId, name } = data;
+
     const cars = this.car.filter((car) => {
       if (
         car.available === true ||
         (brand && car.brand === brand) ||
-        (category_id && car.category_id === category_id) ||
+        (categoryId && car.categoryId === categoryId) ||
         (name && car.name === name)
       ) {
         return car;
@@ -24,16 +32,6 @@ export class InMemoryCarRepository implements ICarRepository {
     });
 
     return cars;
-  }
-
-  async findById(id: string): Promise<Car> {
-    return this.car.find((car) => car.id === id);
-  }
-
-  async findByLicensePlate(license_plate: string): Promise<Car> {
-    const car = this.car.find((car) => car.license_plate === license_plate);
-
-    return car;
   }
 
   async create(data: ICreateCarDTO): Promise<Car> {
@@ -66,7 +64,9 @@ export class InMemoryCarRepository implements ICarRepository {
     return car;
   }
 
-  async updateAvailable(id: string, available: boolean): Promise<void> {
+  async updateAvailable(data: IUpdateAvailableStatusCarDTO): Promise<void> {
+    const { available, id } = data;
+
     const findIndex = this.car.findIndex((car) => car.id === id);
 
     this.car[findIndex].available = available;
