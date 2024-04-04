@@ -2,7 +2,7 @@ import { inject, injectable } from 'tsyringe';
 
 import { IUploadCarImagesDTO } from '@modules/cars/dtos/IUploadCarImagesDTO';
 import { ICarImageRepository } from '@modules/cars/repositories/ICarImageRepository';
-import IStorageProvider from '@shared/container/providers/StorageProvider/IStorageProvider';
+import { IStorageProvider } from '@shared/container/providers/StorageProvider/models/IStorageProvider';
 
 @injectable()
 export class UploadCarImageUseCase {
