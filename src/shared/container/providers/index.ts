@@ -1,23 +1,25 @@
 import * as dotenv from 'dotenv';
 import { container } from 'tsyringe';
 
-import IDateProvider from './DateProvider/IDateProvider';
-import DatejsDateProvider from './DateProvider/implementations/DayjsDateProvider';
+import { DayjsDateProvider } from './DateProvider/implementations/DayjsDateProvider';
+import { IDateProvider } from './DateProvider/models/IDateProvider';
 import { BCryptHashProvider } from './HashProvider/implementations/BCryptHashProvider';
 import { IHashProvider } from './HashProvider/models/IHashProvider';
 import { WinstonLoggerProvider } from './LoggerProvider/implementations/WintsonLoggerProvider';
 import { ILoggerProvider } from './LoggerProvider/models/ILoggerProvider';
 import { IMailProvider } from './MailProvider/IMailProvider';
-import EtherealMailProvider from './MailProvider/implementations/EtherealMailProvider';
-import LocalStorageProvider from './StorageProvider/implementations/LocalStorageProvider';
-import S3StorageProvider from './StorageProvider/implementations/S3StorageProvider';
-import IStorageProvider from './StorageProvider/IStorageProvider';
+import { EtherealMailProvider } from './MailProvider/implementations/EtherealMailProvider';
+import { LocalStorageProvider } from './StorageProvider/implementations/LocalStorageProvider';
+import { S3StorageProvider } from './StorageProvider/implementations/S3StorageProvider';
+import { IStorageProvider } from './StorageProvider/models/IStorageProvider';
 
 dotenv.config();
 
+container.registerSingleton<IHashProvider>('HashProvider', BCryptHashProvider);
+
 container.registerSingleton<IDateProvider>(
   'DayjsDateProvider',
-  DatejsDateProvider
+  DayjsDateProvider
 );
 
 container.registerInstance<IMailProvider>(

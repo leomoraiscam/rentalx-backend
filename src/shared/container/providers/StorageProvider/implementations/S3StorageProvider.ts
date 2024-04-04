@@ -5,9 +5,9 @@ import path from 'path';
 
 import upload from '@config/upload';
 
-import IStorageProvider from '../IStorageProvider';
+import { IStorageProvider } from '../models/IStorageProvider';
 
-class S3StorageProvider implements IStorageProvider {
+export class S3StorageProvider implements IStorageProvider {
   private client: S3;
 
   constructor() {

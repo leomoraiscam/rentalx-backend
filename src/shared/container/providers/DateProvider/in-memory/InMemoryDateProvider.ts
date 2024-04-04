@@ -36,7 +36,10 @@ export class InMemoryDateProvider implements IDateProvider {
     const startDateUTC = this.convertToUTC(startDate);
 
     return (
-      Math.abs(new Date(endDateUTC).getTime() - new Date(startDateUTC).getTime()) / (1000 * 60 * 60)
+      Math.abs(
+        new Date(endDateUTC).getTime() - new Date(startDateUTC).getTime()
+      ) /
+      (1000 * 60 * 60)
     );
   }
 
@@ -45,7 +48,9 @@ export class InMemoryDateProvider implements IDateProvider {
     const startDateUTC = this.convertToUTC(startDate);
 
     const hoursDifference =
-      Math.abs(new Date(endDateUTC).getTime() - new Date(startDateUTC).getTime()) /
+      Math.abs(
+        new Date(endDateUTC).getTime() - new Date(startDateUTC).getTime()
+      ) /
       (1000 * 60 * 60);
 
     return Math.round(hoursDifference / 24);

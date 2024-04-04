@@ -37,11 +37,11 @@ container.registerSingleton<ICarImageRepository>(
 );
 
 container.registerSingleton<IRentalRepository>(
-  'RentalsRepository',
+  'RentalRepository',
   RentalRepository
 );
 
 container.registerSingleton<IUserTokenRepository>(
-  'UsersTokensRepository',
+  'UserTokenRepository',
   UserTokenRepository
 );

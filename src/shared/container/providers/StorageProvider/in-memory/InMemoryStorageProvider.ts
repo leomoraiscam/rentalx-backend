@@ -1,4 +1,4 @@
-import IStorageProvider from '../IStorageProvider';
+import { IStorageProvider } from '../models/IStorageProvider';
 
 export class InMemoryStorageProvider implements IStorageProvider {
   private storage: string[] = [];

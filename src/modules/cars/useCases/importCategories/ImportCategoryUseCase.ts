@@ -6,7 +6,7 @@ import { IImportCategoriesDTO } from '@modules/cars/dtos/IImportCategoriesDTO';
 import { ICategoryRepository } from '@modules/cars/repositories/ICategoryRepository';
 
 @injectable()
-class ImportCategoryUseCase {
+export class ImportCategoryUseCase {
   constructor(
     @inject('CategoryRepository')
     private categoryRepository: ICategoryRepository
@@ -58,5 +58,3 @@ class ImportCategoryUseCase {
     });
   }
 }
-
-export default ImportCategoryUseCase;

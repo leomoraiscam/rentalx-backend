@@ -8,7 +8,7 @@ import { ISendMailDTO } from '../dtos/ISendMailDTO';
 import { IMailProvider } from '../IMailProvider';
 
 @injectable()
-class EtherealMailProvider implements IMailProvider {
+export class EtherealMailProvider implements IMailProvider {
   private client: Transporter;
 
   constructor() {
@@ -55,5 +55,3 @@ class EtherealMailProvider implements IMailProvider {
     console.log('Preview URL: %s', nodemailer.getTestMessageUrl(message));
   }
 }
-
-export default EtherealMailProvider;

@@ -12,7 +12,7 @@ import 'express-async-errors';
 import '../../container';
 
 import upload from '@config/upload';
-import AppError from '@shared/errors/AppError';
+import { AppError } from '@shared/errors/AppError';
 
 import swaggerFile from '../../../swagger.json';
 import createConnection from '../typeorm';
