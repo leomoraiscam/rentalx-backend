@@ -3,45 +3,41 @@ import { inject, injectable } from 'tsyringe';
 import Car from '@modules/cars/infra/typeorm/entities/Car';
 import AppError from '@shared/errors/AppError';
 
-import ICreateCarsDTO from '../../dtos/ICreateCarsDTO';
-import ICarsRepository from '../../repositories/ICarsRepository';
+import { ICreateCarDTO } from '../../dtos/ICreateCarDTO';
+import { ICarRepository } from '../../repositories/ICarRepository';
 
 @injectable()
-class CreateCarUseCase {
+export class CreateCarUseCase {
   constructor(
-    @inject('CarsRepository')
-    private carsRepository: ICarsRepository
+    @inject('CarRepository')
+    private carRepository: ICarRepository
   ) {}
 
-  async execute({
-    name,
-    description,
-    daily_rate,
-    license_plate,
-    fine_amount,
-    brand,
-    category_id,
-  }: ICreateCarsDTO): Promise<Car> {
-    const carAlredyExist = await this.carsRepository.findByLicensePlate(
-      license_plate
-    );
-
-    if (carAlredyExist) {
-      throw new AppError('Car alredy exist', 400);
-    }
-
-    const car = await this.carsRepository.create({
+  async execute(data: ICreateCarDTO): Promise<Car> {
+    const {
       name,
       description,
-      daily_rate,
-      license_plate,
-      fine_amount,
+      dailyRate,
+      licensePlate,
+      fineAmount,
       brand,
-      category_id,
-    });
+      categoryId,
+    } = data;
 
-    return car;
+    const car = await this.carRepository.findByLicensePlate(licensePlate);
+
+    if (car) {
+      throw new AppError('Car with this licensePlate already exist', 409);
+    }
+
+    return this.carRepository.create({
+      name,
+      description,
+      dailyRate,
+      licensePlate,
+      fineAmount,
+      brand,
+      categoryId,
+    });
   }
 }
-
-export default CreateCarUseCase;

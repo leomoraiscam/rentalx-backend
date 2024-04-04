@@ -1,41 +1,38 @@
 import { injectable, inject } from 'tsyringe';
 
-import Car from '@modules/cars/infra/typeorm/entities/Car';
-import ICarsRepository from '@modules/cars/repositories/ICarsRepository';
-import ISpecificationRepository from '@modules/cars/repositories/ISpecificationRepository';
+import { ICreateCarSpecificationsDTO } from '@modules/cars/dtos/ICreateCarSpecificationsDTO';
+import { Car } from '@modules/cars/infra/typeorm/entities/Car';
+import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
+import { ISpecificationRepository } from '@modules/cars/repositories/ISpecificationRepository';
 import AppError from '@shared/errors/AppError';
 
-interface IRequest {
-  car_id: string;
-  specifications_id: string[];
-}
-
 @injectable()
-class CreateCarsSpecificationsUseCase {
+export class CreateCarSpecificationsUseCase {
   constructor(
-    @inject('CarsRepository')
-    private carsRepository: ICarsRepository,
-    @inject('SpecificationsRepository')
-    private specificationsRepository: ISpecificationRepository
+    @inject('CarRepository')
+    private carRepository: ICarRepository,
+    @inject('SpecificationRepository')
+    private specificationRepository: ISpecificationRepository
   ) {}
 
-  async execute({ car_id, specifications_id }: IRequest): Promise<Car> {
-    const carsExist = await await this.carsRepository.findById(car_id);
+  async execute({
+    carId,
+    specificationsIds,
+  }: ICreateCarSpecificationsDTO): Promise<Car> {
+    const car = await this.carRepository.findById(carId);
 
-    if (!carsExist) {
-      throw new AppError('Car does not exist!');
+    if (!car) {
+      throw new AppError('car not found', 404);
     }
 
-    const specifications = await this.specificationsRepository.findByIds(
-      specifications_id
+    const specifications = await this.specificationRepository.findByIds(
+      specificationsIds
     );
 
-    carsExist.specifications = specifications;
+    Object.assign(car, {
+      specifications,
+    });
 
-    await this.carsRepository.create(carsExist);
-
-    return carsExist;
+    return this.carRepository.create(car);
   }
 }
-
-export default CreateCarsSpecificationsUseCase;

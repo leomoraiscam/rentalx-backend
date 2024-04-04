@@ -1,30 +1,21 @@
 import { injectable, inject } from 'tsyringe';
 
-import Car from '@modules/cars/infra/typeorm/entities/Car';
-import ICarsRepository from '@modules/cars/repositories/ICarsRepository';
-
-interface IRequest {
-  category_id?: string;
-  brand?: string;
-  name?: string;
-}
+import { IQueryListAvailableCarsDTO } from '@modules/cars/dtos/IQueryListAvailableCarsDTO';
+import { Car } from '@modules/cars/infra/typeorm/entities/Car';
+import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
 
 @injectable()
-class ListAvailableCarsUseCase {
+export class ListAvailableCarsUseCase {
   constructor(
-    @inject('CarsRepository')
-    private carsRepository: ICarsRepository
+    @inject('CarRepository')
+    private carRepository: ICarRepository
   ) {}
 
-  async execute({ category_id, brand, name }: IRequest): Promise<Car[]> {
-    const cars = await this.carsRepository.findAvailable(
-      brand,
-      category_id,
-      name
-    );
-
-    return cars;
+  async execute({
+    categoryId,
+    brand,
+    name,
+  }: IQueryListAvailableCarsDTO): Promise<Car[]> {
+    return this.carRepository.findAvailable({ brand, categoryId, name });
   }
 }
-
-export default ListAvailableCarsUseCase;

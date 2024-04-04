@@ -6,16 +6,16 @@ import { UserRepository } from '@modules/accounts/infra/typeorm/repositories/Use
 import { UserTokenRepository } from '@modules/accounts/infra/typeorm/repositories/UserTokenRepository';
 import { IUserRepository } from '@modules/accounts/repositories/IUserRepository';
 import { IUserTokenRepository } from '@modules/accounts/repositories/IUserTokenRepository';
-import CarsRepository from '@modules/cars//infra/typeorm/repositories/CarsRepository';
-import SpecificationsRepository from '@modules/cars//infra/typeorm/repositories/SpecificationRepository';
-import CarsImagesRepository from '@modules/cars/infra/typeorm/repositories/CarsImagesRepository';
-import CategoryRepository from '@modules/cars/infra/typeorm/repositories/CategoriesRepository';
-import ICarsImagesRepository from '@modules/cars/repositories/ICarsImagesRepository';
-import ICarsRepository from '@modules/cars/repositories/ICarsRepository';
-import ICategoryRepository from '@modules/cars/repositories/ICategoriesRepository';
-import ISpecificationRepository from '@modules/cars/repositories/ISpecificationRepository';
-import RentalsRepository from '@modules/rentals/infra/typeorm/repositories/RentalsRepository';
-import IRentalsRepository from '@modules/rentals/repositories/IRentalsRepository';
+import { CarRepository } from '@modules/cars//infra/typeorm/repositories/CarRepository';
+import { SpecificationRepository } from '@modules/cars//infra/typeorm/repositories/SpecificationRepository';
+import { CarImageRepository } from '@modules/cars/infra/typeorm/repositories/CarImageRepository';
+import { CategoryRepository } from '@modules/cars/infra/typeorm/repositories/CategoryRepository';
+import { ICarImageRepository } from '@modules/cars/repositories/ICarImageRepository';
+import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
+import { ICategoryRepository } from '@modules/cars/repositories/ICategoryRepository';
+import { ISpecificationRepository } from '@modules/cars/repositories/ISpecificationRepository';
+import { RentalRepository } from '@modules/rentals/infra/typeorm/repositories/RentalRepository';
+import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
 
 container.registerSingleton<ICategoryRepository>(
   'CategoryRepository',
@@ -23,22 +23,22 @@ container.registerSingleton<ICategoryRepository>(
 );
 
 container.registerSingleton<ISpecificationRepository>(
-  'SpecificationsRepository',
-  SpecificationsRepository
+  'SpecificationRepository',
+  SpecificationRepository
 );
 
 container.registerSingleton<IUserRepository>('UserRepository', UserRepository);
 
-container.registerSingleton<ICarsRepository>('CarsRepository', CarsRepository);
+container.registerSingleton<ICarRepository>('CarRepository', CarRepository);
 
-container.registerSingleton<ICarsImagesRepository>(
-  'CarsImagesRepository',
-  CarsImagesRepository
+container.registerSingleton<ICarImageRepository>(
+  'CarImageRepository',
+  CarImageRepository
 );
 
-container.registerSingleton<IRentalsRepository>(
+container.registerSingleton<IRentalRepository>(
   'RentalsRepository',
-  RentalsRepository
+  RentalRepository
 );
 
 container.registerSingleton<IUserTokenRepository>(

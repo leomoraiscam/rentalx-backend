@@ -1,68 +1,72 @@
 import { inject, injectable } from 'tsyringe';
 
-import ICarsRepository from '@modules/cars/repositories/ICarsRepository';
+import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
+import { ICreateRentalDTO } from '@modules/rentals/dtos/ICreateRentalDTO';
+import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
 import IDateProvider from '@shared/container/providers/DateProvider/IDateProvider';
 import AppError from '@shared/errors/AppError';
 
-import IRentalsRepository from '../../repositories/IRentalsRepository';
-
-interface IRequest {
-  user_id: string;
-  car_id: string;
-  expected_return_date: Date;
-}
+import { IRentalRepository } from '../../repositories/IRentalRepository';
 
 @injectable()
-class CreateRentalUseCase {
+export class CreateRentalUseCase {
   constructor(
-    @inject('RentalsRepository')
-    private rentalsRepository: IRentalsRepository,
-    @inject('DayjsDateProvider')
+    @inject('RentalRepository')
+    private rentalRepository: IRentalRepository,
+    @inject('DateProvider')
     private dateProvider: IDateProvider,
-    @inject('CarsRepository')
-    private carsRepository: ICarsRepository
+    @inject('CarRepository')
+    private carRepository: ICarRepository
   ) {}
 
-  async execute({ user_id, car_id, expected_return_date }: IRequest) {
+  async execute({
+    userId,
+    carId,
+    expectedReturnDate,
+  }: ICreateRentalDTO): Promise<Rental> {
     const minimumHours = 24;
 
-    const carUnavailable = await this.rentalsRepository.findOpebRentalByCar(
-      car_id
+    const carUnavailable = await this.rentalRepository.findOpenRentalByCar(
+      carId
     );
 
     if (carUnavailable) {
-      throw new AppError('Car is unavailable');
+      throw new AppError(
+        'This car is unavailable already exist an rental in progress to the same',
+        409
+      );
     }
 
-    const rentalOpenToUser = await this.rentalsRepository.findOpenRentalByUser(
-      user_id
+    const rentalOpenToUser = await this.rentalRepository.findOpenRentalByUser(
+      userId
     );
 
     if (rentalOpenToUser) {
-      throw new AppError("There's a rental in progress for user");
+      throw new AppError("There's a rental in progress for user", 409);
     }
 
     const dateNow = this.dateProvider.dateNow();
-
     const compare = this.dateProvider.compareInHours(
       dateNow,
-      expected_return_date
+      expectedReturnDate
     );
 
     if (compare < minimumHours) {
-      throw new AppError('Invalid return time!');
+      throw new AppError('Invalid return time!', 422);
     }
 
-    const rental = await this.rentalsRepository.create({
-      user_id,
-      car_id,
-      expected_return_date,
-    });
-
-    await this.carsRepository.updateAvailable(car_id, false);
+    const [rental] = await Promise.all([
+      this.rentalRepository.create({
+        userId,
+        carId,
+        expectedReturnDate,
+      }),
+      this.carRepository.updateAvailable({
+        id: carId,
+        available: false,
+      }),
+    ]);
 
     return rental;
   }
 }
-
-export default CreateRentalUseCase;
