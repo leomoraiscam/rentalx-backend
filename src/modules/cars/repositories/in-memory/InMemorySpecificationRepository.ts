@@ -3,7 +3,8 @@ import { ICreateSpecificationDTO } from '@modules/cars/dtos/ICreateSpecification
 import { Specification } from '../../infra/typeorm/entities/Specification';
 import { ISpecificationRepository } from '../ISpecificationRepository';
 
-export class SpecificationInMemory implements ISpecificationRepository {
+export class InMemorySpecificationRepository
+  implements ISpecificationRepository {
   private specifications: Specification[] = [];
 
   async findByName(name: string): Promise<Specification> {
