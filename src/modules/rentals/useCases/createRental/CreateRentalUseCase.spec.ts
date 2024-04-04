@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 
-import { InMemoryUserRepository } from '@modules/accounts/repositories/in-memory/UsersRepositoryInMemory';
+import { InMemoryUserRepository } from '@modules/accounts/repositories/in-memory/InMemoryUserRepository';
 import { InMemoryCarRepository } from '@modules/cars/repositories/in-memory/InMemoryCarRepository';
 import { InMemoryRentalRepository } from '@modules/rentals/repositories/in-memory/InMemoryRentalRepository';
 import { InMemoryDateProvider } from '@shared/container/providers/DateProvider/in-memory/InMemoryDateProvider';
