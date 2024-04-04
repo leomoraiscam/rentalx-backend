@@ -17,7 +17,7 @@ import AppError from '@shared/errors/AppError';
 import swaggerFile from '../../../swagger.json';
 import createConnection from '../typeorm';
 import rateLimiter from './middlewares/rateLimiter';
-import routes from './routes';
+import { router } from './routes';
 
 createConnection();
 const app = express();
@@ -38,7 +38,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 app.use('/avatar', express.static(`${upload.tmpFolder}/avatar`));
 app.use('/car', express.static(`${upload.tmpFolder}/cars`));
 app.use(cors());
-app.use(routes);
+app.use(router);
 app.use(Sentry.Handlers.errorHandler());
 app.use(
   (err: Error, request: Request, response: Response, next: NextFunction) => {

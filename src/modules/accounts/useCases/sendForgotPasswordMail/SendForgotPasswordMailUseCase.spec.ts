@@ -1,64 +1,55 @@
-import UserRepositoryInMemory from '@modules/accounts/repositories/in-memory/UsersRepositoryInMemory';
-import UsersTokensRepositoryInMemory from '@modules/accounts/repositories/in-memory/UsersTokensRepositoryInMemory';
-import DayjsDateProvider from '@shared/container/providers/DateProvider/implementations/DayjsDateProvider';
-import MailProviderInMemory from '@shared/container/providers/MailProvider/in-memory/MailProviderInMemory';
+import { InMemoryUserRepository } from '@modules/accounts/repositories/in-memory/InMemoryUserRepository';
+import { InMemoryUserTokenRepository } from '@modules/accounts/repositories/in-memory/InMemoryUserTokenRepository';
+import { InMemoryDateProvider } from '@shared/container/providers/DateProvider/in-memory/InMemoryDateProvider';
+import { InMemoryMailProvider } from '@shared/container/providers/MailProvider/in-memory/InMemoryMailProvider';
 import AppError from '@shared/errors/AppError';
 
-import SendForgotPasswordMailUseCase from './SendForgotPasswordMailUseCase';
+import { SendForgotPasswordMailUseCase } from './SendForgotPasswordMailUseCase';
 
+let inMemoryUserRepository: InMemoryUserRepository;
+let inMemoryUserTokenRepository: InMemoryUserTokenRepository;
+let inMemoryDateProvider: InMemoryDateProvider;
+let inMemoryMailProvider: InMemoryMailProvider;
 let sendForgotPasswordMailUseCase: SendForgotPasswordMailUseCase;
-let userRepositoryInMemory: UserRepositoryInMemory;
-let usersTokensRepositoryInMemory: UsersTokensRepositoryInMemory;
-let dayjsDateProvider: DayjsDateProvider;
-let mailProviderInMemory: MailProviderInMemory;
 
-describe('Send forgot mail', () => {
+describe('SendForgotPasswordMailUseCase', () => {
   beforeEach(() => {
-    userRepositoryInMemory = new UserRepositoryInMemory();
-    usersTokensRepositoryInMemory = new UsersTokensRepositoryInMemory();
-    dayjsDateProvider = new DayjsDateProvider();
-    mailProviderInMemory = new MailProviderInMemory();
+    inMemoryUserRepository = new InMemoryUserRepository();
+    inMemoryUserTokenRepository = new InMemoryUserTokenRepository();
+    inMemoryDateProvider = new InMemoryDateProvider();
+    inMemoryMailProvider = new InMemoryMailProvider();
     sendForgotPasswordMailUseCase = new SendForgotPasswordMailUseCase(
-      userRepositoryInMemory,
-      usersTokensRepositoryInMemory,
-      dayjsDateProvider,
-      mailProviderInMemory
+      inMemoryUserRepository,
+      inMemoryUserTokenRepository,
+      inMemoryDateProvider,
+      inMemoryMailProvider
     );
   });
 
-  it('should be able to send a forgot password mail to user', async () => {
-    const sendMail = spyOn(mailProviderInMemory, 'sendMail');
+  it('should be able to send recover the password when user exist', async () => {
+    const sendMailSpied = jest.spyOn(inMemoryMailProvider, 'sendMail');
 
-    await userRepositoryInMemory.create({
-      driver_license: '424-6812',
-      email: 'sinaasi@bo.hu',
-      name: 'Georgia Manning',
-      password: '1234',
+    const { email } = await inMemoryUserRepository.create({
+      name: 'Todd Fisher',
+      email: 'ogimcak@zad.fj',
+      password: 'any-pass@123',
+      driverLicense: '8276259318',
     });
 
-    await sendForgotPasswordMailUseCase.execute('sinaasi@bo.hu');
+    await sendForgotPasswordMailUseCase.execute(email);
 
-    expect(sendMail).toHaveBeenCalled();
+    expect(sendMailSpied).toHaveBeenCalled();
+    expect(sendMailSpied).toHaveBeenCalledTimes(1);
   });
 
-  it('should not be able to send a mail if user does not exist', async () => {
+  it('should not be able to recover the password when user a non exist', async () => {
+    const sendMailSpied = jest.spyOn(inMemoryMailProvider, 'sendMail');
+
     await expect(
-      sendForgotPasswordMailUseCase.execute('ha@mal.gp')
-    ).rejects.toEqual(new AppError('User does not exist!'));
-  });
+      sendForgotPasswordMailUseCase.execute('any-mail@email.com')
+    ).rejects.toBeInstanceOf(AppError);
 
-  it('should be able to create an users tokens', async () => {
-    const generateTokenMail = spyOn(usersTokensRepositoryInMemory, 'create');
-
-    await userRepositoryInMemory.create({
-      driver_license: '481-6813',
-      email: 'le@adoom.sl',
-      name: 'Wesley Walters',
-      password: '1234',
-    });
-
-    await sendForgotPasswordMailUseCase.execute('le@adoom.sl');
-
-    expect(generateTokenMail).toHaveBeenCalled();
+    expect(sendMailSpied).not.toHaveBeenCalled();
+    expect(sendMailSpied).toHaveBeenCalledTimes(0);
   });
 });

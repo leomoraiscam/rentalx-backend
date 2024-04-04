@@ -1,58 +1,81 @@
 import { verify, sign } from 'jsonwebtoken';
 import { inject, injectable } from 'tsyringe';
 
-import auth from '@config/auth';
+import { auth } from '@config/auth';
+import { IRefreshedTokenDTO } from '@modules/accounts/dtos/IRefreshedTokenDTO';
+import { IUserTokenRepository } from '@modules/accounts/repositories/IUserTokenRepository';
 import IDateProvider from '@shared/container/providers/DateProvider/IDateProvider';
+import { ILoggerProvider } from '@shared/container/providers/LoggerProvider/models/ILoggerProvider';
 import AppError from '@shared/errors/AppError';
-
-import IUsersTokensRepository from '../../repositories/IUsersTokensRepository';
 
 interface IPayload {
   sub: string;
   email: string;
 }
+
 @injectable()
-class RefreshTokenUseCase {
+export class RefreshTokenUseCase {
   constructor(
-    @inject('UsersTokensRepository')
-    private usersTokensRepository: IUsersTokensRepository,
-    @inject('DayjsDateProvider')
-    private dayjsDateProvider: IDateProvider
+    @inject('UserTokenRepository')
+    private userTokenRepository: IUserTokenRepository,
+    @inject('DateProvider')
+    private dateProvider: IDateProvider,
+    @inject('LoggerProvider')
+    private loggerProvider: ILoggerProvider
   ) {}
 
-  async execute(token: string): Promise<string> {
-    const { email, sub } = verify(token, auth.secret_refresh_token) as IPayload;
+  async execute(token: string): Promise<IRefreshedTokenDTO> {
+    const {
+      secretRefreshToken,
+      expiresInRefreshToken,
+      expiresRefreshTokenDays,
+    } = auth;
+    const { email, sub: userId } = verify(
+      token,
+      secretRefreshToken
+    ) as IPayload;
 
-    const user_id = sub;
-
-    const userToken = await this.usersTokensRepository.findByUserIdAndRefreshToken(
-      user_id,
-      token
+    const userToken = await this.userTokenRepository.findByUserIdAndRefreshToken(
+      {
+        userId,
+        refreshToken: token,
+      }
     );
 
     if (!userToken) {
-      throw new AppError('Refresh token does not exist');
+      throw new AppError('token not found', 404);
     }
 
-    await this.usersTokensRepository.deleteById(userToken.id);
+    await this.userTokenRepository.deleteById(userToken.id);
 
-    const refresh_token = sign({ email }, auth.secret_refresh_token, {
-      subject: user_id,
-      expiresIn: auth.expires_in_refresh_token,
+    if (!secretRefreshToken || !expiresInRefreshToken) {
+      this.loggerProvider.log({
+        level: 'error',
+        message: `${RefreshTokenUseCase.name} Missing environment variables for JWT configuration`,
+        metadata: auth,
+      });
+
+      return;
+    }
+
+    const refreshToken = sign({ email }, secretRefreshToken, {
+      subject: userId,
+      expiresIn: expiresInRefreshToken,
     });
 
-    const expires_date = this.dayjsDateProvider.addDays(
-      auth.expires_refresh_token_days
+    const parsedExpiresRefreshTokenDays = Number(expiresRefreshTokenDays);
+    const expiresDate = this.dateProvider.addDays(
+      parsedExpiresRefreshTokenDays
     );
 
-    await this.usersTokensRepository.create({
-      expires_date,
-      refresh_token,
-      user_id,
+    await this.userTokenRepository.create({
+      expiresDate,
+      refreshToken,
+      userId,
     });
 
-    return refresh_token;
+    return {
+      refreshToken,
+    };
   }
 }
-
-export default RefreshTokenUseCase;

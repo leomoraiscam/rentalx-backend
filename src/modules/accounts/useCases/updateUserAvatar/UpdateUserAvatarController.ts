@@ -1,22 +1,24 @@
+import { plainToClass } from 'class-transformer';
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
-import UpdateUserAvatarUseCase from './UpdateUserAvatarUseCase';
+import { User } from '@modules/accounts/infra/typeorm/entities/User';
 
-class UpdateUserAvatarController {
+import { UpdateUserAvatarUseCase } from './UpdateUserAvatarUseCase';
+
+export class UpdateUserAvatarController {
   async handle(request: Request, response: Response): Promise<Response> {
-    const { id } = request.user;
-    const avatar_file = request.file.filename;
+    const { id: userId } = request.user;
+    const avatarFile = request.file.filename;
 
     const updateUserAvatarUseCase = container.resolve(UpdateUserAvatarUseCase);
-
-    await updateUserAvatarUseCase.execute({
-      user_id: id,
-      avatar_file,
+    const updatedUser = await updateUserAvatarUseCase.execute({
+      userId,
+      avatarFile,
     });
 
-    return response.status(200).send();
+    const userInstance = plainToClass(User, updatedUser);
+
+    return response.status(200).json(userInstance);
   }
 }
-
-export default UpdateUserAvatarController;

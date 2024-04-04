@@ -1,9 +1,9 @@
 import { Expose } from 'class-transformer';
 import { Entity, PrimaryColumn, Column, CreateDateColumn } from 'typeorm';
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidV4 } from 'uuid';
 
 @Entity('users')
-class User {
+export class User {
   @PrimaryColumn('uuid')
   id: string;
 
@@ -16,20 +16,20 @@ class User {
   @Column()
   password: string;
 
-  @Column()
-  driver_license: string;
+  @Column({ name: 'driver_license' })
+  driverLicense: string;
 
-  @Column()
+  @Column({ name: 'is_admin' })
   isAdmin: boolean;
 
   @Column()
   avatar: string;
 
-  @CreateDateColumn()
-  created_at: Date;
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
 
-  @Expose({ name: 'avatar_url' })
-  avatar_url(): string {
+  @Expose({ name: 'avatarUrl' })
+  avatarUrl(): string {
     switch (process.env.DISK) {
       case 'local':
         return `${process.env.APP_URL}:${process.env.APP_PORT}/avatar/${this.avatar}`;
@@ -42,9 +42,7 @@ class User {
 
   constructor() {
     if (!this.id) {
-      this.id = uuidv4();
+      this.id = uuidV4();
     }
   }
 }
-
-export default User;

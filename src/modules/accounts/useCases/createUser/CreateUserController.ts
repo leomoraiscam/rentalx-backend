@@ -1,23 +1,25 @@
+import { plainToClass } from 'class-transformer';
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
-import CreateUserUseCase from './CreateUserUseCase';
+import { User } from '@modules/accounts/infra/typeorm/entities/User';
 
-class CreateUserController {
+import { CreateUserUseCase } from './CreateUserUseCase';
+
+export class CreateUserController {
   async handle(request: Request, response: Response): Promise<Response> {
-    const { name, email, password, driver_license } = request.body;
+    const { name, email, password, driverLicense } = request.body;
 
     const createUserUseCase = container.resolve(CreateUserUseCase);
-
-    await createUserUseCase.execute({
+    const user = await createUserUseCase.execute({
       name,
       email,
       password,
-      driver_license,
+      driverLicense,
     });
 
-    return response.status(201).send();
+    const userInstance = plainToClass(User, user);
+
+    return response.status(201).json(userInstance);
   }
 }
-
-export default CreateUserController;
