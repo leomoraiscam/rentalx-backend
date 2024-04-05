@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { pathsToModuleNameMapper } from 'ts-jest/utils';
+import { pathsToModuleNameMapper } from 'ts-jest';
 
 import { compilerOptions } from './tsconfig.json';
 
@@ -185,4 +185,5 @@ export default {
 
   // Whether to use watchman for file crawling
   // watchman: true,
+  setupFiles: ['dotenv/config'],
 };
