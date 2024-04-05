@@ -6,17 +6,17 @@ import { ListRentalsByUserController } from '@modules/rentals/useCases/listRenta
 
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
-const rentalRoutes = Router();
+const rentalRouter = Router();
 const createRentalController = new CreateRentalController();
 const devolutionRentalController = new DevolutionRentalController();
 const listRentalsByUserController = new ListRentalsByUserController();
 
-rentalRoutes.get('/', ensureAuthenticated, listRentalsByUserController.handle);
-rentalRoutes.post('/', ensureAuthenticated, createRentalController.handle);
-rentalRoutes.post(
+rentalRouter.get('/', ensureAuthenticated, listRentalsByUserController.handle);
+rentalRouter.post('/', ensureAuthenticated, createRentalController.handle);
+rentalRouter.post(
   '/devolution/:id',
   ensureAuthenticated,
   devolutionRentalController.handle
 );
 
-export default rentalRoutes;
+export { rentalRouter };

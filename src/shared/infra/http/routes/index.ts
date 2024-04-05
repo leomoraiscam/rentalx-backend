@@ -1,22 +1,21 @@
 import { Router } from 'express';
 
 import { accountsRouter } from './accounts.routes';
-import carsRoutes from './cars.routes';
+import { carsRouter } from './cars.routes';
 import { categoriesRouter } from './categories.routes';
 import { passwordRouter } from './password.routes';
-import rentalRoutes from './rental.routes';
+import { rentalRouter } from './rentals.routes';
 import { sessionsRouter } from './sessions.routes';
-import speficationRoutes from './specification.routes';
+import { specificationRouter } from './specifications.routes';
 
 const router = Router();
 
 router.use('/sessions', sessionsRouter);
 router.use('/accounts', accountsRouter);
 router.use('/password', passwordRouter);
-
 router.use('/categories', categoriesRouter);
-router.use('/specifications', speficationRoutes);
-router.use('/cars', carsRoutes);
-router.use('/rentals', rentalRoutes);
+router.use('/specifications', specificationRouter);
+router.use('/cars', carsRouter);
+router.use('/rentals', rentalRouter);
 
 export { router };

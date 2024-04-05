@@ -4,14 +4,13 @@ import { CreateSpecificationController } from '@modules/cars/useCases/createSpec
 
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
-const specificationRoutes = Router();
-
+const specificationRouter = Router();
 const createSpecificationController = new CreateSpecificationController();
 
-specificationRoutes.post(
+specificationRouter.post(
   '/',
   ensureAuthenticated,
   createSpecificationController.handle
 );
 
-export default specificationRoutes;
+export { specificationRouter };

@@ -10,32 +10,33 @@ import { UploadCarImagesController } from '@modules/cars/useCases/uploadCarImage
 import ensureAdmin from '../middlewares/ensureAdmin';
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
-const carsRoutes = Router();
 const uploadImages = multer(uploadConfig);
 
+const carsRouter = Router();
 const createCarController = new CreateCarController();
 const listAvailableCarsController = new ListAvailableCarsController();
 const createCarSpecificationsController = new CreateCarSpecificationsController();
 const uploadCarImagesController = new UploadCarImagesController();
 
-carsRoutes.post(
+carsRouter.post(
   '/',
   ensureAuthenticated,
   ensureAdmin,
   createCarController.handle
 );
-carsRoutes.post(
-  '/specifications/:id',
+carsRouter.post(
+  '/:carId/specifications',
   ensureAuthenticated,
   ensureAdmin,
   createCarSpecificationsController.handle
 );
-carsRoutes.get('/available', listAvailableCarsController.handle);
-carsRoutes.post(
-  '/images/:id',
+carsRouter.get('/available', listAvailableCarsController.handle);
+carsRouter.post(
+  '/:id/images',
   ensureAuthenticated,
   ensureAdmin,
   uploadImages.array('images'),
   uploadCarImagesController.handle
 );
-export default carsRoutes;
+
+export { carsRouter };
