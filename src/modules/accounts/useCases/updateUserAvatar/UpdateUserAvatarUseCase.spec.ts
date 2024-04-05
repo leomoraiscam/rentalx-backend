@@ -62,7 +62,8 @@ describe('UpdateUserAvatarUseCase', () => {
 
     expect(deleteFileSpied).toHaveBeenCalledTimes(1);
     expect(deleteFileSpied).toHaveBeenCalledWith(
-      `./tmp/avatar/old-avatar-file.jpg`
+      'old-avatar-file.jpg',
+      'avatar'
     );
   });
 });
