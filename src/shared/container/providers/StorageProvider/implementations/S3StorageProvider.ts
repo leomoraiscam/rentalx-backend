@@ -3,7 +3,7 @@ import fs from 'fs';
 import mime from 'mime';
 import path from 'path';
 
-import upload from '@config/upload';
+import { multerConfig as upload } from '@config/upload';
 
 import { IStorageProvider } from '../models/IStorageProvider';
 
