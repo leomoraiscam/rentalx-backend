@@ -1,3 +1,4 @@
+import { classToClass, plainToClass } from 'class-transformer';
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
@@ -13,6 +14,8 @@ export class AuthenticateUserController {
       password,
     });
 
-    return response.status(200).json(authenticatedUser);
+    const authenticateWithUserInstance = classToClass(authenticatedUser);
+
+    return response.status(200).json(authenticateWithUserInstance);
   }
 }
