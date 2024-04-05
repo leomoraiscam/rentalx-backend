@@ -17,13 +17,10 @@ dotenv.config();
 
 container.registerSingleton<IHashProvider>('HashProvider', BCryptHashProvider);
 
-container.registerSingleton<IDateProvider>(
-  'DayjsDateProvider',
-  DayjsDateProvider
-);
+container.registerSingleton<IDateProvider>('DateProvider', DayjsDateProvider);
 
 container.registerInstance<IMailProvider>(
-  'EtherealMailProvider',
+  'MailProvider',
   new EtherealMailProvider()
 );
 
