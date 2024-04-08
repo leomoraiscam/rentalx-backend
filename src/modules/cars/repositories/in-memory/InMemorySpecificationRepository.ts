@@ -7,7 +7,7 @@ export class InMemorySpecificationRepository
   implements ISpecificationRepository {
   private specifications: Specification[] = [];
 
-  async findByName(name: string): Promise<Specification> {
+  async findByName(name: string): Promise<Specification | null> {
     return this.specifications.find(
       (specification) => specification.name === name
     );

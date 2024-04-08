@@ -6,7 +6,7 @@ import { ICarImageRepository } from '../ICarImageRepository';
 export class InMemoryCarImageRepository implements ICarImageRepository {
   private carImages: CarImage[] = [];
 
-  async listByCarId(carId: string): Promise<CarImage[]> {
+  async listByCarId(carId: string): Promise<CarImage[] | null> {
     return this.carImages.filter((carImage) => carImage.carId === carId);
   }
 

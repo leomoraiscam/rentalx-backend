@@ -26,6 +26,24 @@ export class CarRepository implements ICarRepository {
 
     const carsQuery = this.repository
       .createQueryBuilder('c')
+      .leftJoinAndSelect('c.category', 'category')
+      .leftJoinAndSelect('c.specifications', 'specifications')
+      .leftJoinAndSelect('c.images', 'images')
+      .select([
+        'c.id',
+        'c.name',
+        'c.description',
+        'c.dailyRate',
+        'c.available',
+        'c.licensePlate',
+        'c.fineAmount',
+        'c.brand',
+        'category.name',
+        'category.description',
+        'specifications.name',
+        'specifications.description',
+        'images.imageName',
+      ])
       .where('available = :available', { available: true });
 
     if (name) {
@@ -54,7 +72,6 @@ export class CarRepository implements ICarRepository {
       dailyRate,
       fineAmount,
       licensePlate,
-      id,
       specifications,
     } = data;
 
@@ -66,7 +83,6 @@ export class CarRepository implements ICarRepository {
       dailyRate,
       fineAmount,
       licensePlate,
-      id,
       specifications,
     });
 
