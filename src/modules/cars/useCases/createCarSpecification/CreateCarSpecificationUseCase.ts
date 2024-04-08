@@ -33,6 +33,6 @@ export class CreateCarSpecificationsUseCase {
       specifications,
     });
 
-    return this.carRepository.create(car);
+    return this.carRepository.save(car);
   }
 }

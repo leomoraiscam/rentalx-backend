@@ -5,7 +5,7 @@ import { CreateCarSpecificationsUseCase } from './CreateCarSpecificationUseCase'
 
 export class CreateCarSpecificationsController {
   async handle(request: Request, response: Response): Promise<Response> {
-    const { id: carId } = request.params;
+    const { carId } = request.params;
     const { specificationsIds } = request.body;
 
     const createCarSpecificationsUseCase = container.resolve(
