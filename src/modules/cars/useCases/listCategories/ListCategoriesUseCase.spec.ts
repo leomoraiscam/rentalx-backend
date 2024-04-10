@@ -1,3 +1,4 @@
+import { OrdenationProps } from '@modules/cars/dtos/IQueryListCategoriesDTO';
 import { InMemoryCategoryRepository } from '@modules/cars/repositories/in-memory/InMemoryCategoryRepository';
 
 import { ListCategoriesUseCase } from './ListCategoriesUseCase';
@@ -27,8 +28,12 @@ describe('ListCategoriesUseCase', () => {
       description: 'Sedan`s cars',
     });
 
-    const categories = await listCategoriesUseCase.execute();
+    const categories = await listCategoriesUseCase.execute({
+      page: 1,
+      perPage: 10,
+      order: OrdenationProps.ASC,
+    });
 
-    expect(categories.length).toEqual(3);
+    expect(categories.data.length).toEqual(3);
   });
 });

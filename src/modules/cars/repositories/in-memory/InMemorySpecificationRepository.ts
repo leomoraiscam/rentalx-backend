@@ -1,4 +1,6 @@
 import { ICreateSpecificationDTO } from '@modules/cars/dtos/ICreateSpecificationDTO';
+import { IPaginationQueryResponseDTO } from '@modules/cars/dtos/IPaginationResponseDTO';
+import { IQueryListCategoriesDTO } from '@modules/cars/dtos/IQueryListCategoriesDTO';
 
 import { Specification } from '../../infra/typeorm/entities/Specification';
 import { ISpecificationRepository } from '../ISpecificationRepository';
@@ -17,6 +19,36 @@ export class InMemorySpecificationRepository
     return this.specifications.filter((specification) =>
       ids.includes(specification.id)
     );
+  }
+
+  async list(
+    options: IQueryListCategoriesDTO
+  ): Promise<IPaginationQueryResponseDTO<Specification>> {
+    let sortedSpecifications = this.specifications;
+
+    const take = options.perPage || 10;
+    const page = options.page || 1;
+    const order = options.order || 'DESC';
+
+    if (order === 'ASC') {
+      sortedSpecifications = sortedSpecifications.sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
+    } else if (order === 'DESC') {
+      sortedSpecifications = sortedSpecifications.sort((a, b) =>
+        b.name.localeCompare(a.name)
+      );
+    }
+
+    const startIndex = (page - 1) * take;
+    const endIndex = startIndex + take;
+
+    const data = sortedSpecifications.slice(startIndex, endIndex);
+
+    return {
+      result: data,
+      total: this.specifications.length,
+    };
   }
 
   async create(data: ICreateSpecificationDTO): Promise<Specification> {
