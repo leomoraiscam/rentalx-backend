@@ -26,7 +26,7 @@ export class InMemoryRentalRepository implements IRentalRepository {
   }
 
   async create(data: ICreateRentalDTO): Promise<Rental> {
-    const { carId, userId, expectedReturnDate } = data;
+    const { carId, userId, expectedReturnDate, startDate, status } = data;
 
     const rental = new Rental();
 
@@ -34,8 +34,9 @@ export class InMemoryRentalRepository implements IRentalRepository {
       carId,
       userId,
       expectedReturnDate,
-      startDate: new Date(),
+      startDate,
       endDate: null,
+      status,
     });
 
     this.rentals.push(rental);

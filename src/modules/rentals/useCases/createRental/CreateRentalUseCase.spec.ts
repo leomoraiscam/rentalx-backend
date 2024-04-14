@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 
 import { InMemoryUserRepository } from '@modules/accounts/repositories/in-memory/InMemoryUserRepository';
 import { InMemoryCarRepository } from '@modules/cars/repositories/in-memory/InMemoryCarRepository';
+import { RentalStatus } from '@modules/rentals/dtos/enums/RentatStatus';
 import { InMemoryRentalRepository } from '@modules/rentals/repositories/in-memory/InMemoryRentalRepository';
 import { InMemoryDateProvider } from '@shared/container/providers/DateProvider/in-memory/InMemoryDateProvider';
 import { AppError } from '@shared/errors/AppError';
@@ -49,6 +50,51 @@ describe('CreateRentalUseCase', () => {
 
     expect(rental).toHaveProperty('id');
     expect(rental).toHaveProperty('startDate');
+    expect(rental.status).toBe(RentalStatus.CONFIRMED);
+  });
+
+  it('should be able to create a new rental when received start and end date', async () => {
+    jest.spyOn(Date, 'now').mockImplementation(() => {
+      return new Date(2024, 3, 8).getTime();
+    });
+
+    const { id: carId } = await inMemoryCarRepository.create({
+      name: 'R8',
+      brand: 'Audi',
+      description: 'super sport car',
+      dailyRate: 900,
+      licensePlate: 'IKV-911',
+      fineAmount: 480,
+      categoryId: 'sportive',
+    });
+
+    const rental = await createRentalUseCase.execute({
+      userId: 'fake-user-id',
+      carId,
+      startDate: new Date(2024, 3, 10, 12),
+      expectedReturnDate: new Date(2024, 3, 12, 12),
+    });
+
+    expect(rental).toHaveProperty('id');
+    expect(rental.startDate).toEqual(new Date(2024, 3, 10, 12));
+    expect(rental.expectedReturnDate).toEqual(new Date(2024, 3, 12, 12));
+    expect(rental.total).toBe(1800);
+    expect(rental.status).toBe(RentalStatus.CONFIRMED);
+  });
+
+  it('should not be able to create a new rental with invalid return time when received start and end date', async () => {
+    jest.spyOn(Date, 'now').mockImplementation(() => {
+      return new Date(2024, 3, 8).getTime();
+    });
+
+    expect(
+      createRentalUseCase.execute({
+        userId: 'fake-user-id',
+        carId: 'fake-car-id',
+        startDate: new Date(2024, 3, 10, 12),
+        expectedReturnDate: new Date(2024, 3, 10, 14),
+      })
+    ).rejects.toBeInstanceOf(AppError);
   });
 
   it('should not be able to create a new rental if there is another open to the same car', async () => {
