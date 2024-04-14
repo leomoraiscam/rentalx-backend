@@ -1,6 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 
 import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
+import { RentalStatus } from '@modules/rentals/dtos/enums/RentatStatus';
 import { ICreateRentalDTO } from '@modules/rentals/dtos/ICreateRentalDTO';
 import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
 import { IDateProvider } from '@shared/container/providers/DateProvider/models/IDateProvider';
@@ -23,8 +24,12 @@ export class CreateRentalUseCase {
     userId,
     carId,
     expectedReturnDate,
+    startDate,
   }: ICreateRentalDTO): Promise<Rental> {
     const minimumHours = 24;
+    let compare = null;
+    let dateNow: Date;
+    let total = 0;
 
     const carUnavailable = await this.rentalRepository.findOpenRentalByCar(
       carId
@@ -45,14 +50,37 @@ export class CreateRentalUseCase {
       throw new AppError("There's a rental in progress for user", 409);
     }
 
-    const dateNow = this.dateProvider.dateNow();
-    const compare = this.dateProvider.compareInHours(
-      dateNow,
-      expectedReturnDate
-    );
+    if (startDate) {
+      compare = this.dateProvider.compareInHours(startDate, expectedReturnDate);
 
-    if (compare < minimumHours) {
-      throw new AppError('Invalid return time!', 422);
+      if (compare < minimumHours) {
+        throw new AppError('Invalid return time!', 422);
+      }
+
+      const expectedDaysOfRentals = this.dateProvider.compareInDays(
+        startDate,
+        expectedReturnDate
+      );
+
+      const car = await this.carRepository.findById(carId);
+
+      total = expectedDaysOfRentals * car.dailyRate;
+    } else {
+      dateNow = this.dateProvider.dateNow();
+      compare = this.dateProvider.compareInHours(dateNow, expectedReturnDate);
+
+      if (compare < minimumHours) {
+        throw new AppError('Invalid return time!', 422);
+      }
+
+      const expectedDaysOfRentals = this.dateProvider.compareInDays(
+        dateNow,
+        expectedReturnDate
+      );
+
+      const car = await this.carRepository.findById(carId);
+
+      total = expectedDaysOfRentals * car.dailyRate;
     }
 
     const [rental] = await Promise.all([
@@ -60,6 +88,9 @@ export class CreateRentalUseCase {
         userId,
         carId,
         expectedReturnDate,
+        startDate: startDate && startDate ? startDate : dateNow,
+        total,
+        status: RentalStatus.CONFIRMED,
       }),
       this.carRepository.updateAvailable({
         id: carId,
@@ -67,6 +98,9 @@ export class CreateRentalUseCase {
       }),
     ]);
 
-    return rental;
+    return {
+      ...rental,
+      total,
+    };
   }
 }
