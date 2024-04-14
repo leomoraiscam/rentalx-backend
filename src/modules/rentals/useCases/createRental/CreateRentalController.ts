@@ -5,7 +5,7 @@ import { CreateRentalUseCase } from './CreateRentalUseCase';
 
 export class CreateRentalController {
   async handle(request: Request, response: Response): Promise<Response> {
-    const { expectedReturnDate, carId } = request.body;
+    const { expectedReturnDate, carId, startDate } = request.body;
     const { id: userId } = request.user;
 
     const createRentalUseCase = container.resolve(CreateRentalUseCase);
@@ -13,6 +13,7 @@ export class CreateRentalController {
       carId,
       userId,
       expectedReturnDate,
+      startDate,
     });
 
     return response.status(201).json(rental);
