@@ -38,6 +38,9 @@ export class Rental {
   @Column()
   total: number;
 
+  @Column()
+  status: string;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 

@@ -43,7 +43,16 @@ export class RentalRepository implements IRentalRepository {
   }
 
   async create(data: ICreateRentalDTO): Promise<Rental> {
-    const { carId, userId, expectedReturnDate, id, endDate, total } = data;
+    const {
+      carId,
+      userId,
+      expectedReturnDate,
+      id,
+      endDate,
+      total,
+      startDate,
+      status,
+    } = data;
 
     const rental = this.repository.create({
       carId,
@@ -52,6 +61,8 @@ export class RentalRepository implements IRentalRepository {
       id,
       endDate,
       total,
+      startDate,
+      status,
     });
 
     await this.repository.save(rental);
