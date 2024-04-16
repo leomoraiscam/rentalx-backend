@@ -8,8 +8,10 @@ import { IUserRepository } from '@modules/accounts/repositories/IUserRepository'
 import { IUserTokenRepository } from '@modules/accounts/repositories/IUserTokenRepository';
 import { CarRepository } from '@modules/cars//infra/typeorm/repositories/CarRepository';
 import { SpecificationRepository } from '@modules/cars//infra/typeorm/repositories/SpecificationRepository';
+import { CarAvailabilityRepository } from '@modules/cars/infra/typeorm/repositories/CarAvailabilityRepository';
 import { CarImageRepository } from '@modules/cars/infra/typeorm/repositories/CarImageRepository';
 import { CategoryRepository } from '@modules/cars/infra/typeorm/repositories/CategoryRepository';
+import { ICarAvailabilityRepository } from '@modules/cars/repositories/ICarAvailabilityRepository';
 import { ICarImageRepository } from '@modules/cars/repositories/ICarImageRepository';
 import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
 import { ICategoryRepository } from '@modules/cars/repositories/ICategoryRepository';
@@ -38,4 +40,9 @@ container.registerSingleton<IRentalRepository>(
 container.registerSingleton<IUserTokenRepository>(
   'UserTokenRepository',
   UserTokenRepository
+);
+
+container.registerSingleton<ICarAvailabilityRepository>(
+  'CarAvailabilityRepository',
+  CarAvailabilityRepository
 );
