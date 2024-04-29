@@ -12,6 +12,9 @@ export class Category {
   @Column()
   description: string;
 
+  @Column()
+  type: string;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
