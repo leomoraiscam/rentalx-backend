@@ -1,6 +1,8 @@
+/* eslint-disable no-restricted-syntax */
 import { IQueryListAvailableCarsDTO } from '@modules/cars/dtos/IQueryListAvailableCarsDTO';
 import { IUpdateAvailableStatusCarDTO } from '@modules/cars/dtos/IUpdateAvailableStatusCarDTO';
 import { Car } from '@modules/cars/infra/typeorm/entities/Car';
+import { CarImage } from '@modules/cars/infra/typeorm/entities/CarImage';
 
 import { ICreateCarDTO } from '../../dtos/ICreateCarDTO';
 import { ICarRepository } from '../ICarRepository';
@@ -16,22 +18,8 @@ export class InMemoryCarRepository implements ICarRepository {
     return this.car.find((car) => car.licensePlate === licensePlate);
   }
 
-  async findAvailable(data: IQueryListAvailableCarsDTO): Promise<Car[] | null> {
-    const { brand, categoryId, name } = data;
-
-    const cars = this.car.filter((car) => {
-      if (
-        car.available === true ||
-        (brand && car.brand === brand) ||
-        (categoryId && car.categoryId === categoryId) ||
-        (name && car.name === name)
-      ) {
-        return car;
-      }
-      return null;
-    });
-
-    return cars;
+  async findAvailable(): Promise<Car[] | null> {
+    return this.car;
   }
 
   async create(data: ICreateCarDTO): Promise<Car> {
@@ -44,6 +32,7 @@ export class InMemoryCarRepository implements ICarRepository {
       fineAmount,
       licensePlate,
       specifications,
+      images,
     } = data;
 
     const car = new Car();
@@ -57,6 +46,7 @@ export class InMemoryCarRepository implements ICarRepository {
       fineAmount,
       licensePlate,
       specifications,
+      images,
     });
 
     this.car.push(car);
