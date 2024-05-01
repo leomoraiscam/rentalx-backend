@@ -59,24 +59,6 @@ export class ListCategoriesCarsGroupUseCase {
 
     const carsWithAvailability = await Promise.all(transformedCategories);
 
-    // if (data.brand || data.type) {
-    //   const filteredCategories = carsWithAvailability
-    //     .map((category) => ({
-    //       ...category,
-    //       cars: category.cars.filter((car) => {
-    //         return (
-    //           (!data.brand || car.brand === data.brand) &&
-    //           (!data.type || category.type === data.type)
-    //         );
-    //       }),
-    //     }))
-    //     .filter((category) => {
-    //       return category.cars.length > 0;
-    //     });
-
-    //   return filteredCategories;
-    // }
-
     return carsWithAvailability;
   }
 }
