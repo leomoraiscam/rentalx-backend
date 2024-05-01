@@ -43,7 +43,7 @@ describe('ListAvailableCarsUseCase', () => {
   });
 
   it('should be able to list all cars (available and unavailable) classified by groups or categories', async () => {
-    const car = await inMemoryCarRepository.create({
+    await inMemoryCarRepository.create({
       name: 'Mustang',
       brand: 'Ford',
       description: 'Ford Mustang',
@@ -61,8 +61,6 @@ describe('ListAvailableCarsUseCase', () => {
         },
       ],
     });
-
-    await inMemoryCarRepository.save(car);
 
     const cars = await listCategoriesCarsGroupUseCase.execute({});
 
@@ -165,6 +163,7 @@ describe('ListAvailableCarsUseCase', () => {
             dailyRate: 400,
             fineAmount: 400,
             licensePlate: 'DJA-002',
+            category,
             specifications: [
               {
                 id: specification.id,
@@ -191,6 +190,7 @@ describe('ListAvailableCarsUseCase', () => {
             dailyRate: 600,
             fineAmount: 600,
             licensePlate: 'LKO-001',
+            category,
             specifications: [
               {
                 id: specification.id,
@@ -300,7 +300,7 @@ describe('ListAvailableCarsUseCase', () => {
         licensePlate: 'LKO-001',
         fineAmount: 800,
         categoryId: suvCategory.id,
-        category,
+        category: suvCategory,
         specifications: [specification],
         images: [
           {
@@ -319,7 +319,7 @@ describe('ListAvailableCarsUseCase', () => {
     expect(cars.length).toBe(1);
   });
 
-  it.only('should be able to list cars classified by groups or categories when received filter by vehicle brand and type', async () => {
+  it('should be able to list cars classified by groups or categories when received filter by vehicle brand and type', async () => {
     const suvCategory = await inMemoryCategoryRepository.create({
       name: 'GROUP L - SUV',
       description: '',
@@ -348,7 +348,7 @@ describe('ListAvailableCarsUseCase', () => {
       inMemoryCarRepository.create({
         name: 'M2',
         brand: 'BMW',
-        description: 'BM2 M2',
+        description: 'BMW M2',
         dailyRate: 600,
         licensePlate: 'DJA-003',
         fineAmount: 600,
@@ -366,7 +366,7 @@ describe('ListAvailableCarsUseCase', () => {
       inMemoryCarRepository.create({
         name: 'M8',
         brand: 'BMW',
-        description: 'BM2 M8',
+        description: 'BMW M8',
         dailyRate: 1000,
         licensePlate: 'DJA-004',
         fineAmount: 1000,
@@ -406,6 +406,6 @@ describe('ListAvailableCarsUseCase', () => {
       brand: 'BMW',
     });
 
-    expect(cars.length).toBe(2);
+    expect(cars.length).toBe(1);
   });
 });

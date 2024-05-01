@@ -24,7 +24,7 @@ export class ListCategoriesCarsGroupUseCase {
     const categories = await this.categoryRepository.list({
       order: OrdenationProps.DESC,
       page: 1,
-      perPage: 5,
+      perPage: 15,
     });
     const cars = await this.carRepository.findAvailable(data);
 
@@ -43,22 +43,26 @@ export class ListCategoriesCarsGroupUseCase {
           };
         });
 
-      const carsWithAvailability = await Promise.all(categoryCars);
+      const carsWithAvailabilityField = await Promise.all(categoryCars);
 
-      const categoryAvailable = carsWithAvailability.some(
+      const categoryAvailable = carsWithAvailabilityField.some(
         (car) => car.available
       );
 
       return {
         name: category.name,
         type: category.type,
-        cars: carsWithAvailability,
+        cars: carsWithAvailabilityField,
         available: categoryAvailable,
       };
     });
 
-    const carsWithAvailability = await Promise.all(transformedCategories);
+    const promiseAllCarsProcessed = await Promise.all(transformedCategories);
 
-    return carsWithAvailability;
+    const carsWithAvailabilityFieldLength = promiseAllCarsProcessed.filter(
+      (values) => values.cars.length
+    );
+
+    return carsWithAvailabilityFieldLength;
   }
 }
