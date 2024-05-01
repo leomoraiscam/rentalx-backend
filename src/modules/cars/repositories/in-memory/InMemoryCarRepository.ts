@@ -1,8 +1,6 @@
-/* eslint-disable no-restricted-syntax */
 import { IQueryListAvailableCarsDTO } from '@modules/cars/dtos/IQueryListAvailableCarsDTO';
 import { IUpdateAvailableStatusCarDTO } from '@modules/cars/dtos/IUpdateAvailableStatusCarDTO';
 import { Car } from '@modules/cars/infra/typeorm/entities/Car';
-import { CarImage } from '@modules/cars/infra/typeorm/entities/CarImage';
 
 import { ICreateCarDTO } from '../../dtos/ICreateCarDTO';
 import { ICarRepository } from '../ICarRepository';
@@ -18,8 +16,17 @@ export class InMemoryCarRepository implements ICarRepository {
     return this.car.find((car) => car.licensePlate === licensePlate);
   }
 
-  async findAvailable(): Promise<Car[] | null> {
-    return this.car;
+  async findAvailable(data: IQueryListAvailableCarsDTO): Promise<Car[] | null> {
+    return this.car.filter((car) => {
+      if (
+        (!data.brand || car.brand === data.brand) &&
+        (!data.type || car.category.type === data.type)
+      ) {
+        return car;
+      }
+
+      return null;
+    });
   }
 
   async create(data: ICreateCarDTO): Promise<Car> {
@@ -33,6 +40,7 @@ export class InMemoryCarRepository implements ICarRepository {
       licensePlate,
       specifications,
       images,
+      category,
     } = data;
 
     const car = new Car();
@@ -47,6 +55,7 @@ export class InMemoryCarRepository implements ICarRepository {
       licensePlate,
       specifications,
       images,
+      category,
     });
 
     this.car.push(car);

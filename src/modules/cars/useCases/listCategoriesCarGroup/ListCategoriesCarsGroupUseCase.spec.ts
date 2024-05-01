@@ -51,6 +51,7 @@ describe('ListAvailableCarsUseCase', () => {
       licensePlate: 'DJA-002',
       fineAmount: 400,
       categoryId: category.id,
+      category,
       specifications: [specification],
       images: [
         {
@@ -63,7 +64,7 @@ describe('ListAvailableCarsUseCase', () => {
 
     await inMemoryCarRepository.save(car);
 
-    const cars = await listCategoriesCarsGroupUseCase.execute();
+    const cars = await listCategoriesCarsGroupUseCase.execute({});
 
     expect(cars).toEqual(
       expect.arrayContaining([
@@ -117,6 +118,7 @@ describe('ListAvailableCarsUseCase', () => {
         licensePlate: 'DJA-002',
         fineAmount: 400,
         categoryId: category.id,
+        category,
         specifications: [specification],
         images: [
           {
@@ -134,6 +136,7 @@ describe('ListAvailableCarsUseCase', () => {
         licensePlate: 'LKO-001',
         fineAmount: 600,
         categoryId: category.id,
+        category,
         specifications: [specification],
         images: [
           {
@@ -145,7 +148,7 @@ describe('ListAvailableCarsUseCase', () => {
       }),
     ]);
 
-    const cars = await listCategoriesCarsGroupUseCase.execute();
+    const cars = await listCategoriesCarsGroupUseCase.execute({});
 
     expect(cars).toEqual([
       {
@@ -210,15 +213,199 @@ describe('ListAvailableCarsUseCase', () => {
     ]);
   });
 
-  it.todo(
-    'should be able to list cars classified by groups or categories when received filter by vehicle type'
-  );
+  it('should be able to list cars classified by groups or categories when received filter by vehicle brand', async () => {
+    const suvCategory = await inMemoryCategoryRepository.create({
+      name: 'GROUP L - SUV',
+      description: '',
+      type: CategoryType.SUV,
+    });
 
-  it.todo(
-    'should be able to list cars classified by groups or categories when received filter by vehicle brand'
-  );
+    await Promise.all([
+      inMemoryCarRepository.create({
+        name: 'Mustang',
+        brand: 'Ford',
+        description: 'Ford Mustang',
+        dailyRate: 400,
+        licensePlate: 'DJA-002',
+        fineAmount: 400,
+        categoryId: category.id,
+        category,
+        specifications: [specification],
+        images: [
+          {
+            id: 'fake-image-id',
+            imageName: 'mustang-image',
+            createdAt: new Date(2024, 2, 26),
+          },
+        ],
+      }),
+      inMemoryCarRepository.create({
+        name: 'X6',
+        brand: 'BMW',
+        description: 'BMW X6',
+        dailyRate: 800,
+        licensePlate: 'LKO-001',
+        fineAmount: 800,
+        categoryId: suvCategory.id,
+        category: suvCategory,
+        specifications: [specification],
+        images: [
+          {
+            id: 'fake-image-id',
+            imageName: 'bmw-x6-image',
+            createdAt: new Date(2024, 2, 26),
+          },
+        ],
+      }),
+    ]);
 
-  it.todo(
-    'should be able to list cars classified by groups or categories when received filter by vehicle brand and type'
-  );
+    const cars = await listCategoriesCarsGroupUseCase.execute({
+      brand: 'Ford',
+    });
+
+    expect(cars.length).toBe(1);
+  });
+
+  it('should be able to list cars classified by groups or categories when received filter by vehicle type', async () => {
+    const suvCategory = await inMemoryCategoryRepository.create({
+      name: 'GROUP L - SUV',
+      description: '',
+      type: CategoryType.SUV,
+    });
+
+    await Promise.all([
+      inMemoryCarRepository.create({
+        name: 'Mustang',
+        brand: 'Ford',
+        description: 'Ford Mustang',
+        dailyRate: 400,
+        licensePlate: 'DJA-002',
+        fineAmount: 400,
+        categoryId: category.id,
+        category,
+        specifications: [specification],
+        images: [
+          {
+            id: 'fake-image-id',
+            imageName: 'mustang-image',
+            createdAt: new Date(2024, 2, 26),
+          },
+        ],
+      }),
+      inMemoryCarRepository.create({
+        name: 'X6',
+        brand: 'BMW',
+        description: 'BMW X6',
+        dailyRate: 800,
+        licensePlate: 'LKO-001',
+        fineAmount: 800,
+        categoryId: suvCategory.id,
+        category,
+        specifications: [specification],
+        images: [
+          {
+            id: 'fake-image-id',
+            imageName: 'bmw-x6-image',
+            createdAt: new Date(2024, 2, 26),
+          },
+        ],
+      }),
+    ]);
+
+    const cars = await listCategoriesCarsGroupUseCase.execute({
+      type: CategoryType.SPORT,
+    });
+
+    expect(cars.length).toBe(1);
+  });
+
+  it.only('should be able to list cars classified by groups or categories when received filter by vehicle brand and type', async () => {
+    const suvCategory = await inMemoryCategoryRepository.create({
+      name: 'GROUP L - SUV',
+      description: '',
+      type: CategoryType.SUV,
+    });
+
+    await Promise.all([
+      inMemoryCarRepository.create({
+        name: 'Mustang',
+        brand: 'Ford',
+        description: 'Ford Mustang',
+        dailyRate: 400,
+        licensePlate: 'DJA-002',
+        fineAmount: 400,
+        categoryId: category.id,
+        category,
+        specifications: [specification],
+        images: [
+          {
+            id: 'fake-image-id',
+            imageName: 'mustang-image',
+            createdAt: new Date(2024, 2, 26),
+          },
+        ],
+      }),
+      inMemoryCarRepository.create({
+        name: 'M2',
+        brand: 'BMW',
+        description: 'BM2 M2',
+        dailyRate: 600,
+        licensePlate: 'DJA-003',
+        fineAmount: 600,
+        categoryId: category.id,
+        category,
+        specifications: [specification],
+        images: [
+          {
+            id: 'fake-image-id',
+            imageName: 'bmw-m2-image',
+            createdAt: new Date(2024, 2, 26),
+          },
+        ],
+      }),
+      inMemoryCarRepository.create({
+        name: 'M8',
+        brand: 'BMW',
+        description: 'BM2 M8',
+        dailyRate: 1000,
+        licensePlate: 'DJA-004',
+        fineAmount: 1000,
+        categoryId: category.id,
+        category,
+        specifications: [specification],
+        images: [
+          {
+            id: 'fake-image-id',
+            imageName: 'bmw-m8-image',
+            createdAt: new Date(2024, 2, 26),
+          },
+        ],
+      }),
+      inMemoryCarRepository.create({
+        name: 'X6',
+        brand: 'BMW',
+        description: 'BMW X6',
+        dailyRate: 800,
+        licensePlate: 'LKO-001',
+        fineAmount: 800,
+        categoryId: suvCategory.id,
+        category: suvCategory,
+        specifications: [specification],
+        images: [
+          {
+            id: 'fake-image-id',
+            imageName: 'bmw-x6-image',
+            createdAt: new Date(2024, 2, 26),
+          },
+        ],
+      }),
+    ]);
+
+    const cars = await listCategoriesCarsGroupUseCase.execute({
+      type: CategoryType.SPORT,
+      brand: 'BMW',
+    });
+
+    expect(cars.length).toBe(2);
+  });
 });
