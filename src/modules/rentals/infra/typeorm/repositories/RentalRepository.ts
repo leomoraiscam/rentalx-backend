@@ -1,5 +1,11 @@
-import { getRepository, Repository } from 'typeorm';
+import {
+  getRepository,
+  LessThanOrEqual,
+  MoreThanOrEqual,
+  Repository,
+} from 'typeorm';
 
+import { IQueryListAvailableCarsDTO } from '@modules/cars/dtos/IQueryListAvailableCarsDTO';
 import { ICreateRentalDTO } from '@modules/rentals/dtos/ICreateRentalDTO';
 import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
@@ -31,6 +37,22 @@ export class RentalRepository implements IRentalRepository {
         endDate: null,
       },
     });
+  }
+
+  async findOpenRentalByDateAndCar(
+    data: IQueryListAvailableCarsDTO
+  ): Promise<Rental | undefined> {
+    const { carId, startDate, expectedReturnDate } = data;
+
+    const rental = await this.repository.findOne({
+      where: {
+        carId,
+        startDate: LessThanOrEqual(expectedReturnDate),
+        expectedReturnDate: MoreThanOrEqual(startDate),
+      },
+    });
+
+    return rental;
   }
 
   async findOpenRentalByUser(userId: string): Promise<Rental> {
