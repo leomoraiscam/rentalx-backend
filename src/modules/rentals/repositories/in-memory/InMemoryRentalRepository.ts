@@ -50,7 +50,7 @@ export class InMemoryRentalRepository implements IRentalRepository {
       carId,
       userId,
       expectedReturnDate,
-      startDate,
+      startDate: startDate || new Date(),
       endDate: null,
       status,
     });
