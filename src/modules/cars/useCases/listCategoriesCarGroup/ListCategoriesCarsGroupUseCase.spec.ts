@@ -16,7 +16,7 @@ let listCategoriesCarsGroupUseCase: ListCategoriesCarsGroupUseCase;
 let category: Category;
 let specification: Specification;
 
-describe('ListAvailableCarsUseCase', () => {
+describe('ListCategoriesCarsGroupUseCase', () => {
   beforeEach(async () => {
     inMemoryCarRepository = new InMemoryCarRepository();
     inMemoryCategoryRepository = new InMemoryCategoryRepository();
@@ -42,7 +42,11 @@ describe('ListAvailableCarsUseCase', () => {
     });
   });
 
-  it('should be able to list all cars (available and unavailable) classified by groups or categories', async () => {
+  it('should be able to list all cars classified by categories', async () => {
+    jest.spyOn(Date, 'now').mockImplementationOnce(() => {
+      return new Date(2024, 2, 27).getTime();
+    });
+
     await inMemoryCarRepository.create({
       name: 'Mustang',
       brand: 'Ford',
@@ -62,7 +66,10 @@ describe('ListAvailableCarsUseCase', () => {
       ],
     });
 
-    const cars = await listCategoriesCarsGroupUseCase.execute({});
+    const cars = await listCategoriesCarsGroupUseCase.execute({
+      startDate: new Date(2024, 2, 20),
+      expectedReturnDate: new Date(2024, 2, 23),
+    });
 
     expect(cars).toEqual(
       expect.arrayContaining([
@@ -102,7 +109,7 @@ describe('ListAvailableCarsUseCase', () => {
     );
   });
 
-  it('should be able to list all cars classified by groups or categories (available and unavailable)', async () => {
+  it('should be able to return all cars classified by categories when there is at least one car unavailable but the category is available too', async () => {
     jest.spyOn(Date, 'now').mockImplementationOnce(() => {
       return new Date(2024, 2, 27).getTime();
     });
@@ -122,7 +129,7 @@ describe('ListAvailableCarsUseCase', () => {
           {
             id: 'fake-image-id',
             imageName: 'mustang-image',
-            createdAt: new Date(2024, 2, 26),
+            createdAt: new Date(2024, 2, 10),
           },
         ],
       }),
@@ -140,13 +147,23 @@ describe('ListAvailableCarsUseCase', () => {
           {
             id: 'fake-image-id',
             imageName: 'bmw-image',
-            createdAt: new Date(2024, 2, 26),
+            createdAt: new Date(2024, 2, 10),
           },
         ],
       }),
     ]);
 
-    const cars = await listCategoriesCarsGroupUseCase.execute({});
+    await inMemoryRentalRepository.create({
+      carId: secondCar.id,
+      startDate: new Date(2024, 2, 20),
+      expectedReturnDate: new Date(2024, 2, 23),
+      userId: 'fake-user-id',
+    });
+
+    const cars = await listCategoriesCarsGroupUseCase.execute({
+      startDate: new Date(2024, 2, 20),
+      expectedReturnDate: new Date(2024, 2, 23),
+    });
 
     expect(cars).toEqual([
       {
@@ -176,13 +193,13 @@ describe('ListAvailableCarsUseCase', () => {
               {
                 id: 'fake-image-id',
                 imageName: 'mustang-image',
-                createdAt: new Date(2024, 2, 26),
+                createdAt: new Date(2024, 2, 10),
               },
             ],
           },
           {
             id: secondCar.id,
-            available: true,
+            available: false,
             name: 'M2',
             description: 'BMW M2',
             brand: 'BMW',
@@ -203,7 +220,7 @@ describe('ListAvailableCarsUseCase', () => {
               {
                 id: 'fake-image-id',
                 imageName: 'bmw-image',
-                createdAt: new Date(2024, 2, 26),
+                createdAt: new Date(2024, 2, 10),
               },
             ],
           },
@@ -213,7 +230,265 @@ describe('ListAvailableCarsUseCase', () => {
     ]);
   });
 
-  it('should be able to list cars classified by groups or categories when received filter by vehicle brand', async () => {
+  it('should be able to return all cars classified by categories when all cars are unavailable and the category must be unavailable too', async () => {
+    jest.spyOn(Date, 'now').mockImplementationOnce(() => {
+      return new Date(2024, 2, 27).getTime();
+    });
+
+    const [firstCar, secondCar] = await Promise.all([
+      inMemoryCarRepository.create({
+        name: 'Mustang',
+        brand: 'Ford',
+        description: 'Ford Mustang',
+        dailyRate: 400,
+        licensePlate: 'DJA-002',
+        fineAmount: 400,
+        categoryId: category.id,
+        category,
+        specifications: [specification],
+        images: [
+          {
+            id: 'fake-image-id',
+            imageName: 'mustang-image',
+            createdAt: new Date(2024, 2, 10),
+          },
+        ],
+      }),
+      inMemoryCarRepository.create({
+        name: 'M2',
+        brand: 'BMW',
+        description: 'BMW M2',
+        dailyRate: 600,
+        licensePlate: 'LKO-001',
+        fineAmount: 600,
+        categoryId: category.id,
+        category,
+        specifications: [specification],
+        images: [
+          {
+            id: 'fake-image-id',
+            imageName: 'bmw-image',
+            createdAt: new Date(2024, 2, 10),
+          },
+        ],
+      }),
+    ]);
+
+    await Promise.all([
+      inMemoryRentalRepository.create({
+        carId: firstCar.id,
+        startDate: new Date(2024, 2, 19),
+        expectedReturnDate: new Date(2024, 2, 22),
+        userId: 'fake-user-id',
+      }),
+      inMemoryRentalRepository.create({
+        carId: secondCar.id,
+        startDate: new Date(2024, 2, 20),
+        expectedReturnDate: new Date(2024, 2, 23),
+        userId: 'fake-user-id',
+      }),
+    ]);
+
+    const cars = await listCategoriesCarsGroupUseCase.execute({
+      startDate: new Date(2024, 2, 20),
+      expectedReturnDate: new Date(2024, 2, 23),
+    });
+
+    expect(cars).toEqual([
+      {
+        name: 'GROUP L - SPORT',
+        type: 'sport',
+        cars: [
+          {
+            id: firstCar.id,
+            available: false,
+            name: 'Mustang',
+            description: 'Ford Mustang',
+            brand: 'Ford',
+            categoryId: category.id,
+            dailyRate: 400,
+            fineAmount: 400,
+            licensePlate: 'DJA-002',
+            category,
+            specifications: [
+              {
+                id: specification.id,
+                name: 'Direção Elétrica',
+                description:
+                  'Conjunto mecânico que permite ao motorista conduzir o seu veículo de maneira leve.',
+              },
+            ],
+            images: [
+              {
+                id: 'fake-image-id',
+                imageName: 'mustang-image',
+                createdAt: new Date(2024, 2, 10),
+              },
+            ],
+          },
+          {
+            id: secondCar.id,
+            available: false,
+            name: 'M2',
+            description: 'BMW M2',
+            brand: 'BMW',
+            categoryId: category.id,
+            dailyRate: 600,
+            fineAmount: 600,
+            licensePlate: 'LKO-001',
+            category,
+            specifications: [
+              {
+                id: specification.id,
+                name: 'Direção Elétrica',
+                description:
+                  'Conjunto mecânico que permite ao motorista conduzir o seu veículo de maneira leve.',
+              },
+            ],
+            images: [
+              {
+                id: 'fake-image-id',
+                imageName: 'bmw-image',
+                createdAt: new Date(2024, 2, 10),
+              },
+            ],
+          },
+        ],
+        available: false,
+      },
+    ]);
+  });
+
+  it('should be able to return all cars classified by when there is at least one car available and the category must be available too', async () => {
+    jest.spyOn(Date, 'now').mockImplementationOnce(() => {
+      return new Date(2024, 2, 27).getTime();
+    });
+
+    const [firstCar, secondCar] = await Promise.all([
+      inMemoryCarRepository.create({
+        name: 'Mustang',
+        brand: 'Ford',
+        description: 'Ford Mustang',
+        dailyRate: 400,
+        licensePlate: 'DJA-002',
+        fineAmount: 400,
+        categoryId: category.id,
+        category,
+        specifications: [specification],
+        images: [
+          {
+            id: 'fake-image-id',
+            imageName: 'mustang-image',
+            createdAt: new Date(2024, 2, 10),
+          },
+        ],
+      }),
+      inMemoryCarRepository.create({
+        name: 'M2',
+        brand: 'BMW',
+        description: 'BMW M2',
+        dailyRate: 600,
+        licensePlate: 'LKO-001',
+        fineAmount: 600,
+        categoryId: category.id,
+        category,
+        specifications: [specification],
+        images: [
+          {
+            id: 'fake-image-id',
+            imageName: 'bmw-image',
+            createdAt: new Date(2024, 2, 10),
+          },
+        ],
+      }),
+    ]);
+
+    await Promise.all([
+      inMemoryRentalRepository.create({
+        carId: firstCar.id,
+        startDate: new Date(2024, 2, 18),
+        expectedReturnDate: new Date(2024, 2, 20),
+        userId: 'fake-user-id',
+      }),
+      inMemoryRentalRepository.create({
+        carId: secondCar.id,
+        startDate: new Date(2024, 2, 20),
+        expectedReturnDate: new Date(2024, 2, 23),
+        userId: 'fake-user-id',
+      }),
+    ]);
+
+    const cars = await listCategoriesCarsGroupUseCase.execute({
+      startDate: new Date(2024, 2, 21),
+      expectedReturnDate: new Date(2024, 2, 23),
+    });
+
+    expect(cars).toEqual([
+      {
+        name: 'GROUP L - SPORT',
+        type: 'sport',
+        cars: [
+          {
+            id: firstCar.id,
+            available: true,
+            name: 'Mustang',
+            description: 'Ford Mustang',
+            brand: 'Ford',
+            categoryId: category.id,
+            dailyRate: 400,
+            fineAmount: 400,
+            licensePlate: 'DJA-002',
+            category,
+            specifications: [
+              {
+                id: specification.id,
+                name: 'Direção Elétrica',
+                description:
+                  'Conjunto mecânico que permite ao motorista conduzir o seu veículo de maneira leve.',
+              },
+            ],
+            images: [
+              {
+                id: 'fake-image-id',
+                imageName: 'mustang-image',
+                createdAt: new Date(2024, 2, 10),
+              },
+            ],
+          },
+          {
+            id: secondCar.id,
+            available: false,
+            name: 'M2',
+            description: 'BMW M2',
+            brand: 'BMW',
+            categoryId: category.id,
+            dailyRate: 600,
+            fineAmount: 600,
+            licensePlate: 'LKO-001',
+            category,
+            specifications: [
+              {
+                id: specification.id,
+                name: 'Direção Elétrica',
+                description:
+                  'Conjunto mecânico que permite ao motorista conduzir o seu veículo de maneira leve.',
+              },
+            ],
+            images: [
+              {
+                id: 'fake-image-id',
+                imageName: 'bmw-image',
+                createdAt: new Date(2024, 2, 10),
+              },
+            ],
+          },
+        ],
+        available: true,
+      },
+    ]);
+  });
+
+  it('should be able to return all cars classified by categories when received filter by vehicle brand', async () => {
     const suvCategory = await inMemoryCategoryRepository.create({
       name: 'GROUP L - SUV',
       description: '',
@@ -266,7 +541,7 @@ describe('ListAvailableCarsUseCase', () => {
     expect(cars.length).toBe(1);
   });
 
-  it('should be able to list cars classified by groups or categories when received filter by vehicle type', async () => {
+  it('should be able to return cars classified by categories when received filter by vehicle type', async () => {
     const suvCategory = await inMemoryCategoryRepository.create({
       name: 'GROUP L - SUV',
       description: '',
@@ -319,7 +594,7 @@ describe('ListAvailableCarsUseCase', () => {
     expect(cars.length).toBe(1);
   });
 
-  it('should be able to list cars classified by groups or categories when received filter by vehicle brand and type', async () => {
+  it('should be able to return cars classified by categories when received filter by vehicle brand and type', async () => {
     const suvCategory = await inMemoryCategoryRepository.create({
       name: 'GROUP L - SUV',
       description: '',
