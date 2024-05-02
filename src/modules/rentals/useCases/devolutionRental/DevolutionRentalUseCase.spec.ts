@@ -27,6 +27,10 @@ describe('DevolutionRentalUseCase', () => {
   });
 
   it('should be able to devolve a rental', async () => {
+    jest.spyOn(Date, 'now').mockImplementation(() => {
+      return new Date(2024, 3, 8).getTime();
+    });
+
     const { id: carId } = await inMemoryCarRepository.create({
       name: 'A3',
       brand: 'Audi',
@@ -41,6 +45,7 @@ describe('DevolutionRentalUseCase', () => {
       userId: 'fake-user-id',
       carId,
       expectedReturnDate: dayAdd24Hours,
+      startDate: new Date(2024, 3, 10, 12),
     });
 
     const updatedRental = await devolutionRentalUseCase.execute({
@@ -57,10 +62,15 @@ describe('DevolutionRentalUseCase', () => {
   });
 
   it('should not be able to devolve a rental when the same a non exist', async () => {
+    jest.spyOn(Date, 'now').mockImplementation(() => {
+      return new Date(2024, 3, 8).getTime();
+    });
+
     const rental = await inMemoryRentalRepository.create({
       userId: 'fake-user-id',
       carId: 'fake-car-id',
       expectedReturnDate: dayAdd24Hours,
+      startDate: new Date(2024, 3, 10, 12),
     });
 
     await expect(
@@ -69,6 +79,10 @@ describe('DevolutionRentalUseCase', () => {
   });
 
   it('should be able to set devolution rental to the same day when ocurred in less 24 hours', async () => {
+    jest.spyOn(Date, 'now').mockImplementation(() => {
+      return new Date(2024, 3, 8).getTime();
+    });
+
     const dayAdd2Hours = inMemoryDateProvider.addHours(2);
 
     const { id: carId } = await inMemoryCarRepository.create({
@@ -85,6 +99,7 @@ describe('DevolutionRentalUseCase', () => {
       userId: 'fake-user-id',
       carId,
       expectedReturnDate: dayAdd2Hours,
+      startDate: new Date(2024, 3, 10, 12),
     });
 
     const devolutionRental = await devolutionRentalUseCase.execute({
@@ -95,6 +110,10 @@ describe('DevolutionRentalUseCase', () => {
   });
 
   it('should be able to set devolution rental to 1 days after', async () => {
+    jest.spyOn(Date, 'now').mockImplementation(() => {
+      return new Date(2024, 3, 8).getTime();
+    });
+
     const { id: carId } = await inMemoryCarRepository.create({
       name: 'A3',
       brand: 'Audi',
@@ -109,6 +128,7 @@ describe('DevolutionRentalUseCase', () => {
       userId: 'fake-user-id',
       carId,
       expectedReturnDate: dayAdd24Hours,
+      startDate: new Date(2024, 3, 10, 12),
     });
 
     const devolutionRental = await devolutionRentalUseCase.execute({

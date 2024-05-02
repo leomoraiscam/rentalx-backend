@@ -14,10 +14,15 @@ describe('ListRentalsByUserUseCase', () => {
   });
 
   it('should be able to all rentals by user', async () => {
+    jest.spyOn(Date, 'now').mockImplementation(() => {
+      return new Date(2024, 3, 8).getTime();
+    });
+
     await inMemoryRentalRepository.create({
       carId: 'fake-car-id',
       expectedReturnDate: new Date(),
       userId: 'fake-user-id',
+      startDate: new Date(2024, 3, 10, 12),
     });
 
     const rentals = await listRentalsByUserUseCase.execute('fake-user-id');
