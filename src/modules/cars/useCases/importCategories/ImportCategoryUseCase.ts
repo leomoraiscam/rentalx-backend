@@ -23,11 +23,12 @@ export class ImportCategoryUseCase {
 
       parseFile
         .on('data', async (line) => {
-          const [name, description] = line;
+          const [name, description, type] = line;
 
           categories.push({
             name,
             description,
+            type,
           });
         })
         .on('end', () => {
@@ -45,7 +46,7 @@ export class ImportCategoryUseCase {
     const categories = await this.loadCategories(file);
 
     categories.map(async (data) => {
-      const { name, description } = data;
+      const { name, description, type } = data;
 
       const category = await this.categoryRepository.findByName(name);
 
@@ -53,6 +54,7 @@ export class ImportCategoryUseCase {
         await this.categoryRepository.create({
           name,
           description,
+          type,
         });
       }
     });
