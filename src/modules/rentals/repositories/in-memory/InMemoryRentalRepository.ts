@@ -1,3 +1,5 @@
+import { IQueryListAvailableCarsDTO } from '@modules/cars/dtos/IQueryListAvailableCarsDTO';
+
 import { ICreateRentalDTO } from '../../dtos/ICreateRentalDTO';
 import { Rental } from '../../infra/typeorm/entities/Rental';
 import { IRentalRepository } from '../IRentalRepository';
@@ -19,6 +21,20 @@ export class InMemoryRentalRepository implements IRentalRepository {
     );
   }
 
+  async findOpenRentalByDateAndCar({
+    startDate,
+    expectedReturnDate,
+    carId,
+  }: IQueryListAvailableCarsDTO): Promise<Rental | null> {
+    return this.rentals.find((rental) => {
+      return (
+        rental.carId === carId &&
+        rental.startDate <= expectedReturnDate &&
+        rental.expectedReturnDate >= startDate
+      );
+    });
+  }
+
   async findOpenRentalByUser(userId: string): Promise<Rental | undefined> {
     return this.rentals.find(
       (rental) => rental.userId === userId && !rental.endDate
@@ -34,7 +50,7 @@ export class InMemoryRentalRepository implements IRentalRepository {
       carId,
       userId,
       expectedReturnDate,
-      startDate,
+      startDate: startDate || new Date(),
       endDate: null,
       status,
     });

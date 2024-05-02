@@ -22,7 +22,7 @@ export class CarRepository implements ICarRepository {
   }
 
   async findAvailable(data: IQueryListAvailableCarsDTO): Promise<Car[] | null> {
-    const { brand, categoryId, name } = data;
+    const { brand, type } = data;
 
     const carsQuery = this.repository
       .createQueryBuilder('c')
@@ -38,24 +38,22 @@ export class CarRepository implements ICarRepository {
         'c.licensePlate',
         'c.fineAmount',
         'c.brand',
+        'c.categoryId',
         'category.name',
         'category.description',
+        'category.type',
         'specifications.name',
         'specifications.description',
         'images.imageName',
-      ])
-      .where('available = :available', { available: true });
-
-    if (name) {
-      carsQuery.andWhere('c.name = :name', { name });
-    }
+      ]);
 
     if (brand) {
-      carsQuery.andWhere('c.brand = :brand', { brand });
+      carsQuery.where('c.brand = :brand', { brand });
     }
 
-    if (categoryId) {
-      carsQuery.andWhere('c.category_id = :category_id', { categoryId });
+    // TODO: this filter does not operation, add functionality to begin operate
+    if (type) {
+      carsQuery.andWhere('c.category.type = :type', { type });
     }
 
     const cars = await carsQuery.getMany();

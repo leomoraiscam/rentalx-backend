@@ -42,12 +42,17 @@ export class InMemoryCategoryRepository implements ICategoryRepository {
     };
   }
 
-  async create({ name, description }: ICreateCategoryDTO): Promise<Category> {
+  async create({
+    name,
+    description,
+    type,
+  }: ICreateCategoryDTO): Promise<Category> {
     const category = new Category();
 
     Object.assign(category, {
       name,
       description,
+      type,
     });
 
     this.categories.push(category);

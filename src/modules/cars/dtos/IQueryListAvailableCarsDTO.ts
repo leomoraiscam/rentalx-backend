@@ -1,5 +1,9 @@
+import { CategoryType } from './ICreateCategoryDTO';
+
 export interface IQueryListAvailableCarsDTO {
-  categoryId?: string;
+  startDate?: Date;
+  expectedReturnDate?: Date;
+  carId?: string;
   brand?: string;
-  name?: string;
+  type?: CategoryType;
 }

@@ -19,11 +19,11 @@ export class CarImage {
   imageName: string;
 
   @Column({ name: 'car_id' })
-  carId: string;
+  carId?: string;
 
   @ManyToOne(() => Car, (car) => car.images)
   @JoinColumn({ name: 'car_id' })
-  car: Car;
+  car?: Car;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

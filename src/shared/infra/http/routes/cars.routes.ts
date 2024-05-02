@@ -4,8 +4,7 @@ import multer from 'multer';
 import { multerConfig } from '@config/upload';
 import { CreateCarController } from '@modules/cars/useCases/createCar/CreateCarController';
 import { CreateCarSpecificationsController } from '@modules/cars/useCases/createCarSpecification/CreateCarSpecificationController';
-import { CreateInventoryToCarsController } from '@modules/cars/useCases/createInventoryToCars/CreateInventoryToCarsController';
-import { ListAvailableCarsController } from '@modules/cars/useCases/listAvailableCars/ListAvailableCarsController';
+import { ListCategoriesCarsGroupController } from '@modules/cars/useCases/listCategoriesCarGroup/ListCategoriesCarsGroupController';
 import { UploadCarImagesController } from '@modules/cars/useCases/uploadCarImages/UploadCarImagesController';
 
 import ensureAdmin from '../middlewares/ensureAdmin';
@@ -15,10 +14,9 @@ const uploadImages = multer(multerConfig);
 
 const carsRouter = Router();
 const createCarController = new CreateCarController();
-const listAvailableCarsController = new ListAvailableCarsController();
+const listCategoriesCarsGroupController = new ListCategoriesCarsGroupController();
 const createCarSpecificationsController = new CreateCarSpecificationsController();
 const uploadCarImagesController = new UploadCarImagesController();
-const createInventoryToCarsController = new CreateInventoryToCarsController();
 
 carsRouter.post(
   '/',
@@ -32,7 +30,7 @@ carsRouter.post(
   ensureAdmin,
   createCarSpecificationsController.handle
 );
-carsRouter.get('/available', listAvailableCarsController.handle);
+carsRouter.get('/', listCategoriesCarsGroupController.handle);
 carsRouter.post(
   '/:id/images',
   ensureAuthenticated,
@@ -40,6 +38,5 @@ carsRouter.post(
   uploadImages.array('images'),
   uploadCarImagesController.handle
 );
-carsRouter.post('/inventories', createInventoryToCarsController.handle);
 
 export { carsRouter };

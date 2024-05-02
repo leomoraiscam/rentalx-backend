@@ -17,21 +17,16 @@ export class InMemoryCarRepository implements ICarRepository {
   }
 
   async findAvailable(data: IQueryListAvailableCarsDTO): Promise<Car[] | null> {
-    const { brand, categoryId, name } = data;
-
-    const cars = this.car.filter((car) => {
+    return this.car.filter((car) => {
       if (
-        car.available === true ||
-        (brand && car.brand === brand) ||
-        (categoryId && car.categoryId === categoryId) ||
-        (name && car.name === name)
+        (!data.brand || car.brand === data.brand) &&
+        (!data.type || car.category.type === data.type)
       ) {
         return car;
       }
+
       return null;
     });
-
-    return cars;
   }
 
   async create(data: ICreateCarDTO): Promise<Car> {
@@ -44,6 +39,8 @@ export class InMemoryCarRepository implements ICarRepository {
       fineAmount,
       licensePlate,
       specifications,
+      images,
+      category,
     } = data;
 
     const car = new Car();
@@ -57,6 +54,8 @@ export class InMemoryCarRepository implements ICarRepository {
       fineAmount,
       licensePlate,
       specifications,
+      images,
+      category,
     });
 
     this.car.push(car);

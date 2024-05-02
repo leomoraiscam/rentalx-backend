@@ -1,3 +1,4 @@
+import { CategoryType } from '@modules/cars/dtos/ICreateCategoryDTO';
 import { InMemoryCategoryRepository } from '@modules/cars/repositories/in-memory/InMemoryCategoryRepository';
 import { AppError } from '@shared/errors/AppError';
 
@@ -18,6 +19,7 @@ describe('CreateCategoryUseCase', () => {
     const category = await createCategoryUseCase.execute({
       name: 'Executive',
       description: 'cars executives',
+      type: CategoryType.SEDAN,
     });
 
     expect(category).toHaveProperty('id');
@@ -27,12 +29,14 @@ describe('CreateCategoryUseCase', () => {
     await inMemoryCategoryRepository.create({
       name: 'SUV',
       description: 'SUV`s cars',
+      type: CategoryType.SUV,
     });
 
     await expect(
       createCategoryUseCase.execute({
         name: 'SUV',
         description: 'SUV`s cars',
+        type: CategoryType.SUV,
       })
     ).rejects.toBeInstanceOf(AppError);
   });

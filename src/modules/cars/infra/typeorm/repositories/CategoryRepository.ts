@@ -42,11 +42,12 @@ export class CategoryRepository implements ICategoryRepository {
   }
 
   async create(data: ICreateCategoryDTO): Promise<Category> {
-    const { name, description } = data;
+    const { name, description, type } = data;
 
     const category = this.repository.create({
       name,
       description,
+      type,
     });
 
     await this.repository.save(category);

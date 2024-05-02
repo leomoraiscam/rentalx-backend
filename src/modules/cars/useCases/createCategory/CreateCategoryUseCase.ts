@@ -12,7 +12,11 @@ export class CreateCategoryUseCase {
     private categoryRepository: ICategoryRepository
   ) {}
 
-  async execute({ name, description }: ICreateCategoryDTO): Promise<Category> {
+  async execute({
+    name,
+    description,
+    type,
+  }: ICreateCategoryDTO): Promise<Category> {
     const category = await this.categoryRepository.findByName(name);
 
     if (category) {
@@ -22,6 +26,7 @@ export class CreateCategoryUseCase {
     return this.categoryRepository.create({
       name,
       description,
+      type,
     });
   }
 }
