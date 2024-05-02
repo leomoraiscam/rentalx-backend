@@ -21,20 +21,29 @@ export class ListCategoriesCarsGroupUseCase {
   async execute(
     data?: IQueryListAvailableCarsDTO
   ): Promise<IListCategoriesCarsGroupDTO[]> {
-    const categories = await this.categoryRepository.list({
-      order: OrdenationProps.DESC,
-      page: 1,
-      perPage: 15,
-    });
-    const cars = await this.carRepository.findAvailable(data);
+    const { startDate, expectedReturnDate } = data;
+
+    const [categories, cars] = await Promise.all([
+      this.categoryRepository.list({
+        order: OrdenationProps.DESC,
+        page: 1,
+        perPage: 15,
+      }),
+      this.carRepository.findAvailable(data),
+    ]);
 
     const transformedCategories = categories.result.map(async (category) => {
       const categoryCars = cars
         .filter((car) => car.categoryId === category.id)
         .map(async (car) => {
-          const rental = await this.rentalRepository.findOpenRentalByCar(
-            car.id
+          const rental = await this.rentalRepository.findOpenRentalByDateAndCar(
+            {
+              startDate,
+              expectedReturnDate,
+              carId: car.id,
+            }
           );
+
           const available = !rental;
 
           return {
