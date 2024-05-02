@@ -3,15 +3,15 @@ import fs from 'fs';
 import { injectable, inject } from 'tsyringe';
 
 import { IImportCategoriesDTO } from '@modules/cars/dtos/IImportCategoriesDTO';
-import { ICategoryRepository } from '@modules/cars/repositories/ICategoryRepository';
+import { ISpecificationRepository } from '@modules/cars/repositories/ISpecificationRepository';
 
-type IImportSpecificationsDTO = IImportCategoriesDTO;
+type IImportSpecificationsDTO = Omit<IImportCategoriesDTO, 'type'>;
 
 @injectable()
 export class ImportSpecificationsUseCase {
   constructor(
     @inject('SpecificationRepository')
-    private specificationRepository: ICategoryRepository
+    private specificationRepository: ISpecificationRepository
   ) {}
 
   loadSpecifications(
