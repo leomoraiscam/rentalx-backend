@@ -1,3 +1,4 @@
+import { CategoryType } from '@modules/cars/dtos/ICreateCategoryDTO';
 import { OrdenationProps } from '@modules/cars/dtos/IQueryListCategoriesDTO';
 import { InMemoryCategoryRepository } from '@modules/cars/repositories/in-memory/InMemoryCategoryRepository';
 
@@ -18,14 +19,17 @@ describe('ListCategoriesUseCase', () => {
     await inMemoryCategoryRepository.create({
       name: 'SUV',
       description: 'SUV`s cars',
+      type: CategoryType.SUV,
     });
     await inMemoryCategoryRepository.create({
       name: 'Hatch',
       description: 'Hatch`s cars',
+      type: CategoryType.HATCH,
     });
     await inMemoryCategoryRepository.create({
       name: 'Sedan',
       description: 'Sedan`s cars',
+      type: CategoryType.SEDAN,
     });
 
     const categories = await listCategoriesUseCase.execute({
