@@ -1,3 +1,5 @@
+import { Car } from '@modules/cars/infra/typeorm/entities/Car';
+
 export interface ICreateRentalDTO {
   userId: string;
   carId: string;
@@ -7,4 +9,5 @@ export interface ICreateRentalDTO {
   endDate?: Date;
   total?: number;
   status?: string;
+  car?: Car;
 }
