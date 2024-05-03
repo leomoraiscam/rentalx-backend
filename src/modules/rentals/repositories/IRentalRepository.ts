@@ -12,4 +12,5 @@ export interface IRentalRepository {
     data: IQueryListAvailableCarsDTO
   ): Promise<Rental | null>;
   create(data: ICreateRentalDTO): Promise<Rental>;
+  save(data: Rental): Promise<Rental>;
 }

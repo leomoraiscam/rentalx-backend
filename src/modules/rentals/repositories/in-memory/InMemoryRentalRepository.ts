@@ -60,4 +60,14 @@ export class InMemoryRentalRepository implements IRentalRepository {
 
     return rental;
   }
+
+  async save(data: Rental): Promise<Rental> {
+    const rentalIndex = this.rentals.findIndex(
+      (rental) => rental.id === data.id
+    );
+
+    this.rentals[rentalIndex] = data;
+
+    return data;
+  }
 }
