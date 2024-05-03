@@ -96,4 +96,8 @@ export class RentalRepository implements IRentalRepository {
 
     return rental;
   }
+
+  async save(data: Rental): Promise<Rental> {
+    return this.repository.save(data);
+  }
 }
