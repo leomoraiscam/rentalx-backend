@@ -49,7 +49,10 @@ export class CreateRentalUseCase {
     );
 
     if (rentalOpenToUser) {
-      throw new AppError("There's a rental in progress for user", 409);
+      throw new AppError(
+        "There's a rental scheduled or in progress for user",
+        409
+      );
     }
 
     const compare = this.dateProvider.compareInHours(
