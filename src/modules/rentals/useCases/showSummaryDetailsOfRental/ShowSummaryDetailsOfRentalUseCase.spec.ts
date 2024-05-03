@@ -7,24 +7,24 @@ import { InMemoryRentalRepository } from '@modules/rentals/repositories/in-memor
 import { InMemoryDateProvider } from '@shared/container/providers/DateProvider/in-memory/InMemoryDateProvider';
 import { AppError } from '@shared/errors/AppError';
 
-import { ShowSummaryRentalUseCase } from './showSummaryRentalUseCase';
+import { ShowSummaryDetailsOfRentalUseCase } from './ShowSummaryDetailsOfRentalUseCase';
 
 let inMemoryCategoryRepository: InMemoryCategoryRepository;
 let inMemorySpecificationRepository: InMemorySpecificationRepository;
 let inMemoryCarRepository: InMemoryCarRepository;
 let inMemoryRentalRepository: InMemoryRentalRepository;
 let inMemoryDateProvider: InMemoryDateProvider;
-let showSummaryRentalUseCase: ShowSummaryRentalUseCase;
+let showSummaryDetailsOfRentalUseCase: ShowSummaryDetailsOfRentalUseCase;
 let car: Car;
 
-describe('ShowSummaryRentalUseCase', () => {
+describe('ShowSummaryDetailsOfRentalUseCase', () => {
   beforeEach(async () => {
     inMemoryCategoryRepository = new InMemoryCategoryRepository();
     inMemorySpecificationRepository = new InMemorySpecificationRepository();
     inMemoryCarRepository = new InMemoryCarRepository();
     inMemoryRentalRepository = new InMemoryRentalRepository();
     inMemoryDateProvider = new InMemoryDateProvider();
-    showSummaryRentalUseCase = new ShowSummaryRentalUseCase(
+    showSummaryDetailsOfRentalUseCase = new ShowSummaryDetailsOfRentalUseCase(
       inMemoryRentalRepository,
       inMemoryDateProvider
     );
@@ -75,7 +75,7 @@ describe('ShowSummaryRentalUseCase', () => {
       userId: 'fake-user-id',
     });
 
-    const rentalDetails = await showSummaryRentalUseCase.execute(id);
+    const rentalDetails = await showSummaryDetailsOfRentalUseCase.execute(id);
 
     expect(rentalDetails).toHaveProperty('car');
     expect(rentalDetails).toHaveProperty('offer');
@@ -83,7 +83,7 @@ describe('ShowSummaryRentalUseCase', () => {
 
   it('should not be able to return details of rental when rental a non exist', async () => {
     await expect(
-      showSummaryRentalUseCase.execute('fake-rental-id')
+      showSummaryDetailsOfRentalUseCase.execute('fake-rental-id')
     ).rejects.toBeInstanceOf(AppError);
   });
 });

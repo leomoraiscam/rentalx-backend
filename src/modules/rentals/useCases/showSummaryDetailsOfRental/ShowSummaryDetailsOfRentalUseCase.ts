@@ -6,7 +6,7 @@ import { IDateProvider } from '@shared/container/providers/DateProvider/models/I
 import { AppError } from '@shared/errors/AppError';
 
 @injectable()
-export class ShowSummaryRentalUseCase {
+export class ShowSummaryDetailsOfRentalUseCase {
   constructor(
     @inject('RentalRepository')
     private rentalRepository: IRentalRepository,
