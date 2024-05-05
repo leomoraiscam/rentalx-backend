@@ -74,10 +74,59 @@ describe('UpdateStatusRentalUseCase', () => {
       userId: 'fake-user-id',
     });
 
-    const updatedRental = await updateStatusRentalUseCase.execute(id);
+    const updatedRental = await updateStatusRentalUseCase.execute({
+      id,
+      status: RentalStatus.CONFIRMED,
+    });
 
     expect(updatedRental.id).toEqual(id);
     expect(updatedRental.status).toEqual(RentalStatus.CONFIRMED);
     expect(updatedRental.status).not.toEqual(RentalStatus.PENDING);
+  });
+
+  it('should be able to update status rental when the same has canceled', async () => {
+    jest.spyOn(Date, 'now').mockImplementationOnce(() => {
+      return new Date(2024, 2, 27).getTime();
+    });
+
+    const { id } = await inMemoryRentalRepository.create({
+      carId: car.id,
+      startDate: new Date(2024, 2, 20),
+      expectedReturnDate: new Date(2024, 2, 23),
+      userId: 'fake-user-id',
+    });
+
+    const updatedRental = await updateStatusRentalUseCase.execute({
+      id,
+      status: RentalStatus.CANCELED,
+    });
+
+    expect(updatedRental.id).toEqual(id);
+    expect(updatedRental.status).toEqual(RentalStatus.CANCELED);
+    expect(updatedRental.status).not.toEqual(RentalStatus.CONFIRMED);
+    expect(updatedRental.status).not.toEqual(RentalStatus.PENDING);
+  });
+
+  it('should be able to update status rental when the same has pending', async () => {
+    jest.spyOn(Date, 'now').mockImplementationOnce(() => {
+      return new Date(2024, 2, 27).getTime();
+    });
+
+    const { id } = await inMemoryRentalRepository.create({
+      carId: car.id,
+      startDate: new Date(2024, 2, 20),
+      expectedReturnDate: new Date(2024, 2, 23),
+      userId: 'fake-user-id',
+    });
+
+    const updatedRental = await updateStatusRentalUseCase.execute({
+      id,
+      status: RentalStatus.PENDING,
+    });
+
+    expect(updatedRental.id).toEqual(id);
+    expect(updatedRental.status).toEqual(RentalStatus.PENDING);
+    expect(updatedRental.status).not.toEqual(RentalStatus.CONFIRMED);
+    expect(updatedRental.status).not.toEqual(RentalStatus.CONFIRMED);
   });
 });
