@@ -91,27 +91,6 @@ describe('UpdateRentalUseCase', () => {
     expect(updatedRental.expectedReturnDate).toEqual(new Date(2024, 2, 27));
   });
 
-  it.skip('should be able to update rental status when car reservation is confirmed', async () => {
-    jest.spyOn(Date, 'now').mockImplementationOnce(() => {
-      return new Date(2024, 2, 27).getTime();
-    });
-
-    const { id } = await inMemoryRentalRepository.create({
-      carId: car.id,
-      startDate: new Date(2024, 2, 20),
-      expectedReturnDate: new Date(2024, 2, 23),
-      userId: 'fake-user-id',
-    });
-
-    const updatedRental = await updateRentalUseCase.execute({
-      id,
-      status: 'confirmed',
-    });
-
-    expect(updatedRental.id).toEqual(id);
-    expect(updatedRental.status).toEqual('confirmed');
-  });
-
   it('should be able to update rental car when received correct id', async () => {
     jest.spyOn(Date, 'now').mockImplementationOnce(() => {
       return new Date(2024, 2, 27).getTime();

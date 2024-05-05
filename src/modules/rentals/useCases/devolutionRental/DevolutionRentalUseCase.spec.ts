@@ -79,10 +79,7 @@ describe('DevolutionRentalUseCase', () => {
   });
 
   it('should be able to set devolution rental to the same day when ocurred in less 24 hours', async () => {
-    jest.spyOn(Date, 'now').mockImplementation(() => {
-      return new Date(2024, 3, 8).getTime();
-    });
-
+    const dateNow = inMemoryDateProvider.dateNow();
     const dayAdd2Hours = inMemoryDateProvider.addHours(2);
 
     const { id: carId } = await inMemoryCarRepository.create({
@@ -98,8 +95,8 @@ describe('DevolutionRentalUseCase', () => {
     const rental = await inMemoryRentalRepository.create({
       userId: 'fake-user-id',
       carId,
+      startDate: dateNow,
       expectedReturnDate: dayAdd2Hours,
-      startDate: new Date(2024, 3, 10, 12),
     });
 
     const devolutionRental = await devolutionRentalUseCase.execute({
@@ -110,9 +107,7 @@ describe('DevolutionRentalUseCase', () => {
   });
 
   it('should be able to set devolution rental to 1 days after', async () => {
-    jest.spyOn(Date, 'now').mockImplementation(() => {
-      return new Date(2024, 3, 8).getTime();
-    });
+    const dayAdd2Hours = inMemoryDateProvider.addHours(2);
 
     const { id: carId } = await inMemoryCarRepository.create({
       name: 'A3',
@@ -128,7 +123,7 @@ describe('DevolutionRentalUseCase', () => {
       userId: 'fake-user-id',
       carId,
       expectedReturnDate: dayAdd24Hours,
-      startDate: new Date(2024, 3, 10, 12),
+      startDate: dayAdd2Hours,
     });
 
     const devolutionRental = await devolutionRentalUseCase.execute({

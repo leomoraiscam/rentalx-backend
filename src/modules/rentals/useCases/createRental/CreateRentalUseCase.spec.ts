@@ -215,8 +215,9 @@ describe('CreateRentalUseCase', () => {
     ).rejects.toBeInstanceOf(AppError);
   });
 
-  it.skip('should not be able to create a new rental with invalid return time', async () => {
-    const dayAdd24HoursInMemory = inMemoryDateProvider.addDays(1);
+  it('should not be able to create a new rental with invalid return time', async () => {
+    const dateNow = await inMemoryDateProvider.dateNow();
+    const dayAdd2Hours = inMemoryDateProvider.addHours(2);
 
     jest.spyOn(Date, 'now').mockImplementation(() => {
       return new Date(2024, 3, 8).getTime();
@@ -226,8 +227,8 @@ describe('CreateRentalUseCase', () => {
       createRentalUseCase.execute({
         userId: 'fake-user-id',
         carId: 'fake-car-id',
-        startDate: new Date(2024, 3, 10, 12),
-        expectedReturnDate: dayAdd24HoursInMemory,
+        startDate: dateNow,
+        expectedReturnDate: dayAdd2Hours,
       })
     ).rejects.toBeInstanceOf(AppError);
   });
