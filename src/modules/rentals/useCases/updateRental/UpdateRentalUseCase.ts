@@ -1,4 +1,4 @@
-import { inject } from 'tsyringe';
+import { inject, injectable } from 'tsyringe';
 
 import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
 import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
@@ -6,6 +6,7 @@ import { IRentalRepository } from '@modules/rentals/repositories/IRentalReposito
 import { IDateProvider } from '@shared/container/providers/DateProvider/models/IDateProvider';
 import { AppError } from '@shared/errors/AppError';
 
+@injectable()
 export class UpdateRentalUseCase {
   constructor(
     @inject('RentalRepository')
@@ -35,6 +36,14 @@ export class UpdateRentalUseCase {
       if (compare < minimumHours) {
         throw new AppError('Invalid return time!', 422);
       }
+
+      const dailies = await this.dateProvider.compareInDays(
+        data.startDate,
+        data.expectedReturnDate
+      );
+
+      total = dailies * rental.car.dailyRate;
+      rental.total = total;
     }
 
     if (data.carId && rental.carId !== data.carId) {
@@ -46,11 +55,11 @@ export class UpdateRentalUseCase {
       const car = await this.carRepository.findById(data.carId);
 
       total = dailies * car.dailyRate;
+      rental.total = total;
     }
 
     Object.assign(rental, {
       ...data,
-      total,
     });
 
     const updatedRental = await this.rentalRepository.save(rental);

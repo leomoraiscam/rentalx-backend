@@ -5,10 +5,11 @@ import { UpdateRentalUseCase } from './UpdateRentalUseCase';
 
 export class UpdateRentalController {
   async handle(request: Request, response: Response): Promise<Response> {
-    const { expectedReturnDate, carId, startDate } = request.body;
+    const { id, expectedReturnDate, carId, startDate } = request.body;
 
     const updateRentalUseCase = container.resolve(UpdateRentalUseCase);
     const updatedRental = await updateRentalUseCase.execute({
+      id,
       startDate,
       expectedReturnDate,
       carId,

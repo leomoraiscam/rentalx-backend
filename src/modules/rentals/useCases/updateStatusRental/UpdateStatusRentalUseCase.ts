@@ -1,10 +1,11 @@
-import { inject } from 'tsyringe';
+import { inject, injectable } from 'tsyringe';
 
 import { RentalStatus } from '@modules/rentals/dtos/enums/RentatStatus';
 import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
 import { AppError } from '@shared/errors/AppError';
 
+@injectable()
 export class UpdateStatusRentalUseCase {
   constructor(
     @inject('RentalRepository')
