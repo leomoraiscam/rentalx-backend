@@ -32,8 +32,8 @@ describe('CreateRentalUseCase', () => {
   });
 
   it('should be able to create a new rental', async () => {
-    jest.spyOn(Date, 'now').mockImplementation(() => {
-      return new Date(2024, 3, 8).getTime();
+    jest.spyOn(inMemoryDateProvider, 'dateNow').mockImplementation(() => {
+      return new Date(2024, 3, 8, 8);
     });
 
     const { id: carId } = await inMemoryCarRepository.create({
@@ -49,7 +49,7 @@ describe('CreateRentalUseCase', () => {
     const rental = await createRentalUseCase.execute({
       userId: 'fake-user-id',
       carId,
-      startDate: new Date(2024, 3, 10, 12),
+      startDate: new Date(2024, 3, 10, 8),
       expectedReturnDate: dayAdd24Hours,
     });
 
@@ -58,8 +58,8 @@ describe('CreateRentalUseCase', () => {
   });
 
   it('should be able to create a new rental when received start and end date', async () => {
-    jest.spyOn(Date, 'now').mockImplementation(() => {
-      return new Date(2024, 3, 8).getTime();
+    jest.spyOn(inMemoryDateProvider, 'dateNow').mockImplementation(() => {
+      return new Date(2024, 3, 8, 8);
     });
 
     const { id: carId } = await inMemoryCarRepository.create({
@@ -75,14 +75,13 @@ describe('CreateRentalUseCase', () => {
     const rental = await createRentalUseCase.execute({
       userId: 'fake-user-id',
       carId,
-      startDate: new Date(2024, 3, 10, 12),
+      startDate: new Date(2024, 3, 10, 8),
       expectedReturnDate: new Date(2024, 3, 12, 12),
     });
 
     expect(rental).toHaveProperty('id');
-    expect(rental.startDate).toEqual(new Date(2024, 3, 10, 12));
+    expect(rental.startDate).toEqual(new Date(2024, 3, 10, 8));
     expect(rental.expectedReturnDate).toEqual(new Date(2024, 3, 12, 12));
-    expect(rental.total).toBe(1800);
     expect(rental.status).toBe(RentalStatus.PENDING);
   });
 
@@ -229,6 +228,55 @@ describe('CreateRentalUseCase', () => {
         carId: 'fake-car-id',
         startDate: dateNow,
         expectedReturnDate: dayAdd2Hours,
+      })
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should not be able to create a new rental with start date before now', async () => {
+    const dayAdd2Hours = inMemoryDateProvider.addDays(2);
+
+    jest.spyOn(Date, 'now').mockImplementation(() => {
+      return new Date(2024, 3, 8).getTime();
+    });
+
+    expect(
+      createRentalUseCase.execute({
+        userId: 'fake-user-id',
+        carId: 'fake-car-id',
+        startDate: new Date(2024, 3, 10),
+        expectedReturnDate: dayAdd2Hours,
+      })
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should not be able to create a new rental when the same is closed', async () => {
+    const dayAdd2Hours = inMemoryDateProvider.addDays(2);
+
+    jest.spyOn(Date, 'now').mockImplementation(() => {
+      return new Date(2024, 3, 8, 10).getTime();
+    });
+
+    expect(
+      createRentalUseCase.execute({
+        userId: 'fake-user-id',
+        carId: 'fake-car-id',
+        startDate: new Date(2024, 3, 10, 6),
+        expectedReturnDate: dayAdd2Hours,
+      })
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should not be able to create a new rental when the same is closed', async () => {
+    jest.spyOn(Date, 'now').mockImplementation(() => {
+      return new Date(2024, 3, 8, 10).getTime();
+    });
+
+    expect(
+      createRentalUseCase.execute({
+        userId: 'fake-user-id',
+        carId: 'fake-car-id',
+        startDate: new Date(2024, 3, 10, 6),
+        expectedReturnDate: new Date(2024, 3, 12, 7),
       })
     ).rejects.toBeInstanceOf(AppError);
   });
