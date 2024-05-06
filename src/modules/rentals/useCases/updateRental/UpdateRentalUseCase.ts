@@ -28,6 +28,45 @@ export class UpdateRentalUseCase {
     }
 
     if (data.startDate || data.expectedReturnDate) {
+      const dateNow = await this.dateProvider.dateNow();
+      const isBefore = await this.dateProvider.compareIfBefore(
+        data.startDate,
+        dateNow
+      );
+
+      if (isBefore) {
+        throw new AppError('You cant create an rental on a past date', 403);
+      }
+
+      const startDateIsLess8AmHour = this.dateProvider.getHours(data.startDate);
+      const startDateIsMore18PmHour = this.dateProvider.getHours(
+        data.startDate
+      );
+
+      if (
+        Number(startDateIsLess8AmHour.substring(0, 2)) < 8 ||
+        Number(startDateIsMore18PmHour.substring(0, 2)) > 18
+      ) {
+        throw new AppError('You can only create rental 8am and 18pm', 403);
+      }
+
+      const returnDateIsLess8AmHour = this.dateProvider.getHours(
+        data.expectedReturnDate
+      );
+      const returnDateIsMore18PmHour = this.dateProvider.getHours(
+        data.expectedReturnDate
+      );
+
+      if (
+        Number(returnDateIsLess8AmHour.substring(0, 2)) < 8 ||
+        Number(returnDateIsMore18PmHour.substring(0, 2)) > 18
+      ) {
+        throw new AppError(
+          'You can only devolution car between 8am and 18pm',
+          403
+        );
+      }
+
       const compare = this.dateProvider.compareInHours(
         data.startDate,
         data.expectedReturnDate
