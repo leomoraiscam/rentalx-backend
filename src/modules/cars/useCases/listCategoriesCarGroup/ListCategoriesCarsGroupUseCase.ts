@@ -35,18 +35,21 @@ export class ListCategoriesCarsGroupUseCase {
     const transformedCategories = categories.result.map(async (category) => {
       const categoryCars = cars
         .filter((car) => car.categoryId === category.id)
-        .map(async (car) => {
+        .map(async ({ id: carId, dailyRate, fineAmount, ...car }) => {
           const rental = await this.rentalRepository.findOpenRentalByDateAndCar(
             {
               startDate,
               expectedReturnDate,
-              carId: car.id,
+              carId,
             }
           );
 
           const available = !rental;
 
           return {
+            id: carId,
+            dailyRate: Number(dailyRate),
+            fineAmount: Number(fineAmount),
             ...car,
             available,
           };

@@ -32,10 +32,10 @@ export class Car {
   @Column()
   available: boolean;
 
-  @Column({ name: 'license_plate' })
+  @Column({ name: 'license_plate', type: 'int' })
   licensePlate: string;
 
-  @Column({ name: 'fine_amount' })
+  @Column({ name: 'fine_amount', type: 'int' })
   fineAmount: number;
 
   @Column()

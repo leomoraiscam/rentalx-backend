@@ -28,10 +28,14 @@ export class ShowSummaryDetailsOfRentalUseCase {
 
     return {
       id: rental.id,
-      car: rental.car,
+      car: {
+        ...rental.car,
+        dailyRate: Number(rental.car.dailyRate),
+        fineAmount: Number(rental.car.fineAmount),
+      },
       offer: {
         dailies,
-        quoteCarDailyRate: rental?.car.dailyRate,
+        quoteCarDailyRate: Number(rental?.car.dailyRate),
         total: rental?.car.dailyRate * dailies,
       },
       withdrawal: rental.startDate,
