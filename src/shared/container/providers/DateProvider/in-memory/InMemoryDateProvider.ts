@@ -15,6 +15,12 @@ export class InMemoryDateProvider implements IDateProvider {
     return this.currentDate;
   }
 
+  getHours(hour: Date): string {
+    const hourString = hour.toTimeString();
+
+    return hourString;
+  }
+
   addHours(hours: number): Date {
     const newDate = new Date(this.currentDate.getTime());
 

@@ -10,6 +10,10 @@ export class DayjsDateProvider implements IDateProvider {
     return dayjs().toDate();
   }
 
+  getHours(hour: Date): string {
+    return dayjs(hour).format('HH:mm:ss');
+  }
+
   addHours(hours: number): Date {
     return dayjs().add(hours, 'hour').toDate();
   }
