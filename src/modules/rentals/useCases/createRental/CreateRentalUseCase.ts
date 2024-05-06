@@ -29,6 +29,43 @@ export class CreateRentalUseCase {
     const minimumHours = 24;
     let total = 0;
 
+    const dateNow = await this.dateProvider.dateNow();
+    const isBefore = await this.dateProvider.compareIfBefore(
+      startDate,
+      dateNow
+    );
+
+    if (isBefore) {
+      throw new AppError('You cant create an rental on a past date', 403);
+    }
+
+    const startDateIsLess8AmHour = this.dateProvider.getHours(startDate);
+    const startDateIsMore18PmHour = this.dateProvider.getHours(startDate);
+
+    if (
+      Number(startDateIsLess8AmHour.substring(0, 2)) < 8 ||
+      Number(startDateIsMore18PmHour.substring(0, 2)) > 18
+    ) {
+      throw new AppError('You can only create rental 8am and 18pm', 403);
+    }
+
+    const returnDateIsLess8AmHour = this.dateProvider.getHours(
+      expectedReturnDate
+    );
+    const returnDateIsMore18PmHour = this.dateProvider.getHours(
+      expectedReturnDate
+    );
+
+    if (
+      Number(returnDateIsLess8AmHour.substring(0, 2)) < 8 ||
+      Number(returnDateIsMore18PmHour.substring(0, 2)) > 18
+    ) {
+      throw new AppError(
+        'You can only devolution car between 8am and 18pm',
+        403
+      );
+    }
+
     const carUnavailable = await this.rentalRepository.findOpenRentalByDateAndCar(
       {
         carId,
@@ -73,7 +110,7 @@ export class CreateRentalUseCase {
 
     total = expectedDaysOfRentals * car.dailyRate;
 
-    const rental = await this.rentalRepository.create({
+    return this.rentalRepository.create({
       userId,
       carId,
       expectedReturnDate,
@@ -81,10 +118,5 @@ export class CreateRentalUseCase {
       total,
       status: RentalStatus.PENDING,
     });
-
-    return {
-      ...rental,
-      total,
-    };
   }
 }
