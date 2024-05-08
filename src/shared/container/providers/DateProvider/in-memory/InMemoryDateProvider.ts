@@ -11,6 +11,24 @@ export class InMemoryDateProvider implements IDateProvider {
     this.currentDate = date;
   }
 
+  getMonthName(month: number): string {
+    const monthNames = [
+      'jan',
+      'fev',
+      'mar',
+      'abr',
+      'mai',
+      'jun',
+      'jul',
+      'ago',
+      'set',
+      'out',
+      'nov',
+      'dez',
+    ];
+    return monthNames[month - 1];
+  }
+
   dateNow(): Date {
     return this.currentDate;
   }
@@ -19,6 +37,13 @@ export class InMemoryDateProvider implements IDateProvider {
     const hourString = hour.toTimeString();
 
     return hourString;
+  }
+
+  getDate(date: Date): string {
+    const day = date.getDate();
+    const month = this.getMonthName(date.getMonth() + 1);
+    const year = date.getFullYear();
+    return `${day}, ${month} ${year}`;
   }
 
   addHours(hours: number): Date {

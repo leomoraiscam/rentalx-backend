@@ -1,6 +1,7 @@
 export interface IDateProvider {
   dateNow(): Date;
   getHours(hour: Date): string;
+  getDate(date: Date): string;
   addHours(hours: number): Date;
   addDays(days: number): Date;
   compareInHours(startDate: Date, endDate: Date): number;

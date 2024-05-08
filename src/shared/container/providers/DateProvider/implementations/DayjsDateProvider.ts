@@ -1,9 +1,10 @@
 import dayjs from 'dayjs';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
 import utc from 'dayjs/plugin/utc';
 
 import { IDateProvider } from '../models/IDateProvider';
 
-dayjs.extend(utc);
+dayjs.extend(utc, localizedFormat);
 
 export class DayjsDateProvider implements IDateProvider {
   dateNow(): Date {
@@ -12,6 +13,10 @@ export class DayjsDateProvider implements IDateProvider {
 
   getHours(hour: Date): string {
     return dayjs(hour).format('HH:mm:ss');
+  }
+
+  getDate(date: Date): string {
+    return dayjs(date).format('DD, MMM YYYY');
   }
 
   addHours(hours: number): Date {
