@@ -1,3 +1,4 @@
+import { InMemoryUserRepository } from '@modules/accounts/repositories/in-memory/InMemoryUserRepository';
 import { CategoryType } from '@modules/cars/dtos/ICreateCategoryDTO';
 import { Car } from '@modules/cars/infra/typeorm/entities/Car';
 import { Category } from '@modules/cars/infra/typeorm/entities/Category';
@@ -7,6 +8,8 @@ import { InMemoryCategoryRepository } from '@modules/cars/repositories/in-memory
 import { InMemorySpecificationRepository } from '@modules/cars/repositories/in-memory/InMemorySpecificationRepository';
 import { RentalStatus } from '@modules/rentals/dtos/enums/RentatStatus';
 import { InMemoryRentalRepository } from '@modules/rentals/repositories/in-memory/InMemoryRentalRepository';
+import { InMemoryDateProvider } from '@shared/container/providers/DateProvider/in-memory/InMemoryDateProvider';
+import { InMemoryMailProvider } from '@shared/container/providers/MailProvider/in-memory/InMemoryMailProvider';
 import { AppError } from '@shared/errors/AppError';
 
 import { ConfirmRentalUseCase } from './ConfirmRentalUseCase';
@@ -15,18 +18,30 @@ let inMemoryCategoryRepository: InMemoryCategoryRepository;
 let inMemorySpecificationRepository: InMemorySpecificationRepository;
 let inMemoryCarRepository: InMemoryCarRepository;
 let inMemoryRentalRepository: InMemoryRentalRepository;
+let inMemoryUserRepository: InMemoryUserRepository;
+let inMemoryMailProvider: InMemoryMailProvider;
+let inMemoryDateProvider: InMemoryDateProvider;
 let confirmRentalUseCase: ConfirmRentalUseCase;
+
 let category: Category;
 let specification: Specification;
 let car: Car;
 
-describe('ConfirmUseCase', () => {
+describe('ConfirmRentalUseCase', () => {
   beforeEach(async () => {
     inMemoryCategoryRepository = new InMemoryCategoryRepository();
     inMemorySpecificationRepository = new InMemorySpecificationRepository();
     inMemoryCarRepository = new InMemoryCarRepository();
     inMemoryRentalRepository = new InMemoryRentalRepository();
-    confirmRentalUseCase = new ConfirmRentalUseCase(inMemoryRentalRepository);
+    inMemoryUserRepository = new InMemoryUserRepository();
+    inMemoryMailProvider = new InMemoryMailProvider();
+    inMemoryDateProvider = new InMemoryDateProvider();
+    confirmRentalUseCase = new ConfirmRentalUseCase(
+      inMemoryRentalRepository,
+      inMemoryUserRepository,
+      inMemoryMailProvider,
+      inMemoryDateProvider
+    );
 
     category = await inMemoryCategoryRepository.create({
       name: 'GROUP L - SPORT',
@@ -61,16 +76,27 @@ describe('ConfirmUseCase', () => {
     });
   });
 
-  it('should be able to update status rental when the same has confirmed', async () => {
+  it('should be able to update status rental and send email when the same has confirmed', async () => {
     jest.spyOn(Date, 'now').mockImplementationOnce(() => {
       return new Date(2024, 2, 27).getTime();
+    });
+    const sendMailSpied = jest.spyOn(inMemoryMailProvider, 'sendMail');
+
+    const user = await inMemoryUserRepository.create({
+      name: 'fake-name',
+      email: 'fake-email',
+      password: 'fake-pass',
+      driverLicense: 'fake-driver-license',
+      avatar: 'fake-avatar',
     });
 
     const { id } = await inMemoryRentalRepository.create({
       carId: car.id,
       startDate: new Date(2024, 2, 20),
       expectedReturnDate: new Date(2024, 2, 23),
-      userId: 'fake-user-id',
+      userId: user.id,
+      user,
+      car,
     });
 
     const updatedRental = await confirmRentalUseCase.execute(id);
@@ -79,6 +105,22 @@ describe('ConfirmUseCase', () => {
     expect(updatedRental.status).toEqual(RentalStatus.CONFIRMED);
     expect(updatedRental.status).not.toEqual(RentalStatus.PENDING);
     expect(updatedRental.status).not.toEqual(RentalStatus.CANCELED);
+    expect(sendMailSpied).toHaveBeenCalledTimes(1);
+  });
+
+  it('should not be able to update status rental when the same has confirmed status', async () => {
+    await inMemoryRentalRepository.create({
+      carId: car.id,
+      startDate: new Date(2024, 2, 20),
+      expectedReturnDate: new Date(2024, 2, 23),
+      userId: 'fake-user-id',
+      car,
+      status: RentalStatus.CONFIRMED,
+    });
+
+    await expect(
+      confirmRentalUseCase.execute('fake-id')
+    ).rejects.toBeInstanceOf(AppError);
   });
 
   it('should not be able to update status rental when the same a non exist', async () => {
