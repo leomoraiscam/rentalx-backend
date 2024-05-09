@@ -34,7 +34,6 @@ export class CarRepository implements ICarRepository {
         'c.name',
         'c.description',
         'c.dailyRate',
-        'c.available',
         'c.licensePlate',
         'c.fineAmount',
         'c.brand',
