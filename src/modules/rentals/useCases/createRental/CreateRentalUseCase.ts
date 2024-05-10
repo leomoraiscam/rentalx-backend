@@ -29,6 +29,12 @@ export class CreateRentalUseCase {
     const minimumHours = 24;
     let total = 0;
 
+    const car = await this.carRepository.findById(carId);
+
+    if (!car) {
+      throw new AppError('Car not found', 404);
+    }
+
     const dateNow = await this.dateProvider.dateNow();
     const isBefore = await this.dateProvider.compareIfBefore(
       startDate,
@@ -105,8 +111,6 @@ export class CreateRentalUseCase {
       startDate,
       expectedReturnDate
     );
-
-    const car = await this.carRepository.findById(carId);
 
     total = expectedDaysOfRentals * car.dailyRate;
 

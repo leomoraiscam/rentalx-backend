@@ -21,6 +21,12 @@ export class UpdateRentalUseCase {
     const minimumHours = 24;
     let total = 0;
 
+    const car = await this.carRepository.findById(data.carId);
+
+    if (!car) {
+      throw new AppError('Car not found', 404);
+    }
+
     const rental = await this.rentalRepository.findById(data.id);
 
     if (!rental) {
