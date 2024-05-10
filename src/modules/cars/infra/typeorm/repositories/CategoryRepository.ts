@@ -13,6 +13,10 @@ export class CategoryRepository implements ICategoryRepository {
     this.repository = getRepository(Category);
   }
 
+  async findById(id: string): Promise<Category> {
+    return this.repository.findOne(id);
+  }
+
   async findByName(name: string): Promise<Category | null> {
     return this.repository.findOne({
       name,

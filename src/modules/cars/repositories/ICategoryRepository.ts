@@ -4,6 +4,7 @@ import { IQueryListCategoriesDTO } from '../dtos/IQueryListCategoriesDTO';
 import { Category } from '../infra/typeorm/entities/Category';
 
 export interface ICategoryRepository {
+  findById(id: string): Promise<Category | null>;
   findByName(name: string): Promise<Category | null>;
   list(
     options?: IQueryListCategoriesDTO
