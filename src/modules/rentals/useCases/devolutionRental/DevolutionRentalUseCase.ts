@@ -1,6 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 
 import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
+import { RentalStatus } from '@modules/rentals/dtos/enums/RentatStatus';
 import { ICreateDevolutionCarDTO } from '@modules/rentals/dtos/ICreateDevolutionCarDTO';
 import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
@@ -25,6 +26,10 @@ export class DevolutionRentalUseCase {
 
     if (!rental) {
       throw new AppError('Rental not found', 404);
+    }
+
+    if (rental.status !== RentalStatus.CONFIRMED) {
+      throw new AppError('This rental isnt confirmed', 422);
     }
 
     const car = await this.carRepository.findById(rental.carId);
