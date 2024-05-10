@@ -2,7 +2,6 @@ import { getRepository, Repository } from 'typeorm';
 
 import { ICreateCarDTO } from '@modules/cars/dtos/ICreateCarDTO';
 import { IQueryListAvailableCarsDTO } from '@modules/cars/dtos/IQueryListAvailableCarsDTO';
-import { IUpdateAvailableStatusCarDTO } from '@modules/cars/dtos/IUpdateAvailableStatusCarDTO';
 import { Car } from '@modules/cars/infra/typeorm/entities/Car';
 import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
 
@@ -90,17 +89,5 @@ export class CarRepository implements ICarRepository {
 
   async save(car: Car): Promise<Car> {
     return this.repository.save(car);
-  }
-
-  async updateAvailable(data: IUpdateAvailableStatusCarDTO): Promise<void> {
-    const { id, available } = data;
-
-    await this.repository
-      .createQueryBuilder()
-      .update()
-      .set({ available })
-      .where('id = :id')
-      .setParameters({ id })
-      .execute();
   }
 }
