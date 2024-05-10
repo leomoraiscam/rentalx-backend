@@ -280,4 +280,15 @@ describe('CreateRentalUseCase', () => {
       })
     ).rejects.toBeInstanceOf(AppError);
   });
+
+  it('should not be able to create a new rental when the car a non exist', async () => {
+    expect(
+      createRentalUseCase.execute({
+        userId: 'fake-user-id',
+        carId: 'fake-car-id',
+        startDate: new Date(2024, 3, 10, 6),
+        expectedReturnDate: new Date(2024, 3, 12, 7),
+      })
+    ).rejects.toBeInstanceOf(AppError);
+  });
 });

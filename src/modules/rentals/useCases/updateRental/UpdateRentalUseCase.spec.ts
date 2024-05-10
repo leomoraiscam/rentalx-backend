@@ -82,6 +82,7 @@ describe('UpdateRentalUseCase', () => {
 
     const updatedRental = await updateRentalUseCase.execute({
       id,
+      carId: car.id,
       startDate: new Date(2024, 2, 23, 8),
       expectedReturnDate: new Date(2024, 2, 27, 10),
     });
@@ -142,7 +143,7 @@ describe('UpdateRentalUseCase', () => {
     ).rejects.toBeInstanceOf(AppError);
   });
 
-  it('should not be able to create a new rental with start date before now', async () => {
+  it('should not be able to update rental with start date before now', async () => {
     const dayAdd2Hours = inMemoryDateProvider.addDays(2);
 
     jest.spyOn(Date, 'now').mockImplementation(() => {
@@ -159,7 +160,7 @@ describe('UpdateRentalUseCase', () => {
     ).rejects.toBeInstanceOf(AppError);
   });
 
-  it('should not be able to create a new rental when the same is closed', async () => {
+  it('should not be able to update rental when the same is closed', async () => {
     const dayAdd2Hours = inMemoryDateProvider.addDays(2);
 
     jest.spyOn(Date, 'now').mockImplementation(() => {
@@ -176,11 +177,22 @@ describe('UpdateRentalUseCase', () => {
     ).rejects.toBeInstanceOf(AppError);
   });
 
-  it('should not be able to create a new rental when the same is closed', async () => {
+  it('should not be able to update rental when the same is closed', async () => {
     jest.spyOn(Date, 'now').mockImplementation(() => {
       return new Date(2024, 3, 8, 10).getTime();
     });
 
+    expect(
+      updateRentalUseCase.execute({
+        userId: 'fake-user-id',
+        carId: 'fake-car-id',
+        startDate: new Date(2024, 3, 10, 6),
+        expectedReturnDate: new Date(2024, 3, 12, 7),
+      })
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should not be able to update rental when the car a non-exist', async () => {
     expect(
       updateRentalUseCase.execute({
         userId: 'fake-user-id',
