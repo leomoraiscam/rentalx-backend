@@ -44,6 +44,7 @@ describe('DevolutionRentalUseCase', () => {
     const rental = await inMemoryRentalRepository.create({
       userId: 'fake-user-id',
       carId,
+      status: 'confirmed',
       expectedReturnDate: dayAdd24Hours,
       startDate: new Date(2024, 3, 10, 12),
     });
@@ -97,6 +98,7 @@ describe('DevolutionRentalUseCase', () => {
       carId,
       startDate: dateNow,
       expectedReturnDate: dayAdd2Hours,
+      status: 'confirmed',
     });
 
     const devolutionRental = await devolutionRentalUseCase.execute({
@@ -124,6 +126,7 @@ describe('DevolutionRentalUseCase', () => {
       carId,
       expectedReturnDate: dayAdd24Hours,
       startDate: dayAdd2Hours,
+      status: 'confirmed',
     });
 
     const devolutionRental = await devolutionRentalUseCase.execute({
