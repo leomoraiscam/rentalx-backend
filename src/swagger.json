@@ -1,71 +1,497 @@
 {
-  "openapi":"3.0.0",
+  "openapi": "3.0.0",
   "info": {
-    "title": "RentX Documentation",
-    "description": "This is API Rentl",
-    "version": "1.0.0"
+    "title": "Car rentals API - Swagger Documentation",
+    "description": "This is API Rental",
+    "termsOfService": "http://swagger.io/terms/",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.11",
+    "host": "http://localhost:3333/api-docs"
   },
+  "servers": [
+    {
+      "url": "http://localhost:3333/api-docs"
+    }
+  ],
+  "tags": [
+    {
+      "name": "accounts",
+      "description": "Endpoints related to accounts management."
+    },
+    {
+      "name": "sessions",
+      "description": "Endpoints for user authentication."
+    },
+    {
+      "name": "password",
+      "description": "Endpoints for reset passwords and send password recovery emails."
+    },
+    {
+      "name": "categories",
+      "description": "Endpoints related to car categories management."
+    },
+    {
+      "name": "specifications",
+      "description": "Endpoints related to car specifications management."
+    },
+    {
+      "name": "cars",
+      "description": "Endpoints related to cars management."
+    },
+    {
+      "name": "rentals",
+      "description": "Endpoints related to car rentals management."
+    }
+  ],
   "paths": {
-    "/categories": {
+    "/accounts": {
       "post": {
-        "tags": ["Category"],
-        "summary": "Create a category",
-        "description": "Create a new category",
-        "security": [
-          {"bearerAuth": []}
+        "tags": ["accounts"],
+        "summary": "Create a new account",
+        "description": "This endpoint allows the creation of a new account",
+        "operationId": "addAccount",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Account"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "This will be returned when the created a account resource",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "This will be returned when has validation error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "This will be returned when the account resource already exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConflictError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "This will be returned when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts/avatar": {
+      "patch": {
+        "tags": ["accounts"],
+        "summary": "Upload image to account",
+        "description": "This endpoint allows you to upload images to a specific account by taking the logged in user's ID.",
+        "operationId": "uploadAvatar",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadAvatar"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "This will be returned when the uploaded avatar to account resource",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountWithAvatarResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "This will be returned when has validation error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This will be returned when the user is not authorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "This will be returned when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions": {
+      "post": {
+        "tags": ["sessions"],
+        "summary": "Authenticate user",
+        "description": "This endpoint allows users to log into the application with their credentials. The response includes a JWT token that must be used to authenticate future requests.",
+        "operationId": "authenticateUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Session"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "This will be returned when the user was authenticated with success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "This will be returned when has validation error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This will be returned when email or password  is incorrect.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "This will be returned when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/password/forgot": {
+      "post": {
+        "tags": ["password"],
+        "summary": "Send password recovery email",
+        "description": "This endpoint allows users to request a password recovery email.",
+        "operationId": "sendForgotPassword",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPassword"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "This will be returned when the email was send with success"
+          },
+          "400": {
+            "description": "This will be returned when has validation error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "This will be returned when the user to be deleted or does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "This will be returned when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/password/reset": {
+      "post": {
+        "tags": ["password"],
+        "summary": "Reset user password",
+        "description": "This endpoint allows users to reset their passwords. The user must provide the password reset token received via email along with the new password.",
+        "operationId": "resetPassword",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "description": "token obtained via password reset email",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "default": "6ec808b3-13f0-4cb7-bf91-ac8609a3205c"
+            }
+          }
         ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "description": {
-                    "type": "string"
-                  }
-                },
-                "example": {
-                  "name": "category name sample",
-                  "description": "category description sample"
+                "$ref": "#/components/schemas/ResetPassword"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "This will be returned when the password was reseted with success"
+          },
+          "400": {
+            "description": "This will be returned when has validation error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This will be returned when the user is not authorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "This will be returned when the user to be deleted or does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "This will be returned when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
                 }
               }
             }
           }
+        }
+      }
+    },
+    "/categories": {
+      "post": {
+        "tags": ["categories"],
+        "summary": "Create a new category",
+        "description": "This endpoint allows the creation of a new category",
+        "operationId": "addCategory",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Category"
+              }
+            }
+          },
+          "required": true
         },
         "responses": {
           "201": {
-            "description": "Created"
+            "description": "This will be returned when the created a category resource",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "This will be returned when has validation error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This will be returned when the user is not authorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "This will be returned when the category resource already exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConflictError"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Category alredy exist"
+            "description": "This will be returned when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
           }
         }
       },
       "get": {
-        "tags": ["Category"],
-        "summary": "List all categories",
-        "description": "List all categories",
+        "tags": ["categories"],
+        "summary": "List of car categories",
+        "description": "This endpoint returns a list of car categories",
+        "operationId": "listCategories",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page values that need to be considered for filter",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "1"
+            }
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "description": "PerPage values that need to be considered for filter",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "10"
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "description": "The order (ASC or DESC) values that need to be considered for filter",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "DESC"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "This will be returned when list of car categories with success",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "name": {
-                        "type":"string"
-                      },
-                      "description": {
-                        "type": "string"
-                      }
-                    }
-                  }
+                  "$ref": "#/components/schemas/CategoryListResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "This will be returned when the empty data to this entity"
+          },
+          "401": {
+            "description": "This will be returned when the user is not authorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "This will be returned when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
                 }
               }
             }
@@ -75,133 +501,345 @@
     },
     "/categories/import": {
       "post": {
-        "tags": ["Category"],
-        "summary": "Upload a new category",
-        "description": "Upload a new category",
-        "security": [
-          {"bearerAuth": []}
-        ],
+        "tags": ["categories"],
+        "summary": "Upload car categories from CSV",
+        "description": "Allows administrators to upload car categories in bulk from a CSV file. Each row in the CSV file should contain information such as name, description, and type of the car category",
+        "operationId": "uploadCategories",
         "requestBody": {
           "content": {
             "multipart/form-data": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "file": {
-                    "type": "string",
-                    "format": "binary"
-                  }
-                }
+                "$ref": "#/components/schemas/UploadCSV"
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "Created"
+            "description": "This will be returned when the created a category resource"
+          },
+          "401": {
+            "description": "This will be returned when the user is not authorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "This will be returned when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
           }
         }
       }
     },
     "/specifications": {
       "post": {
-        "tags": ["Specifications"],
-        "summary": "Create a specification",
-        "description":"Create a new specification",
-        "security": [
-          {"bearerAuth": []}
-        ],
+        "tags": ["specifications"],
+        "summary": "Create a new specification",
+        "description": "This endpoint allows the creation of a new specification",
+        "operationId": "addSpecification",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/definitions/Specification"
+                "$ref": "#/components/schemas/Specification"
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "Created" 
+            "description": "This will be returned when the created a specification resource",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpecificationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "This will be returned when has validation error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This will be returned when the user is not authorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "This will be returned when the specification resource already exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConflictError"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Specification alredy exist!"
+            "description": "This will be returned when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["specifications"],
+        "summary": "List of car specifications",
+        "description": "This endpoint returns a list of car specifications",
+        "operationId": "listSpecifications",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page values that need to be considered for filter",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "1"
+            }
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "description": "PerPage values that need to be considered for filter",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "10"
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "description": "The order (ASC or DESC) values that need to be considered for filter",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "DESC"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "This will be returned when list of car specifications with success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpecificationListResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "This will be returned when the empty data to this entity"
+          },
+          "401": {
+            "description": "This will be returned when the user is not authorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "This will be returned when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
           }
         }
       }
     },
-    "/sessions": {
+    "/specifications/import": {
       "post": {
-        "tags": ["Session"],
-        "summary": "Authentication user",
-        "description": "Authentication user",
+        "tags": ["specifications"],
+        "summary": "Upload car specifications from CSV",
+        "description": "Allows administrators to upload car specifications in bulk from a CSV file. Each row in the CSV file should contain information such as name, description of the car category",
+        "operationId": "uploadSpecifications",
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "type": "object",
-                "properties":{ 
-                  "email": {
-                    "type": "string"
-                  },
-                  "password": {
-                    "type": "string"
-                  }
-                }
+                "$ref": "#/components/schemas/UploadCSV"
               }
             }
           }
         },
         "responses": {
-          "200": {
-            "description": "Sucess"
+          "201": {
+            "description": "This will be returned when the created a specification resource"
           },
           "401": {
-            "description": "Email or password incorrect"
+            "description": "This will be returned when the user is not authorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "This will be returned when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
           }
         }
       }
     },
     "/cars": {
       "post": {
-        "tags":["Cars"],
+        "tags": ["cars"],
         "summary": "Create a new car",
-        "description": "Create a new car",
+        "description": "This endpoint allows the creation of a new car",
+        "operationId": "addCar",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/definitions/Car"
+                "$ref": "#/components/schemas/Car"
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "Created"
+            "description": "This will be returned when the created a car resource",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CarResponse"
+                }
+              }
+            }
           },
           "400": {
-            "description": "Car alredy exist"
+            "description": "This will be returned when has validation error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This will be returned when the user is not authorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "This will be returned when the car resource already exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConflictError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "This will be returned when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["cars"],
+        "summary": "List cars separated by categories",
+        "description": "This endpoint returns a list of cars organized by categories",
+        "operationId": "listCars",
+        "responses": {
+          "200": {
+            "description": "This will be returned when list of cars organized by categories",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CarListResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "This will be returned when the empty data to this entity"
+          },
+          "500": {
+            "description": "This will be returned when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
           }
         }
       }
     },
     "/cars/images/{id}": {
       "post": {
-        "tags": ["Cars"],
-        "summary": "Upload images",
-        "description": "Upload images",
-        "security": [
-          {"bearerAuth":[]}
-        ],
+        "tags": ["cars"],
+        "summary": "Upload images to a specific car",
+        "description": "This endpoint allows you to upload images for a specific car",
+        "operationId": "addImagesCar",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "Car id",
+            "description": "ID of car",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "example": "3c2d1188-ab65-41d3-b3b6-49adf24082d6"
             }
           }
         ],
@@ -209,66 +847,856 @@
           "content": {
             "multipart/form-data": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "images": "array",
-                  "items": {
-                    "type": "string",
-                    "format": "binary"
-                  }
-                }
+                "$ref": "#/components/schemas/UploadImages"
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "Created"
+            "description": "This will be returned when the created a specification resource"
+          },
+          "401": {
+            "description": "This will be returned when the user is not authorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "This will be returned when the car to be deleted does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "This will be returned when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rentals": {
+      "post": {
+        "tags": ["rentals"],
+        "summary": "Create a rental",
+        "description": "This endpoint allows the creation of a rental",
+        "operationId": "addRental",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rental"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "This will be returned when the created a rental resource",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RentalResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "This will be returned when has validation error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This will be returned when the user is not authorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "This will be returned when the car to be deleted or does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "This will be returned when the resource already exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConflictError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "This will be returned when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["rentals"],
+        "summary": "Update rental information",
+        "description": "This endpoint allows end users to update information for an existing lease.",
+        "operationId": "updateRental",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRental"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "This will be returned when the updated a rental resource",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RentalResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "This will be returned when has validation error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This will be returned when the user is not authorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "This will be returned when the car to be deleted does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "This will be returned when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rentals/{id}": {
+      "patch": {
+        "tags": ["rentals"],
+        "summary": "Confirms an existing rental",
+        "description": "This endpoint allows end users to confirm a previously created rental.",
+        "operationId": "confirmRental",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of car",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "3c2d1188-ab65-41d3-b3b6-49adf24082d6"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "This will be returned when the updated a rental status resource",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RentalResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This will be returned when the user is not authorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "This will be returned when the car to be deleted or does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "This will be returned when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rentals/devolution/{id}": {
+      "post": {
+        "tags": ["rentals"],
+        "summary": "Return a rental car",
+        "description": "This endpoint allows end users to return a rental car.",
+        "operationId": "devolutionRental",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of car",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "3c2d1188-ab65-41d3-b3b6-49adf24082d6"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "This will be returned when the devolution a car rental"
+          },
+          "401": {
+            "description": "This will be returned when the user is not authorized.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "This will be returned when the car to be deleted or does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "This will be returned when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
           }
         }
       }
     }
   },
-  "definitions": {
-    "Specification": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
+  "components": {
+    "schemas": {
+      "Account": {
+        "required": ["name", "email", "password", "driverLicense"],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Jonh"
+          },
+          "email": {
+            "type": "string",
+            "example": "email@email.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "pass@123"
+          },
+          "driverLicense": {
+            "type": "string",
+            "example": "5304286925"
+          }
         }
+      },
+      "AccountResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Account"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "createdAt": {
+                "type": "string",
+                "example": "2024-05-09T02:28:18.190Z"
+              }
+            }
+          }
+        ]
+      },
+      "AccountWithAvatarResponse": {
+        "allOf": [
+          { "$ref": "#/components/schemas/AccountResponse" },
+          {
+            "type": "object",
+            "properties": {
+              "avatar": {
+                "type": "string",
+                "example": "f66a596a348f0729-ts-2.png"
+              },
+              "updatedAt": {
+                "type": "string",
+                "example": "2024-05-09T02:28:18.190Z"
+              }
+            }
+          }
+        ]
+      },
+      "Session": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "email+1@email.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "pass@12345"
+          }
+        }
+      },
+      "SessionResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTUzNDM5MjQsImV4cCI6MTcxNTM0NTcyNCwic3ViIjoiNjVlMTcxODQtNDRlOC00MTAxLWFhMTMtMjZmMzQxMmYyZDc2In0.NlSLdGPuff8i1Clwq_n-o9jLl2N2c6Ot8iozFLWB37c"
+          },
+          "user": {
+            "allOf": [
+              { "$ref": "#/components/schemas/AccountWithAvatarResponse" },
+              {
+                "type": "object",
+                "properties": {
+                  "isAdmin": {
+                    "type": "boolean",
+                    "example": true
+                  }
+                }
+              }
+            ]
+          },
+          "refreshToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVtYWlsKzFAZW1haWwuY29tIiwiaWF0IjoxNzE1MzQzOTI0LCJleHAiOjE3MTc5MzU5MjQsInN1YiI6IjY1ZTE3MTg0LTQ0ZTgtNDEwMS1hYTEzLTI2ZjM0MTJmMmQ3NiJ9.nFVh7uBLzIdpvJDxgt0uq5ooiurcFSTYi7jzeCyAn7A"
+          }
+        }
+      },
+      "ForgotPassword": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "email+1@email.com"
+          }
+        }
+      },
+      "ResetPassword": {
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string",
+            "example": "pass@12345"
+          }
+        }
+      },
+      "Category": {
+        "required": ["name", "description", "type"],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Sedã"
+          },
+          "description": {
+            "type": "string",
+            "example": "Categoria de carros que possui três volumes: o porta-malas, a cabine e o compartimento do motor."
+          },
+          "type": {
+            "type": "string",
+            "example": "Sedã"
+          }
+        }
+      },
+      "CategoryResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Category"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid",
+                "example": "ba1d4a61-f635-4104-9167-4f3cb970d87a"
+              },
+              "createdAt": {
+                "type": "string",
+                "example": "2024-05-09 00:42:55.136515"
+              }
+            }
+          }
+        ]
+      },
+      "CategoryListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CategoryResponse"
+            }
+          },
+          "total": {
+            "type": "number",
+            "example": 4
+          },
+          "totalPages": {
+            "type": "number",
+            "example": 1
+          }
+        }
+      },
+      "Specification": {
+        "required": ["name", "description"],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Direção Elétrica"
+          },
+          "description": {
+            "type": "string",
+            "example": "Um conjunto mecânico que permite a condução do veículo de maneira mais leve através do volante."
+          }
+        }
+      },
+      "SpecificationResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Specification"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid",
+                "example": "ba1d4a61-f635-4104-9167-4f3cb970d87a"
+              },
+              "createdAt": {
+                "type": "string",
+                "example": "2024-05-09 00:42:55.136515"
+              }
+            }
+          }
+        ]
+      },
+      "SpecificationListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SpecificationResponse"
+            }
+          },
+          "total": {
+            "type": "number",
+            "example": 4
+          },
+          "totalPages": {
+            "type": "number",
+            "example": 1
+          }
+        }
+      },
+      "UploadCSV": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary"
+          }
+        }
+      },
+      "UploadImages": {
+        "type": "object",
+        "properties": {
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "binary"
+            }
+          }
+        }
+      },
+      "UploadAvatar": {
+        "type": "object",
+        "properties": {
+          "avatar": {
+            "type": "string",
+            "format": "binary"
+          }
+        }
+      },
+      "Car": {
+        "required": [
+          "name",
+          "brand",
+          "description",
+          "dailyRate",
+          "licensePlate",
+          "fineAmount",
+          "categoryId"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Mustang GT 500"
+          },
+          "brand": {
+            "type": "string",
+            "example": "Ford."
+          },
+          "description": {
+            "type": "string",
+            "example": "carro esportivo avançado em performance"
+          },
+          "dailyRate": {
+            "type": "number",
+            "example": 600
+          },
+          "licensePlate": {
+            "type": "string",
+            "example": "EFG-5678"
+          },
+          "fineAmount": {
+            "type": "number",
+            "example": 600
+          },
+          "categoryId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "2214ae85-9c94-4b02-8b80-4d04eb07c53f"
+          }
+        }
+      },
+      "CarResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Car"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "e1ecb723-6f8c-4ee6-86f6-64af13a77e8f"
+              },
+              "createdAt": {
+                "type": "string",
+                "example": "2024-05-09 00:42:55.136515"
+              }
+            }
+          }
+        ]
+      },
+      "CarImages": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "0b57f64e-5391-4803-817b-1fa4cfc60f72"
+          },
+          "imageName": {
+            "type": "string",
+            "example": "7f6de17fb968c47a-ts_1.png"
+          }
+        }
+      },
+      "CarListResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "example": "Esportivo"
+            },
+            "type": {
+              "type": "string",
+              "example": "esportivo"
+            },
+            "cars": {
+              "type": "array",
+              "items": {
+                "allOf": [
+                  { "$ref": "#/components/schemas/CarResponse" },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "available": {
+                        "type": "boolean",
+                        "example": true
+                      },
+                      "category": {
+                        "$ref": "#/components/schemas/CategoryResponse"
+                      },
+                      "specifications": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/SpecificationResponse"
+                        }
+                      },
+                      "images": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/CarImages"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "available": {
+              "type": "boolean",
+              "example": true
+            }
+          }
+        }
+      },
+      "Rental": {
+        "required": ["startDate", "expectReturdDate", "carId"],
+        "type": "object",
+        "properties": {
+          "startDate": {
+            "type": "string",
+            "example": "2024-05-26 08:00:00"
+          },
+          "expectReturdDate": {
+            "type": "string",
+            "example": "2024-05-29 10:00:00"
+          },
+          "carId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "5141cc5d-2a5d-4aeb-9353-ac274e02e0c4"
+          }
+        }
+      },
+      "RentalResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Rental"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid",
+                "example": "7f83aa58-e1fc-4de5-b2b0-e3584acbd84f"
+              },
+              "userId": {
+                "type": "string",
+                "format": "uuid",
+                "example": "65e17184-44e8-4101-aa13-26f3412f2d76"
+              },
+              "total": {
+                "type": "number",
+                "example": 1800
+              },
+              "status": {
+                "type": "string",
+                "example": "pending"
+              },
+              "createdAt": {
+                "type": "string",
+                "example": "2024-05-09 00:42:55.136515"
+              },
+              "updatedAt": {
+                "type": "string",
+                "example": null
+              }
+            }
+          }
+        ]
+      },
+      "UpdateRental": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "3fcf6fb1-decf-41c0-82eb-3478e0523979"
+          },
+          "startDate": {
+            "type": "string",
+            "example": "2024-05-26 08:00:00"
+          },
+          "expectReturnDate": {
+            "type": "string",
+            "example": "2024-05-29 10:00:00"
+          },
+          "carId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "5141cc5d-2a5d-4aeb-9353-ac274e02e0c4"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "ValidationError": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Error"
+          },
+          {
+            "example": {
+              "status": "error",
+              "message": "The \"property (example)\" parameter is missing in request body."
+            }
+          }
+        ]
+      },
+      "UnauthorizedError": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Error"
+          },
+          {
+            "example": {
+              "status": "error",
+              "message": "Token missing!"
+            }
+          }
+        ]
+      },
+      "NotFoundError": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Error"
+          },
+          {
+            "example": {
+              "status": "error",
+              "message": "Car not found"
+            }
+          }
+        ]
+      },
+      "ConflictError": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Error"
+          },
+          {
+            "example": {
+              "status": "error",
+              "message": "Entity resource with this name already exists"
+            }
+          }
+        ]
+      },
+      "InternalServerError": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Error"
+          },
+          {
+            "example": {
+              "status": "error",
+              "message": "Internal Server Error"
+            }
+          }
+        ]
       }
     },
-    "Car": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "daily_rate": {
-          "type": "number"
-        },
-        "license_plate": {
-          "type": "string"
-        },
-        "fine_amount": {
-          "type": "number"
-        },
-        "brand": {
-          "type": "string"
-        },
-        "category_id": {
-          "type": "string"
-        }
-      }
-    }
-  },
-  "components": {
     "securitySchemes": {
       "bearerAuth": {
         "type": "http",
