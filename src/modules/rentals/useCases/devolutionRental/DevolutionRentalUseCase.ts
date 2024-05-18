@@ -29,7 +29,7 @@ export class DevolutionRentalUseCase {
     }
 
     if (rental.status !== RentalStatus.CONFIRMED) {
-      throw new AppError('This rental isnt confirmed', 422);
+      throw new AppError('This rental isn`t confirmed', 422);
     }
 
     const car = await this.carRepository.findById(rental.carId);

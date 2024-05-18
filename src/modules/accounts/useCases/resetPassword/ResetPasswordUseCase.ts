@@ -24,7 +24,7 @@ export class ResetPasswordUseCase {
     const userToken = await this.userTokenRepository.findByRefreshToken(token);
 
     if (!userToken) {
-      throw new AppError('token not found', 404);
+      throw new AppError('Invalid or expired token', 401);
     }
 
     const { id, userId, expiresDate } = userToken;

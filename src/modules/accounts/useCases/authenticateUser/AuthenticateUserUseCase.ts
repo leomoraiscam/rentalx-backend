@@ -60,7 +60,7 @@ export class AuthenticateUserUseCase {
         metadata: auth,
       });
 
-      return;
+      throw new AppError('Internal dependency is missing', 424);
     }
 
     const { id: userId } = user;

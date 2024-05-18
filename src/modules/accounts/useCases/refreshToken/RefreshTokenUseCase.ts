@@ -43,7 +43,7 @@ export class RefreshTokenUseCase {
     );
 
     if (!userToken) {
-      throw new AppError('token not found', 404);
+      throw new AppError('Invalid or expired token', 401);
     }
 
     await this.userTokenRepository.deleteById(userToken.id);
@@ -55,7 +55,7 @@ export class RefreshTokenUseCase {
         metadata: auth,
       });
 
-      return;
+      throw new AppError('Internal dependency is missing', 424);
     }
 
     const refreshToken = sign({ email }, secretRefreshToken, {

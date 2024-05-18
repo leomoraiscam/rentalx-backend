@@ -22,7 +22,7 @@ export class CreateCarSpecificationsUseCase {
     const car = await this.carRepository.findById(carId);
 
     if (!car) {
-      throw new AppError('car not found', 404);
+      throw new AppError('Car not found', 404);
     }
 
     const specifications = await this.specificationRepository.findByIds(

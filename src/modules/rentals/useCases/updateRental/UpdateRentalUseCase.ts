@@ -41,7 +41,7 @@ export class UpdateRentalUseCase {
       );
 
       if (isBefore) {
-        throw new AppError('You cant create an rental on a past date', 403);
+        throw new AppError('You cant create an rental on a past date', 422);
       }
 
       const startDateIsLess8AmHour = this.dateProvider.getHours(data.startDate);
@@ -53,7 +53,7 @@ export class UpdateRentalUseCase {
         Number(startDateIsLess8AmHour.substring(0, 2)) < 8 ||
         Number(startDateIsMore18PmHour.substring(0, 2)) > 18
       ) {
-        throw new AppError('You can only create rental 8am and 18pm', 403);
+        throw new AppError('You can only create rental 8am and 18pm', 422);
       }
 
       const returnDateIsLess8AmHour = this.dateProvider.getHours(
@@ -69,7 +69,7 @@ export class UpdateRentalUseCase {
       ) {
         throw new AppError(
           'You can only devolution car between 8am and 18pm',
-          403
+          422
         );
       }
 
