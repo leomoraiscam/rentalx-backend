@@ -128,10 +128,12 @@ describe('AuthenticateUserUseCase', () => {
       driverLicense: '8587317685',
     });
 
-    await authenticateUserUseCase.execute({
-      email: 'lez@cujve.vu',
-      password: 'any-pass@123',
-    });
+    await expect(
+      authenticateUserUseCase.execute({
+        email: 'lez@cujve.vu',
+        password: 'any-pass@123',
+      })
+    ).rejects.toBeInstanceOf(AppError);
 
     expect(loggerSpied).toHaveBeenCalledTimes(1);
     expect(loggerSpied).toHaveBeenCalledWith({

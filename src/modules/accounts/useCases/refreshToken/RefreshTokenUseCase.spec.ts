@@ -83,7 +83,9 @@ describe('ResetPasswordUseCase', () => {
       sub: userId,
     });
 
-    await refreshTokenUseCase.execute('example-token');
+    await expect(
+      refreshTokenUseCase.execute('example-token')
+    ).rejects.toBeInstanceOf(AppError);
 
     expect(loggerSpied).toHaveBeenCalledTimes(1);
     expect(loggerSpied).toHaveBeenCalledWith({
