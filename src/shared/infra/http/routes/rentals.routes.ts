@@ -24,12 +24,12 @@ rentalRouter.get(
   showSummaryDetailsOfRentalController.handle
 );
 rentalRouter.post('/', ensureAuthenticated, createRentalController.handle);
-rentalRouter.put('/', ensureAuthenticated, updateRentalController.handle);
 rentalRouter.post(
   '/devolution/:id',
   ensureAuthenticated,
   devolutionRentalController.handle
 );
+rentalRouter.put('/', ensureAuthenticated, updateRentalController.handle);
 rentalRouter.patch('/:id', ensureAuthenticated, confirmRentalController.handle);
 
 export { rentalRouter };

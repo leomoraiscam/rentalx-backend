@@ -6,6 +6,7 @@ import { CreateSpecificationController } from '@modules/cars/useCases/createSpec
 import { ImportSpecificationsController } from '@modules/cars/useCases/importSpecifications/importSpecificationsController';
 import { ListSpecificationsController } from '@modules/cars/useCases/listSpecifications/ListSpecificationsController';
 
+import ensureAdmin from '../middlewares/ensureAdmin';
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 const uploadSpecifications = multer(multerConfig);
@@ -23,11 +24,13 @@ specificationRouter.get(
 specificationRouter.post(
   '/',
   ensureAuthenticated,
+  ensureAdmin,
   createSpecificationController.handle
 );
 specificationRouter.post(
   '/import',
   ensureAuthenticated,
+  ensureAdmin,
   uploadSpecifications.single('file'),
   importSpecificationsController.handle
 );

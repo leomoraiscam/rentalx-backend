@@ -10,8 +10,8 @@ import { specificationRouter } from './specifications.routes';
 
 const router = Router();
 
-router.use('/sessions', sessionsRouter);
 router.use('/accounts', accountsRouter);
+router.use('/sessions', sessionsRouter);
 router.use('/password', passwordRouter);
 router.use('/categories', categoriesRouter);
 router.use('/specifications', specificationRouter);

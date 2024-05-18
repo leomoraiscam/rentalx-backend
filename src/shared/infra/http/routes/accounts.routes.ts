@@ -10,7 +10,6 @@ import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 const uploadAvatar = multer(multerConfig);
 
 const accountsRouter = Router();
-
 const createUserController = new CreateUserController();
 const updateUserAvatarController = new UpdateUserAvatarController();
 
