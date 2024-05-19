@@ -6,7 +6,6 @@ import { CreateCategoriesHandler } from '../handler/CreateCategoriesHandler';
 export function makeCreateCategoriesHandler(): CreateCategoriesHandler {
   const categoryRepository = new CategoryRepository();
 
-  // TODO: check if can use container.resolve
   const createCategoryUseCase = new CreateCategoryUseCase(categoryRepository);
 
   const createCategoriesHandler = new CreateCategoriesHandler(

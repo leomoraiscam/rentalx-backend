@@ -8,7 +8,6 @@ export function makeCreateUserHandler(): CreateUserHandler {
   const userRepository = new UserRepository();
   const cryptHashProvider = new BCryptHashProvider();
 
-  // TODO: check if can use container.resolve
   const createUserUseCase = new CreateUserUseCase(
     userRepository,
     cryptHashProvider

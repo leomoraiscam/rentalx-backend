@@ -6,7 +6,6 @@ import { CreateSpecificationsHandler } from '../handler/CreateSpecificationsHand
 export function makeCreateSpecificationsHandler(): CreateSpecificationsHandler {
   const specificationRepository = new SpecificationRepository();
 
-  // TODO: check if can use container.resolve
   const createSpecificationUseCase = new CreateSpecificationUseCase(
     specificationRepository
   );
