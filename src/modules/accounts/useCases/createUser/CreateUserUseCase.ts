@@ -20,6 +20,7 @@ export class CreateUserUseCase {
     email,
     password,
     driverLicense,
+    isAdmin,
   }: ICreateUserDTO): Promise<User> {
     const user = await this.userRepository.findByEmail(email);
 
@@ -42,6 +43,7 @@ export class CreateUserUseCase {
       email,
       password: hashPassword,
       driverLicense,
+      isAdmin,
     });
   }
 }
