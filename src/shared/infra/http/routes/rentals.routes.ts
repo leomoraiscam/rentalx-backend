@@ -1,3 +1,4 @@
+import { Joi, Segments, celebrate } from 'celebrate';
 import { Router } from 'express';
 
 import { ConfirmRentalController } from '@modules/rentals/useCases/confirmRental/ConfirmRentalController';
@@ -23,13 +24,50 @@ rentalRouter.get(
   ensureAuthenticated,
   showSummaryDetailsOfRentalController.handle
 );
-rentalRouter.post('/', ensureAuthenticated, createRentalController.handle);
+rentalRouter.post(
+  '/',
+  celebrate({
+    [Segments.BODY]: {
+      startDate: Joi.date().required(),
+      expectedReturnDate: Joi.date().required(),
+      carId: Joi.string().uuid().required(),
+    },
+  }),
+  ensureAuthenticated,
+  createRentalController.handle
+);
 rentalRouter.post(
   '/devolution/:id',
+  celebrate({
+    [Segments.PARAMS]: {
+      id: Joi.string().uuid().required(),
+    },
+  }),
   ensureAuthenticated,
   devolutionRentalController.handle
 );
-rentalRouter.put('/', ensureAuthenticated, updateRentalController.handle);
-rentalRouter.patch('/:id', ensureAuthenticated, confirmRentalController.handle);
+rentalRouter.put(
+  '/',
+  celebrate({
+    [Segments.BODY]: {
+      id: Joi.string().uuid().required(),
+      startDate: Joi.date().optional(),
+      expectedReturnDate: Joi.date().optional(),
+      carId: Joi.string().uuid().optional(),
+    },
+  }),
+  ensureAuthenticated,
+  updateRentalController.handle
+);
+rentalRouter.patch(
+  '/:id',
+  celebrate({
+    [Segments.PARAMS]: {
+      id: Joi.string().uuid().required(),
+    },
+  }),
+  ensureAuthenticated,
+  confirmRentalController.handle
+);
 
 export { rentalRouter };

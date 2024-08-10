@@ -1,3 +1,4 @@
+import { Joi, Segments, celebrate } from 'celebrate';
 import { Router } from 'express';
 import multer from 'multer';
 
@@ -13,7 +14,18 @@ const accountsRouter = Router();
 const createUserController = new CreateUserController();
 const updateUserAvatarController = new UpdateUserAvatarController();
 
-accountsRouter.post('/', createUserController.handle);
+accountsRouter.post(
+  '/',
+  celebrate({
+    [Segments.BODY]: {
+      name: Joi.string().min(3).max(20).required(),
+      email: Joi.string().email().required(),
+      password: Joi.string().min(5).max(15).required(),
+      driverLicense: Joi.string().min(9).max(9).required(),
+    },
+  }),
+  createUserController.handle
+);
 accountsRouter.patch(
   '/avatar',
   ensureAuthenticated,

@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import { errors } from 'celebrate';
 import cors from 'cors';
 import express, { Response, Request, NextFunction } from 'express';
 import swaggerUi from 'swagger-ui-express';
@@ -39,6 +40,7 @@ app.use('/avatar', express.static(`${multerConfig.tmpFolder}/avatar`));
 app.use('/car', express.static(`${multerConfig.tmpFolder}/cars`));
 app.use(cors());
 app.use(router);
+app.use(errors());
 app.use(Sentry.Handlers.errorHandler());
 app.use(
   (err: Error, request: Request, response: Response, next: NextFunction) => {

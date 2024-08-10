@@ -1,3 +1,4 @@
+import { Joi, Segments, celebrate } from 'celebrate';
 import { Router } from 'express';
 import multer from 'multer';
 
@@ -18,11 +19,26 @@ const importSpecificationsController = new ImportSpecificationsController();
 
 specificationRouter.get(
   '/',
+  celebrate({
+    [Segments.QUERY]: {
+      page: Joi.string().min(1).max(4).optional(),
+      perPage: Joi.string().min(1).max(4).optional(),
+      order: Joi.string()
+        .valid(...Object.values(['ASC', 'DESC']))
+        .optional(),
+    },
+  }),
   ensureAuthenticated,
   listSpecificationsController.handle
 );
 specificationRouter.post(
   '/',
+  celebrate({
+    [Segments.BODY]: {
+      name: Joi.string().min(3).max(20).required(),
+      description: Joi.string().min(5).max(55).required(),
+    },
+  }),
   ensureAuthenticated,
   ensureAdmin,
   createSpecificationController.handle
