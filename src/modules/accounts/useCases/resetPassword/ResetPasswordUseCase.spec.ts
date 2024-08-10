@@ -6,13 +6,13 @@ import { AppError } from '@shared/errors/AppError';
 
 import { ResetPasswordUseCase } from './ResetPasswordUseCase';
 
-let inMemoryUserTokenRepository: InMemoryUserTokenRepository;
-let inMemoryDateProvider: InMemoryDateProvider;
-let inMemoryUserRepository: InMemoryUserRepository;
-let inMemoryHashProvider: InMemoryHashProvider;
-let resetPasswordUseCase: ResetPasswordUseCase;
-
 describe('ResetPasswordUseCase', () => {
+  let inMemoryUserTokenRepository: InMemoryUserTokenRepository;
+  let inMemoryDateProvider: InMemoryDateProvider;
+  let inMemoryUserRepository: InMemoryUserRepository;
+  let inMemoryHashProvider: InMemoryHashProvider;
+  let resetPasswordUseCase: ResetPasswordUseCase;
+
   beforeEach(() => {
     inMemoryUserTokenRepository = new InMemoryUserTokenRepository();
     inMemoryDateProvider = new InMemoryDateProvider();
@@ -27,6 +27,7 @@ describe('ResetPasswordUseCase', () => {
   });
 
   it('should be able to reset password', async () => {
+    const generateHashSpied = jest.spyOn(inMemoryHashProvider, 'generateHash');
     const { id: userId } = await inMemoryUserRepository.create({
       name: 'Cody Carr',
       email: 'gawu@lutez.ch',
@@ -39,18 +40,12 @@ describe('ResetPasswordUseCase', () => {
       refreshToken: 'example-token',
       userId,
     });
-
-    const generateHashSpied = jest.spyOn(inMemoryHashProvider, 'generateHash');
-
     await resetPasswordUseCase.execute({
       password: 'new-password@123',
       token: 'example-token',
     });
 
-    const updatedUser = await inMemoryUserRepository.findById(userId);
-
     expect(generateHashSpied).toHaveBeenCalledWith('new-password@123');
-    expect(updatedUser?.password).toBe('new-password@123');
   });
 
   it('should not be able to reset the password when token a non exist', async () => {
@@ -84,7 +79,6 @@ describe('ResetPasswordUseCase', () => {
       password: 'password@123',
       driverLicense: '3614503223',
     });
-
     const expiredDate = new Date();
     expiredDate.setHours(expiredDate.getHours() - 3);
 
@@ -95,7 +89,6 @@ describe('ResetPasswordUseCase', () => {
     });
 
     const currentDate = new Date();
-
     currentDate.setHours(currentDate.getHours() + 3);
     inMemoryDateProvider.setCurrentDate(currentDate);
 

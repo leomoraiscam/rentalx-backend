@@ -4,11 +4,11 @@ import { AppError } from '@shared/errors/AppError';
 import { InMemoryUserRepository } from '../../repositories/in-memory/InMemoryUserRepository';
 import { UpdateUserAvatarUseCase } from './UpdateUserAvatarUseCase';
 
-let inMemoryUserRepository: InMemoryUserRepository;
-let inMemoryStorageProvider: InMemoryStorageProvider;
-let updateUserAvatarUseCase: UpdateUserAvatarUseCase;
-
 describe('UpdateUserAvatarUseCase', () => {
+  let inMemoryUserRepository: InMemoryUserRepository;
+  let inMemoryStorageProvider: InMemoryStorageProvider;
+  let updateUserAvatarUseCase: UpdateUserAvatarUseCase;
+
   beforeEach(() => {
     inMemoryUserRepository = new InMemoryUserRepository();
     inMemoryStorageProvider = new InMemoryStorageProvider();
@@ -25,7 +25,6 @@ describe('UpdateUserAvatarUseCase', () => {
       password: 'any-password@123',
       driverLicense: '8364802278',
     });
-
     const { id: userId } = user;
 
     await updateUserAvatarUseCase.execute({
@@ -46,10 +45,8 @@ describe('UpdateUserAvatarUseCase', () => {
   });
 
   it('should be able to delete old avatar file when updating user avatar', async () => {
-    const avatarFile = 'avatar-file.jpg';
-
     const deleteFileSpied = jest.spyOn(inMemoryStorageProvider, 'delete');
-
+    const avatarFile = 'avatar-file.jpg';
     const { id: userId } = await inMemoryUserRepository.create({
       name: 'Cody Reid',
       email: 'weppute@lubpep.cu',

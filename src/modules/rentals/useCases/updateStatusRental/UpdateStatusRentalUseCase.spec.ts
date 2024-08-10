@@ -10,16 +10,16 @@ import { InMemoryRentalRepository } from '@modules/rentals/repositories/in-memor
 
 import { UpdateStatusRentalUseCase } from './UpdateStatusRentalUseCase';
 
-let inMemoryCategoryRepository: InMemoryCategoryRepository;
-let inMemorySpecificationRepository: InMemorySpecificationRepository;
-let inMemoryCarRepository: InMemoryCarRepository;
-let inMemoryRentalRepository: InMemoryRentalRepository;
-let updateStatusRentalUseCase: UpdateStatusRentalUseCase;
-let category: Category;
-let specification: Specification;
-let car: Car;
-
 describe('UpdateStatusRentalUseCase', () => {
+  let inMemoryCategoryRepository: InMemoryCategoryRepository;
+  let inMemorySpecificationRepository: InMemorySpecificationRepository;
+  let inMemoryCarRepository: InMemoryCarRepository;
+  let inMemoryRentalRepository: InMemoryRentalRepository;
+  let updateStatusRentalUseCase: UpdateStatusRentalUseCase;
+  let category: Category;
+  let specification: Specification;
+  let car: Car;
+
   beforeEach(async () => {
     inMemoryCategoryRepository = new InMemoryCategoryRepository();
     inMemorySpecificationRepository = new InMemorySpecificationRepository();
@@ -73,7 +73,6 @@ describe('UpdateStatusRentalUseCase', () => {
       expectedReturnDate: new Date(2024, 2, 23),
       userId: 'fake-user-id',
     });
-
     const updatedRental = await updateStatusRentalUseCase.execute({
       id,
       status: RentalStatus.CONFIRMED,
@@ -95,7 +94,6 @@ describe('UpdateStatusRentalUseCase', () => {
       expectedReturnDate: new Date(2024, 2, 23),
       userId: 'fake-user-id',
     });
-
     const updatedRental = await updateStatusRentalUseCase.execute({
       id,
       status: RentalStatus.CANCELED,

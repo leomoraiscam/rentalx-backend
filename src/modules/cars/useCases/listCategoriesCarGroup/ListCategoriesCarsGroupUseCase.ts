@@ -22,7 +22,6 @@ export class ListCategoriesCarsGroupUseCase {
     data?: IQueryListAvailableCarsDTO
   ): Promise<IListCategoriesCarsGroupDTO[]> {
     const { startDate, expectedReturnDate } = data;
-
     const [categories, cars] = await Promise.all([
       this.categoryRepository.list({
         order: OrdenationProps.DESC,
@@ -43,7 +42,6 @@ export class ListCategoriesCarsGroupUseCase {
               carId,
             }
           );
-
           const available = !rental;
 
           return {
@@ -56,7 +54,6 @@ export class ListCategoriesCarsGroupUseCase {
         });
 
       const carsWithAvailabilityField = await Promise.all(categoryCars);
-
       const categoryAvailable = carsWithAvailabilityField.some(
         (car) => car.available
       );
@@ -70,7 +67,6 @@ export class ListCategoriesCarsGroupUseCase {
     });
 
     const promiseAllCarsProcessed = await Promise.all(transformedCategories);
-
     const carsWithAvailabilityFieldLength = promiseAllCarsProcessed.filter(
       (values) => values.cars.length
     );

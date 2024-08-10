@@ -9,15 +9,15 @@ import { AppError } from '@shared/errors/AppError';
 
 import { RefreshTokenUseCase } from './RefreshTokenUseCase';
 
-let inMemoryUserRepository: InMemoryUserRepository;
-let inMemoryUserTokenRepository: InMemoryUserTokenRepository;
-let inMemoryDateProvider: InMemoryDateProvider;
-let inMemoryLoggerProvider: InMemoryLoggerProvider;
-let refreshTokenUseCase: RefreshTokenUseCase;
-
 jest.mock('jsonwebtoken');
 
 describe('ResetPasswordUseCase', () => {
+  let inMemoryUserRepository: InMemoryUserRepository;
+  let inMemoryUserTokenRepository: InMemoryUserTokenRepository;
+  let inMemoryDateProvider: InMemoryDateProvider;
+  let inMemoryLoggerProvider: InMemoryLoggerProvider;
+  let refreshTokenUseCase: RefreshTokenUseCase;
+
   beforeEach(() => {
     inMemoryUserTokenRepository = new InMemoryUserTokenRepository();
     inMemoryDateProvider = new InMemoryDateProvider();
@@ -62,7 +62,6 @@ describe('ResetPasswordUseCase', () => {
 
   it('should be able to logging an error if JWT configuration variables are missing', async () => {
     const loggerSpied = jest.spyOn(inMemoryLoggerProvider, 'log');
-
     auth.expiresInRefreshToken = '';
 
     const { id: userId } = await inMemoryUserRepository.create({

@@ -15,33 +15,28 @@ export class CreateUserUseCase {
     private hashProvider: IHashProvider
   ) {}
 
-  async execute({
-    name,
-    email,
-    password,
-    driverLicense,
-    isAdmin,
-  }: ICreateUserDTO): Promise<User> {
+  async execute(data: ICreateUserDTO): Promise<User> {
+    const { name, email, password, driverLicense, isAdmin } = data;
     const user = await this.userRepository.findByEmail(email);
 
     if (user) {
       throw new AppError('User with this email already exists', 409);
     }
 
-    const existedUserWithDriveLicense = await this.userRepository.findByDriverLicense(
+    const existingUserWithDriveLicense = await this.userRepository.findByDriverLicense(
       driverLicense
     );
 
-    if (existedUserWithDriveLicense) {
+    if (existingUserWithDriveLicense) {
       throw new AppError('This document already exists for some user', 409);
     }
 
-    const hashPassword = await this.hashProvider.generateHash(password);
+    const hashedPassword = await this.hashProvider.generateHash(password);
 
     return this.userRepository.create({
       name,
       email,
-      password: hashPassword,
+      password: hashedPassword,
       driverLicense,
       isAdmin,
     });

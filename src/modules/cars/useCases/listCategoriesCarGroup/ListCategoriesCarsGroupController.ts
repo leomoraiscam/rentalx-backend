@@ -8,7 +8,6 @@ import { ListCategoriesCarsGroupUseCase } from './ListCategoriesCarsGroupUseCase
 export class ListCategoriesCarsGroupController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { brand, type, startDate, expectedReturnDate } = request.query;
-
     const listCategoriesCarsGroupUseCase = container.resolve(
       ListCategoriesCarsGroupUseCase
     );

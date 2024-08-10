@@ -1,5 +1,3 @@
-import dayjs from 'dayjs';
-
 import { InMemoryUserRepository } from '@modules/accounts/repositories/in-memory/InMemoryUserRepository';
 import { InMemoryCarRepository } from '@modules/cars/repositories/in-memory/InMemoryCarRepository';
 import { RentalStatus } from '@modules/rentals/dtos/enums/RentatStatus';
@@ -9,14 +7,14 @@ import { AppError } from '@shared/errors/AppError';
 
 import { CreateRentalUseCase } from './CreateRentalUseCase';
 
-let inMemoryUserRepository: InMemoryUserRepository;
-let inMemoryRentalRepository: InMemoryRentalRepository;
-let inMemoryCarRepository: InMemoryCarRepository;
-let createRentalUseCase: CreateRentalUseCase;
-let inMemoryDateProvider: InMemoryDateProvider;
-let dayAdd24Hours: Date;
-
 describe('CreateRentalUseCase', () => {
+  let inMemoryUserRepository: InMemoryUserRepository;
+  let inMemoryRentalRepository: InMemoryRentalRepository;
+  let inMemoryCarRepository: InMemoryCarRepository;
+  let createRentalUseCase: CreateRentalUseCase;
+  let inMemoryDateProvider: InMemoryDateProvider;
+  let dayAdd24Hours: Date;
+
   beforeEach(() => {
     inMemoryUserRepository = new InMemoryUserRepository();
     inMemoryRentalRepository = new InMemoryRentalRepository();
@@ -45,7 +43,6 @@ describe('CreateRentalUseCase', () => {
       fineAmount: 80,
       categoryId: 'executive',
     });
-
     const rental = await createRentalUseCase.execute({
       userId: 'fake-user-id',
       carId,
@@ -71,7 +68,6 @@ describe('CreateRentalUseCase', () => {
       fineAmount: 480,
       categoryId: 'sportive',
     });
-
     const rental = await createRentalUseCase.execute({
       userId: 'fake-user-id',
       carId,
@@ -138,7 +134,6 @@ describe('CreateRentalUseCase', () => {
     });
 
     const dayAdd24HoursInMemory = inMemoryDateProvider.addDays(1);
-
     const { id: carId } = await inMemoryCarRepository.create({
       name: 'A3',
       brand: 'Audi',
@@ -148,7 +143,6 @@ describe('CreateRentalUseCase', () => {
       fineAmount: 80,
       categoryId: 'executive',
     });
-
     const { id: userId } = await inMemoryUserRepository.create({
       name: 'Teresa Hammond',
       email: 'fal@kecahpos.jm',
@@ -179,7 +173,6 @@ describe('CreateRentalUseCase', () => {
     });
 
     const dayAdd24HoursInMemory = inMemoryDateProvider.addDays(1);
-
     const { id: carId } = await inMemoryCarRepository.create({
       name: 'A3',
       brand: 'Audi',
@@ -189,7 +182,6 @@ describe('CreateRentalUseCase', () => {
       fineAmount: 80,
       categoryId: 'executive',
     });
-
     const { id: userId } = await inMemoryUserRepository.create({
       name: 'Teresa Hammond',
       email: 'fal@kecahpos.jm',

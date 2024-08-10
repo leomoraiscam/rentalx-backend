@@ -12,15 +12,12 @@ export class CreateCategoryUseCase {
     private categoryRepository: ICategoryRepository
   ) {}
 
-  async execute({
-    name,
-    description,
-    type,
-  }: ICreateCategoryDTO): Promise<Category> {
+  async execute(data: ICreateCategoryDTO): Promise<Category> {
+    const { name, description, type } = data;
     const category = await this.categoryRepository.findByName(name);
 
     if (category) {
-      throw new AppError('Category with this name already exists', 409);
+      throw new AppError('Category with name already exists', 409);
     }
 
     return this.categoryRepository.create({

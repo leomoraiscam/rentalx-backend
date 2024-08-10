@@ -13,11 +13,10 @@ export class ListCategoriesUseCase {
     private categoryRepository: ICategoryRepository
   ) {}
 
-  async execute({
-    page,
-    perPage,
-    order,
-  }: IQueryListCategoriesDTO): Promise<IPaginationResponseDTO<Category>> {
+  async execute(
+    query: IQueryListCategoriesDTO
+  ): Promise<IPaginationResponseDTO<Category>> {
+    const { page, perPage, order } = query;
     const categories = await this.categoryRepository.list({
       page,
       perPage,

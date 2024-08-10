@@ -20,11 +20,9 @@ export class ImportSpecificationsUseCase {
     return new Promise((resolve, reject) => {
       const stream = fs.createReadStream(file.path);
       const specifications: IImportSpecificationsDTO[] = [];
-
       const parseFile = csvParse();
 
       stream.pipe(parseFile);
-
       parseFile
         .on('data', async (line) => {
           const [name, description] = line;
@@ -50,7 +48,6 @@ export class ImportSpecificationsUseCase {
 
     specifications.map(async (data) => {
       const { name, description } = data;
-
       const specification = await this.specificationRepository.findByName(name);
 
       if (!specification) {

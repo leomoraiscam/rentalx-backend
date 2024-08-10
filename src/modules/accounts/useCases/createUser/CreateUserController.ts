@@ -9,7 +9,6 @@ import { CreateUserUseCase } from './CreateUserUseCase';
 export class CreateUserController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { name, email, password, driverLicense } = request.body;
-
     const createUserUseCase = container.resolve(CreateUserUseCase);
     const user = await createUserUseCase.execute({
       name,
@@ -17,7 +16,6 @@ export class CreateUserController {
       password,
       driverLicense,
     });
-
     const userInstance = plainToClass(User, user);
 
     return response.status(201).json(userInstance);

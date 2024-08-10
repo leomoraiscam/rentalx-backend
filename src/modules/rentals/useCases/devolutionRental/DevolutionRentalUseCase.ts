@@ -21,7 +21,6 @@ export class DevolutionRentalUseCase {
 
   async execute({ id }: ICreateDevolutionCarDTO): Promise<Rental> {
     const minimumDaily = 1;
-
     const rental = await this.rentalRepository.findById(id);
 
     if (!rental) {
@@ -39,7 +38,6 @@ export class DevolutionRentalUseCase {
     }
 
     const dateNow = this.dateProvider.dateNow();
-
     let daily = this.dateProvider.compareInDays(rental.startDate, dateNow);
 
     if (daily <= 0) {

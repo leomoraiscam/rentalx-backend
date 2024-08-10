@@ -12,17 +12,15 @@ export class ListSpecificationsUseCase {
     private specificationRepository: ISpecificationRepository
   ) {}
 
-  async execute({
-    page,
-    perPage,
-    order,
-  }: IQueryListCategoriesDTO): Promise<IPaginationResponseDTO<Specification>> {
+  async execute(
+    query: IQueryListCategoriesDTO
+  ): Promise<IPaginationResponseDTO<Specification>> {
+    const { page, perPage, order } = query;
     const specifications = await this.specificationRepository.list({
       page,
       perPage,
       order,
     });
-
     const { total } = specifications;
     const { result: data } = specifications;
     const totalPages = Math.ceil(total / perPage);

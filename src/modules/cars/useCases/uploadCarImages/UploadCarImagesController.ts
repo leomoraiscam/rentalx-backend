@@ -9,7 +9,6 @@ export class UploadCarImagesController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { id: carId } = request.params;
     const images = request.files as Files[];
-
     const uploadCarImageUseCase = container.resolve(UploadCarImageUseCase);
     const imagesName = images.map((file) => file.filename);
 

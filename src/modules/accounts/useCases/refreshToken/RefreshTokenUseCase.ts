@@ -34,7 +34,6 @@ export class RefreshTokenUseCase {
       token,
       secretRefreshToken
     ) as IPayload;
-
     const userToken = await this.userTokenRepository.findByUserIdAndRefreshToken(
       {
         userId,
@@ -62,7 +61,6 @@ export class RefreshTokenUseCase {
       subject: userId,
       expiresIn: expiresInRefreshToken,
     });
-
     const parsedExpiresRefreshTokenDays = Number(expiresRefreshTokenDays);
     const expiresDate = this.dateProvider.addDays(
       parsedExpiresRefreshTokenDays

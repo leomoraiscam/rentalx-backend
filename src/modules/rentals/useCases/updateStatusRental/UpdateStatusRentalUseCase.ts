@@ -13,8 +13,9 @@ export class UpdateStatusRentalUseCase {
     private rentalRepository: IRentalRepository
   ) {}
 
-  async execute({ id, status }: IUpdateStatusRentalDTO): Promise<Rental> {
+  async execute(data: IUpdateStatusRentalDTO): Promise<Rental> {
     let statusToSave: string;
+    const { id, status } = data;
     const rental = await this.rentalRepository.findById(id);
 
     if (!rental) {

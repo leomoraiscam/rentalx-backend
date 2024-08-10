@@ -7,7 +7,6 @@ export class CreateCarSpecificationsController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { carId } = request.params;
     const { specificationsIds } = request.body;
-
     const createCarSpecificationsUseCase = container.resolve(
       CreateCarSpecificationsUseCase
     );

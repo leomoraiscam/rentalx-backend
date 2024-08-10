@@ -7,12 +7,12 @@ import { AppError } from '@shared/errors/AppError';
 import { InMemoryRentalRepository } from '../../repositories/in-memory/InMemoryRentalRepository';
 import { DevolutionRentalUseCase } from './DevolutionRentalUseCase';
 
-let inMemoryRentalRepository: InMemoryRentalRepository;
-let inMemoryCarRepository: InMemoryCarRepository;
-let inMemoryDateProvider: InMemoryDateProvider;
-let devolutionRentalUseCase: DevolutionRentalUseCase;
-
 describe('DevolutionRentalUseCase', () => {
+  let inMemoryRentalRepository: InMemoryRentalRepository;
+  let inMemoryCarRepository: InMemoryCarRepository;
+  let inMemoryDateProvider: InMemoryDateProvider;
+  let devolutionRentalUseCase: DevolutionRentalUseCase;
+
   const dayAdd24Hours = dayjs().add(1, 'day').toDate();
 
   beforeEach(() => {

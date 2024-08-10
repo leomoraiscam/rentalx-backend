@@ -4,11 +4,11 @@ import { AppError } from '@shared/errors/AppError';
 
 import { CreateUserUseCase } from './CreateUserUseCase';
 
-let inMemoryUserRepository: InMemoryUserRepository;
-let inMemoryHashProvider: InMemoryHashProvider;
-let createUserUseCase: CreateUserUseCase;
-
 describe('CreateUserUseCase', () => {
+  let inMemoryUserRepository: InMemoryUserRepository;
+  let inMemoryHashProvider: InMemoryHashProvider;
+  let createUserUseCase: CreateUserUseCase;
+
   beforeEach(() => {
     inMemoryUserRepository = new InMemoryUserRepository();
     inMemoryHashProvider = new InMemoryHashProvider();

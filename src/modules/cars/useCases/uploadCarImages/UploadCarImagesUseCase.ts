@@ -17,7 +17,8 @@ export class UploadCarImageUseCase {
     private storageProvider: IStorageProvider
   ) {}
 
-  async execute({ carId, imagesName }: IUploadCarImagesDTO): Promise<void> {
+  async execute(data: IUploadCarImagesDTO): Promise<void> {
+    const { carId, imagesName } = data;
     const car = await this.carRepository.findById(carId);
 
     if (!car) {

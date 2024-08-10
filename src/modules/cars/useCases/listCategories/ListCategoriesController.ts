@@ -8,7 +8,6 @@ import { ListCategoriesUseCase } from './ListCategoriesUseCase';
 export class ListCategoriesController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { page, perPage, order } = request.query;
-
     const listCategoriesUseCase = container.resolve(ListCategoriesUseCase);
     const categories = await listCategoriesUseCase.execute({
       order: order as OrdenationProps,

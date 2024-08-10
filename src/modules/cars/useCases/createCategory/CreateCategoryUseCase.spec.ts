@@ -4,10 +4,10 @@ import { AppError } from '@shared/errors/AppError';
 
 import { CreateCategoryUseCase } from './CreateCategoryUseCase';
 
-let inMemoryCategoryRepository: InMemoryCategoryRepository;
-let createCategoryUseCase: CreateCategoryUseCase;
-
 describe('CreateCategoryUseCase', () => {
+  let inMemoryCategoryRepository: InMemoryCategoryRepository;
+  let createCategoryUseCase: CreateCategoryUseCase;
+
   beforeEach(() => {
     inMemoryCategoryRepository = new InMemoryCategoryRepository();
     createCategoryUseCase = new CreateCategoryUseCase(
@@ -25,7 +25,7 @@ describe('CreateCategoryUseCase', () => {
     expect(category).toHaveProperty('id');
   });
 
-  it('should be not able to create an category when category already exists', async () => {
+  it('should be not able to create an category when the same already exists', async () => {
     await inMemoryCategoryRepository.create({
       name: 'SUV',
       description: 'SUV`s cars',

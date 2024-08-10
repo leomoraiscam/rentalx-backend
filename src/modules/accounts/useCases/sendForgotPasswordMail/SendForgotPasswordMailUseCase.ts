@@ -30,7 +30,6 @@ export class SendForgotPasswordMailUseCase {
 
     const { id: userId, name } = user;
     const token = uuidV4();
-
     const expiresDate = this.dateProvider.addHours(3);
 
     await this.userTokenRepository.create({
@@ -47,7 +46,6 @@ export class SendForgotPasswordMailUseCase {
       'emails',
       'forgotPassword.hbs'
     );
-
     const variables = {
       name,
       resetPasswordUrl: `${

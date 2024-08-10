@@ -20,15 +20,10 @@ export class CreateRentalUseCase {
     private carRepository: ICarRepository
   ) {}
 
-  async execute({
-    userId,
-    carId,
-    expectedReturnDate,
-    startDate,
-  }: ICreateRentalDTO): Promise<Rental> {
-    const minimumHours = 24;
+  async execute(data: ICreateRentalDTO): Promise<Rental> {
     let total = 0;
-
+    const minimumHours = 24;
+    const { userId, carId, expectedReturnDate, startDate } = data;
     const car = await this.carRepository.findById(carId);
 
     if (!car) {

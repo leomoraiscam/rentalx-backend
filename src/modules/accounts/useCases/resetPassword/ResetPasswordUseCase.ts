@@ -20,7 +20,8 @@ export class ResetPasswordUseCase {
     private hashProvider: IHashProvider
   ) {}
 
-  async execute({ token, password }: IResetPasswordDTO): Promise<void> {
+  async execute(data: IResetPasswordDTO): Promise<void> {
+    const { token, password } = data;
     const userToken = await this.userTokenRepository.findByRefreshToken(token);
 
     if (!userToken) {
@@ -28,26 +29,25 @@ export class ResetPasswordUseCase {
     }
 
     const { id, userId, expiresDate } = userToken;
-
     const user = await this.userRepository.findById(userId);
 
     if (!user) {
       throw new AppError('User not found', 404);
     }
 
-    if (
-      this.dateProvider.compareIfBefore(
-        expiresDate,
-        this.dateProvider.dateNow()
-      )
-    ) {
+    const isBeforeNow = this.dateProvider.compareIfBefore(
+      expiresDate,
+      this.dateProvider.dateNow()
+    );
+
+    if (isBeforeNow) {
       throw new AppError('Invalid or expired token', 401);
     }
 
-    const hashPassword = await this.hashProvider.generateHash(password);
+    const hashedPassword = await this.hashProvider.generateHash(password);
 
     Object.assign(user, {
-      password: hashPassword,
+      password: hashedPassword,
     });
 
     await Promise.all([

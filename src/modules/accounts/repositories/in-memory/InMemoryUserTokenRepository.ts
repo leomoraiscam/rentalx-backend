@@ -7,10 +7,11 @@ import { IUserTokenRepository } from '../IUserTokenRepository';
 export class InMemoryUserTokenRepository implements IUserTokenRepository {
   private userTokens: UserToken[] = [];
 
-  async findByUserIdAndRefreshToken({
-    refreshToken,
-    userId,
-  }: IFindTokensByUserIdDTO): Promise<UserToken | null> {
+  async findByUserIdAndRefreshToken(
+    data: IFindTokensByUserIdDTO
+  ): Promise<UserToken | null> {
+    const { refreshToken, userId } = data;
+
     return this.userTokens.find(
       (userToken) =>
         userToken.userId === userId && userToken.refreshToken === refreshToken
@@ -23,11 +24,8 @@ export class InMemoryUserTokenRepository implements IUserTokenRepository {
     );
   }
 
-  async create({
-    userId,
-    refreshToken,
-    expiresDate,
-  }: ICreateUserTokenDTO): Promise<UserToken> {
+  async create(data: ICreateUserTokenDTO): Promise<UserToken> {
+    const { userId, refreshToken, expiresDate } = data;
     const userToken = new UserToken();
 
     Object.assign(userToken, {

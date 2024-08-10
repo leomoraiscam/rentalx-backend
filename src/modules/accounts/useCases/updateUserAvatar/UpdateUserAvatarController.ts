@@ -10,13 +10,11 @@ export class UpdateUserAvatarController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { id: userId } = request.user;
     const avatarFile = request.file.filename;
-
     const updateUserAvatarUseCase = container.resolve(UpdateUserAvatarUseCase);
     const updatedUser = await updateUserAvatarUseCase.execute({
       userId,
       avatarFile,
     });
-
     const userInstance = plainToClass(User, updatedUser);
 
     return response.status(200).json(userInstance);

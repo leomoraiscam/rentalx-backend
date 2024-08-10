@@ -6,13 +6,13 @@ import { AppError } from '@shared/errors/AppError';
 
 import { SendForgotPasswordMailUseCase } from './SendForgotPasswordMailUseCase';
 
-let inMemoryUserRepository: InMemoryUserRepository;
-let inMemoryUserTokenRepository: InMemoryUserTokenRepository;
-let inMemoryDateProvider: InMemoryDateProvider;
-let inMemoryMailProvider: InMemoryMailProvider;
-let sendForgotPasswordMailUseCase: SendForgotPasswordMailUseCase;
-
 describe('SendForgotPasswordMailUseCase', () => {
+  let inMemoryUserRepository: InMemoryUserRepository;
+  let inMemoryUserTokenRepository: InMemoryUserTokenRepository;
+  let inMemoryDateProvider: InMemoryDateProvider;
+  let inMemoryMailProvider: InMemoryMailProvider;
+  let sendForgotPasswordMailUseCase: SendForgotPasswordMailUseCase;
+
   beforeEach(() => {
     inMemoryUserRepository = new InMemoryUserRepository();
     inMemoryUserTokenRepository = new InMemoryUserTokenRepository();
@@ -28,7 +28,6 @@ describe('SendForgotPasswordMailUseCase', () => {
 
   it('should be able to send recover the password when user exist', async () => {
     const sendMailSpied = jest.spyOn(inMemoryMailProvider, 'sendMail');
-
     const { email } = await inMemoryUserRepository.create({
       name: 'Todd Fisher',
       email: 'ogimcak@zad.fj',

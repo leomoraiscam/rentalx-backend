@@ -4,10 +4,10 @@ import { InMemoryCategoryRepository } from '@modules/cars/repositories/in-memory
 
 import { ListCategoriesUseCase } from './ListCategoriesUseCase';
 
-let inMemoryCategoryRepository: InMemoryCategoryRepository;
-let listCategoriesUseCase: ListCategoriesUseCase;
-
 describe('ListCategoriesUseCase', () => {
+  let inMemoryCategoryRepository: InMemoryCategoryRepository;
+  let listCategoriesUseCase: ListCategoriesUseCase;
+
   beforeEach(() => {
     inMemoryCategoryRepository = new InMemoryCategoryRepository();
     listCategoriesUseCase = new ListCategoriesUseCase(

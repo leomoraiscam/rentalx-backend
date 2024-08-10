@@ -8,14 +8,14 @@ import { AppError } from '@shared/errors/AppError';
 
 import { AuthenticateUserUseCase } from './AuthenticateUserUseCase';
 
-let inMemoryUserRepository: InMemoryUserRepository;
-let inMemoryUserTokenRepository: InMemoryUserTokenRepository;
-let inMemoryDateProvider: InMemoryDateProvider;
-let inMemoryHashProvider: InMemoryHashProvider;
-let inMemoryLoggerProvider: InMemoryLoggerProvider;
-let authenticateUserUseCase: AuthenticateUserUseCase;
-
 describe('AuthenticateUserUseCase', () => {
+  let inMemoryUserRepository: InMemoryUserRepository;
+  let inMemoryUserTokenRepository: InMemoryUserTokenRepository;
+  let inMemoryDateProvider: InMemoryDateProvider;
+  let inMemoryHashProvider: InMemoryHashProvider;
+  let inMemoryLoggerProvider: InMemoryLoggerProvider;
+  let authenticateUserUseCase: AuthenticateUserUseCase;
+
   beforeEach(() => {
     inMemoryUserRepository = new InMemoryUserRepository();
     inMemoryUserTokenRepository = new InMemoryUserTokenRepository();
@@ -38,7 +38,6 @@ describe('AuthenticateUserUseCase', () => {
       password: 'pass@123',
       driverLicense: '8587317685',
     });
-
     const response = await authenticateUserUseCase.execute({
       email: 'lez@cujve.vu',
       password: 'pass@123',
@@ -118,7 +117,6 @@ describe('AuthenticateUserUseCase', () => {
 
   it('should be able to logging an error if JWT configuration variables are missing', async () => {
     const loggerSpied = jest.spyOn(inMemoryLoggerProvider, 'log');
-
     auth.secretToken = '';
 
     await inMemoryUserRepository.create({
@@ -127,7 +125,6 @@ describe('AuthenticateUserUseCase', () => {
       password: 'any-pass@123',
       driverLicense: '8587317685',
     });
-
     await expect(
       authenticateUserUseCase.execute({
         email: 'lez@cujve.vu',
@@ -154,20 +151,17 @@ describe('AuthenticateUserUseCase', () => {
     jest.spyOn(Date, 'now').mockImplementationOnce(() => {
       return new Date(2024, 2, 27).getTime();
     });
-
     const { id: userId } = await inMemoryUserRepository.create({
       name: 'Sophia Bowers',
       email: 'nus@ju.mx',
       password: 'pass@123',
       driverLicense: '8587317685',
     });
-
     const refreshToken = await inMemoryUserTokenRepository.create({
       userId,
       expiresDate: new Date(2024, 2, 28),
       refreshToken: 'refresh-token-1',
     });
-
     const response = await authenticateUserUseCase.execute({
       email: 'nus@ju.mx',
       password: 'pass@123',

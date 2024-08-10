@@ -8,7 +8,6 @@ import { ListSpecificationsUseCase } from './ListSpecificationsUseCase';
 export class ListSpecificationsController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { page, perPage, order } = request.query;
-
     const listSpecificationsUseCase = container.resolve(
       ListSpecificationsUseCase
     );

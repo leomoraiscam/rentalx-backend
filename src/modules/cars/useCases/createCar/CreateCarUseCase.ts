@@ -26,7 +26,6 @@ export class CreateCarUseCase {
       brand,
       categoryId,
     } = data;
-
     const category = await this.categoryRepository.findById(categoryId);
 
     if (!category) {

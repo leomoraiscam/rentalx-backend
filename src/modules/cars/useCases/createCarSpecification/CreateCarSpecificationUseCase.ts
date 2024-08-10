@@ -15,10 +15,8 @@ export class CreateCarSpecificationsUseCase {
     private specificationRepository: ISpecificationRepository
   ) {}
 
-  async execute({
-    carId,
-    specificationsIds,
-  }: ICreateCarSpecificationsDTO): Promise<Car> {
+  async execute(data: ICreateCarSpecificationsDTO): Promise<Car> {
+    const { carId, specificationsIds } = data;
     const car = await this.carRepository.findById(carId);
 
     if (!car) {

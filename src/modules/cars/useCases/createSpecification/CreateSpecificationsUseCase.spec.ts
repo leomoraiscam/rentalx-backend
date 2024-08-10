@@ -3,10 +3,10 @@ import { AppError } from '@shared/errors/AppError';
 
 import { CreateSpecificationUseCase } from './CreateSpecificationUseCase';
 
-let inMemorySpecificationRepository: InMemorySpecificationRepository;
-let createSpecificationUseCase: CreateSpecificationUseCase;
-
 describe('CreateSpecificationUseCase', () => {
+  let inMemorySpecificationRepository: InMemorySpecificationRepository;
+  let createSpecificationUseCase: CreateSpecificationUseCase;
+
   beforeEach(() => {
     inMemorySpecificationRepository = new InMemorySpecificationRepository();
     createSpecificationUseCase = new CreateSpecificationUseCase(
@@ -23,7 +23,7 @@ describe('CreateSpecificationUseCase', () => {
     expect(specification).toHaveProperty('id');
   });
 
-  it('should be not able to create an category when category already exists', async () => {
+  it('should be not able to create an specification when the same already exists', async () => {
     await inMemorySpecificationRepository.create({
       name: 'Turbo',
       description: 'car with turbo of standard',

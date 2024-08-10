@@ -11,17 +11,17 @@ import { AppError } from '@shared/errors/AppError';
 
 import { UpdateRentalUseCase } from './UpdateRentalUseCase';
 
-let inMemoryCategoryRepository: InMemoryCategoryRepository;
-let inMemorySpecificationRepository: InMemorySpecificationRepository;
-let inMemoryCarRepository: InMemoryCarRepository;
-let inMemoryRentalRepository: InMemoryRentalRepository;
-let inMemoryDateProvider: InMemoryDateProvider;
-let updateRentalUseCase: UpdateRentalUseCase;
-let category: Category;
-let specification: Specification;
-let car: Car;
-
 describe('UpdateRentalUseCase', () => {
+  let inMemoryCategoryRepository: InMemoryCategoryRepository;
+  let inMemorySpecificationRepository: InMemorySpecificationRepository;
+  let inMemoryCarRepository: InMemoryCarRepository;
+  let inMemoryRentalRepository: InMemoryRentalRepository;
+  let inMemoryDateProvider: InMemoryDateProvider;
+  let updateRentalUseCase: UpdateRentalUseCase;
+  let category: Category;
+  let specification: Specification;
+  let car: Car;
+
   beforeEach(async () => {
     inMemoryCategoryRepository = new InMemoryCategoryRepository();
     inMemorySpecificationRepository = new InMemorySpecificationRepository();
@@ -79,7 +79,6 @@ describe('UpdateRentalUseCase', () => {
       expectedReturnDate: new Date(2024, 2, 23),
       userId: 'fake-user-id',
     });
-
     const updatedRental = await updateRentalUseCase.execute({
       id,
       carId: car.id,
@@ -104,7 +103,6 @@ describe('UpdateRentalUseCase', () => {
       userId: 'fake-user-id',
       status: 'confirmed',
     });
-
     const newCar = await inMemoryCarRepository.create({
       name: 'M2',
       brand: 'BMW',

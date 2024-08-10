@@ -13,10 +13,11 @@ export class UserTokenRepository implements IUserTokenRepository {
     this.repository = getRepository(UserToken);
   }
 
-  async findByUserIdAndRefreshToken({
-    refreshToken,
-    userId,
-  }: IFindTokensByUserIdDTO): Promise<UserToken | null> {
+  async findByUserIdAndRefreshToken(
+    data: IFindTokensByUserIdDTO
+  ): Promise<UserToken | null> {
+    const { refreshToken, userId } = data;
+
     return this.repository.findOne({
       refreshToken,
       userId,
@@ -29,11 +30,8 @@ export class UserTokenRepository implements IUserTokenRepository {
     });
   }
 
-  async create({
-    userId,
-    refreshToken,
-    expiresDate,
-  }: ICreateUserTokenDTO): Promise<UserToken> {
+  async create(data: ICreateUserTokenDTO): Promise<UserToken> {
+    const { userId, refreshToken, expiresDate } = data;
     const userToken = this.repository.create({
       userId,
       refreshToken,

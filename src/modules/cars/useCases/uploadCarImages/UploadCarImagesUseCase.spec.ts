@@ -4,12 +4,12 @@ import { InMemoryStorageProvider } from '@shared/container/providers/StorageProv
 
 import { UploadCarImageUseCase } from './UploadCarImagesUseCase';
 
-let inMemoryCarImageRepository: InMemoryCarImageRepository;
-let inMemoryCarRepository: InMemoryCarRepository;
-let inMemoryStorageProvider: InMemoryStorageProvider;
-let uploadCarImageUseCase: UploadCarImageUseCase;
-
 describe('UploadCarImagesUseCase', () => {
+  let inMemoryCarImageRepository: InMemoryCarImageRepository;
+  let inMemoryCarRepository: InMemoryCarRepository;
+  let inMemoryStorageProvider: InMemoryStorageProvider;
+  let uploadCarImageUseCase: UploadCarImageUseCase;
+
   beforeEach(() => {
     inMemoryCarImageRepository = new InMemoryCarImageRepository();
     inMemoryCarRepository = new InMemoryCarRepository();
@@ -31,7 +31,6 @@ describe('UploadCarImagesUseCase', () => {
       fineAmount: 400,
       categoryId: 'fake-category-id',
     });
-
     const imagesName = ['image1.jpg', 'image2.jpg'];
 
     await uploadCarImageUseCase.execute({ carId, imagesName });
@@ -57,7 +56,6 @@ describe('UploadCarImagesUseCase', () => {
       fineAmount: 400,
       categoryId: 'fake-category-id',
     });
-
     const imagesName: string[] = [];
 
     await uploadCarImageUseCase.execute({ carId, imagesName });

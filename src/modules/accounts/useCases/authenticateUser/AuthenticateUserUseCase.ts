@@ -26,22 +26,20 @@ export class AuthenticateUserUseCase {
     private loggerProvider: ILoggerProvider
   ) {}
 
-  async execute({
-    email,
-    password,
-  }: IAuthenticationUserDTO): Promise<IAuthenticatedUserDTO> {
+  async execute(data: IAuthenticationUserDTO): Promise<IAuthenticatedUserDTO> {
+    const { email, password } = data;
     const user = await this.userRepository.findByEmail(email);
 
     if (!user) {
       throw new AppError('Email or password incorrect', 401);
     }
 
-    const passwordMatch = await this.hashProvider.compareHash(
+    const matchPassword = await this.hashProvider.compareHash(
       password,
       user.password
     );
 
-    if (!passwordMatch) {
+    if (!matchPassword) {
       throw new AppError('Email or password incorrect', 401);
     }
 
@@ -64,17 +62,14 @@ export class AuthenticateUserUseCase {
     }
 
     const { id: userId } = user;
-
     const token = sign({}, secretToken, {
       subject: userId,
       expiresIn,
     });
-
     const refreshToken = sign({ email }, secretRefreshToken, {
       subject: userId,
       expiresIn: expiresInRefreshToken,
     });
-
     const parsedExpiresRefreshTokenDays = Number(expiresRefreshTokenDays);
     const refreshTokenExpiresDate = this.dateProvider.addDays(
       parsedExpiresRefreshTokenDays

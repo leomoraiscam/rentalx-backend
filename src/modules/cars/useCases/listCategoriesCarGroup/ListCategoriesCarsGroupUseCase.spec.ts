@@ -8,15 +8,15 @@ import { InMemoryRentalRepository } from '@modules/rentals/repositories/in-memor
 
 import { ListCategoriesCarsGroupUseCase } from './ListCategoriesCarsGroupUseCase';
 
-let inMemoryCarRepository: InMemoryCarRepository;
-let inMemoryCategoryRepository: InMemoryCategoryRepository;
-let inMemorySpecificationRepository: InMemorySpecificationRepository;
-let inMemoryRentalRepository: InMemoryRentalRepository;
-let listCategoriesCarsGroupUseCase: ListCategoriesCarsGroupUseCase;
-let category: Category;
-let specification: Specification;
-
 describe('ListCategoriesCarsGroupUseCase', () => {
+  let inMemoryCarRepository: InMemoryCarRepository;
+  let inMemoryCategoryRepository: InMemoryCategoryRepository;
+  let inMemorySpecificationRepository: InMemorySpecificationRepository;
+  let inMemoryRentalRepository: InMemoryRentalRepository;
+  let listCategoriesCarsGroupUseCase: ListCategoriesCarsGroupUseCase;
+  let category: Category;
+  let specification: Specification;
+
   beforeEach(async () => {
     inMemoryCarRepository = new InMemoryCarRepository();
     inMemoryCategoryRepository = new InMemoryCategoryRepository();
@@ -65,7 +65,6 @@ describe('ListCategoriesCarsGroupUseCase', () => {
         },
       ],
     });
-
     const cars = await listCategoriesCarsGroupUseCase.execute({
       startDate: new Date(2024, 2, 20),
       expectedReturnDate: new Date(2024, 2, 23),

@@ -4,11 +4,11 @@ import { AppError } from '@shared/errors/AppError';
 
 import { CreateCarSpecificationsUseCase } from './CreateCarSpecificationUseCase';
 
-let inMemoryCarRepository: InMemoryCarRepository;
-let inMemorySpecificationRepository: InMemorySpecificationRepository;
-let createCarSpecificationsUseCase: CreateCarSpecificationsUseCase;
+describe('CreateCarSpecificationsUseCase', () => {
+  let inMemoryCarRepository: InMemoryCarRepository;
+  let inMemorySpecificationRepository: InMemorySpecificationRepository;
+  let createCarSpecificationsUseCase: CreateCarSpecificationsUseCase;
 
-describe('CreateCarSpecifications', () => {
   beforeEach(() => {
     inMemoryCarRepository = new InMemoryCarRepository();
     inMemorySpecificationRepository = new InMemorySpecificationRepository();
@@ -28,14 +28,11 @@ describe('CreateCarSpecifications', () => {
       fineAmount: 120,
       categoryId: 'sedan sportive',
     });
-
     const specification = await inMemorySpecificationRepository.create({
       description: 'turbo',
       name: 'turbo car`s',
     });
-
     const specificationsIds = [specification.id];
-
     const specificationsCars = await createCarSpecificationsUseCase.execute({
       carId,
       specificationsIds,
@@ -49,7 +46,6 @@ describe('CreateCarSpecifications', () => {
       description: 'Manual',
       name: 'manual transmission shifter',
     });
-
     const specificationsIds = [specification.id];
 
     await expect(

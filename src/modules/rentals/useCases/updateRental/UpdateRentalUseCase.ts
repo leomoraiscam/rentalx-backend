@@ -20,7 +20,6 @@ export class UpdateRentalUseCase {
   async execute(data: Partial<Rental>): Promise<Rental> {
     const minimumHours = 24;
     let total = 0;
-
     const car = await this.carRepository.findById(data.carId);
 
     if (!car) {
@@ -96,7 +95,6 @@ export class UpdateRentalUseCase {
         rental.startDate,
         rental.expectedReturnDate
       );
-
       const car = await this.carRepository.findById(data.carId);
 
       total = dailies * car.dailyRate;

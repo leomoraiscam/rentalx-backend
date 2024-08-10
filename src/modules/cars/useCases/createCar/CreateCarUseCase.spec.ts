@@ -5,11 +5,11 @@ import { AppError } from '@shared/errors/AppError';
 
 import { CreateCarUseCase } from './CreateCarUseCase';
 
-let inMemoryCarRepository: InMemoryCarRepository;
-let inMemoryCategoryRepository: InMemoryCategoryRepository;
-let createCarUseCase: CreateCarUseCase;
-
 describe('CreateCarUseCase', () => {
+  let inMemoryCarRepository: InMemoryCarRepository;
+  let inMemoryCategoryRepository: InMemoryCategoryRepository;
+  let createCarUseCase: CreateCarUseCase;
+
   beforeEach(() => {
     inMemoryCarRepository = new InMemoryCarRepository();
     inMemoryCategoryRepository = new InMemoryCategoryRepository();
@@ -26,7 +26,6 @@ describe('CreateCarUseCase', () => {
         'Designed to optimize aerodynamics, reach higher speeds and offer high performance.',
       type: CategoryType.SPORT,
     });
-
     const car = await createCarUseCase.execute({
       name: 'A4',
       brand: 'Audi',
@@ -47,7 +46,6 @@ describe('CreateCarUseCase', () => {
         'Designed to optimize aerodynamics, reach higher speeds and offer high performance.',
       type: CategoryType.SPORT,
     });
-
     const car = await createCarUseCase.execute({
       name: 'A3',
       brand: 'Audi',
