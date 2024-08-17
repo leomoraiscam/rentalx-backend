@@ -1,4 +1,6 @@
 import { CategoryType } from '@modules/cars/dtos/ICreateCategoryDTO';
+import { Category } from '@modules/cars/infra/typeorm/entities/Category';
+import { Specification } from '@modules/cars/infra/typeorm/entities/Specification';
 import { InMemoryCarRepository } from '@modules/cars/repositories/in-memory/InMemoryCarRepository';
 import { InMemoryCategoryRepository } from '@modules/cars/repositories/in-memory/InMemoryCategoryRepository';
 import { InMemorySpecificationRepository } from '@modules/cars/repositories/in-memory/InMemorySpecificationRepository';
@@ -11,8 +13,10 @@ describe('CreateCarUseCase', () => {
   let inMemoryCategoryRepository: InMemoryCategoryRepository;
   let inMemorySpecificationRepository: InMemorySpecificationRepository;
   let createCarUseCase: CreateCarUseCase;
+  let category: Category;
+  let specification: Specification;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     inMemoryCarRepository = new InMemoryCarRepository();
     inMemoryCategoryRepository = new InMemoryCategoryRepository();
     inMemorySpecificationRepository = new InMemorySpecificationRepository();
@@ -21,20 +25,19 @@ describe('CreateCarUseCase', () => {
       inMemoryCategoryRepository,
       inMemorySpecificationRepository
     );
-  });
-
-  it('should be able to create a new car when received correct data', async () => {
-    const category = await inMemoryCategoryRepository.create({
+    category = await inMemoryCategoryRepository.create({
       name: 'GROUP L - SPORT',
       description:
         'Designed to optimize aerodynamics, reach higher speeds and offer high performance.',
       type: CategoryType.SPORT,
     });
-    const specification = await inMemorySpecificationRepository.create({
+    specification = await inMemorySpecificationRepository.create({
       name: 'Turbo',
       description: 'car with turbo of standard',
     });
+  });
 
+  it('should be able to create a new car when received correct data', async () => {
     const car = await createCarUseCase.execute({
       name: 'A4',
       brand: 'Audi',
@@ -50,24 +53,18 @@ describe('CreateCarUseCase', () => {
     expect(car).toHaveProperty('id');
   });
 
-  it('should be able to create a car with correct data', async () => {
-    const { id: categoryId } = await inMemoryCategoryRepository.create({
-      name: 'GROUP L - SPORT',
-      description:
-        'Designed to optimize aerodynamics, reach higher speeds and offer high performance.',
-      type: CategoryType.SPORT,
-    });
-    const car = await createCarUseCase.execute({
-      name: 'A3',
-      brand: 'Audi',
-      description: 'executive',
-      dailyRate: 120,
-      licensePlate: 'JKL-294',
-      fineAmount: 100,
-      categoryId,
-    });
-
-    expect(car).toHaveProperty('id');
+  it('should not be able to create a car when category a non-exist', async () => {
+    await expect(
+      createCarUseCase.execute({
+        name: 'A3',
+        brand: 'Audi',
+        description: 'executive',
+        dailyRate: 120,
+        licensePlate: 'JKL-294',
+        fineAmount: 100,
+        categoryId: 'fake-category-id',
+      })
+    ).rejects.toBeInstanceOf(AppError);
   });
 
   it('should not be able to create a car when already exist license plate', async () => {
@@ -78,7 +75,9 @@ describe('CreateCarUseCase', () => {
       dailyRate: 80,
       licensePlate: 'KMD-143',
       fineAmount: 75,
-      categoryId: 'SUV',
+      categoryId: category.id,
+      category,
+      specifications: [specification],
     });
 
     await expect(
@@ -89,7 +88,9 @@ describe('CreateCarUseCase', () => {
         dailyRate: 80,
         licensePlate: 'KMD-143',
         fineAmount: 75,
-        categoryId: 'SUV',
+        categoryId: category.id,
+        category,
+        specifications: [specification],
       })
     ).rejects.toBeInstanceOf(AppError);
   });
