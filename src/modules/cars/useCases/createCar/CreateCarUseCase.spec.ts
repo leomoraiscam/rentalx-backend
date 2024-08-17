@@ -1,6 +1,7 @@
 import { CategoryType } from '@modules/cars/dtos/ICreateCategoryDTO';
 import { InMemoryCarRepository } from '@modules/cars/repositories/in-memory/InMemoryCarRepository';
 import { InMemoryCategoryRepository } from '@modules/cars/repositories/in-memory/InMemoryCategoryRepository';
+import { InMemorySpecificationRepository } from '@modules/cars/repositories/in-memory/InMemorySpecificationRepository';
 import { AppError } from '@shared/errors/AppError';
 
 import { CreateCarUseCase } from './CreateCarUseCase';
@@ -8,24 +9,32 @@ import { CreateCarUseCase } from './CreateCarUseCase';
 describe('CreateCarUseCase', () => {
   let inMemoryCarRepository: InMemoryCarRepository;
   let inMemoryCategoryRepository: InMemoryCategoryRepository;
+  let inMemorySpecificationRepository: InMemorySpecificationRepository;
   let createCarUseCase: CreateCarUseCase;
 
   beforeEach(() => {
     inMemoryCarRepository = new InMemoryCarRepository();
     inMemoryCategoryRepository = new InMemoryCategoryRepository();
+    inMemorySpecificationRepository = new InMemorySpecificationRepository();
     createCarUseCase = new CreateCarUseCase(
       inMemoryCarRepository,
-      inMemoryCategoryRepository
+      inMemoryCategoryRepository,
+      inMemorySpecificationRepository
     );
   });
 
   it('should be able to create a new car when received correct data', async () => {
-    const { id: categoryId } = await inMemoryCategoryRepository.create({
+    const category = await inMemoryCategoryRepository.create({
       name: 'GROUP L - SPORT',
       description:
         'Designed to optimize aerodynamics, reach higher speeds and offer high performance.',
       type: CategoryType.SPORT,
     });
+    const specification = await inMemorySpecificationRepository.create({
+      name: 'Turbo',
+      description: 'car with turbo of standard',
+    });
+
     const car = await createCarUseCase.execute({
       name: 'A4',
       brand: 'Audi',
@@ -33,7 +42,9 @@ describe('CreateCarUseCase', () => {
       dailyRate: 120,
       licensePlate: 'ABC-1234',
       fineAmount: 100,
-      categoryId,
+      categoryId: category.id,
+      category,
+      specifications: [specification],
     });
 
     expect(car).toHaveProperty('id');

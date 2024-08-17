@@ -41,7 +41,6 @@ export class InMemoryCarRepository implements ICarRepository {
       images,
       category,
     } = data;
-
     const car = new Car();
 
     Object.assign(car, {

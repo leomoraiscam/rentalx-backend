@@ -1,7 +1,10 @@
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-await-in-loop */
 import { inject, injectable } from 'tsyringe';
 
 import { Car } from '@modules/cars/infra/typeorm/entities/Car';
 import { ICategoryRepository } from '@modules/cars/repositories/ICategoryRepository';
+import { ISpecificationRepository } from '@modules/cars/repositories/ISpecificationRepository';
 import { AppError } from '@shared/errors/AppError';
 
 import { ICreateCarDTO } from '../../dtos/ICreateCarDTO';
@@ -13,7 +16,9 @@ export class CreateCarUseCase {
     @inject('CarRepository')
     private carRepository: ICarRepository,
     @inject('CategoryRepository')
-    private categoryRepository: ICategoryRepository
+    private categoryRepository: ICategoryRepository,
+    @inject('SpecificationRepository')
+    private specificationRepository: ISpecificationRepository
   ) {}
 
   async execute(data: ICreateCarDTO): Promise<Car> {
@@ -25,6 +30,7 @@ export class CreateCarUseCase {
       fineAmount,
       brand,
       categoryId,
+      specifications,
     } = data;
     const category = await this.categoryRepository.findById(categoryId);
 
@@ -38,6 +44,10 @@ export class CreateCarUseCase {
       throw new AppError('Car with this licensePlate already exist', 409);
     }
 
+    const specificationsEntities = await this.specificationRepository.findByIds(
+      specifications as string[]
+    );
+
     return this.carRepository.create({
       name,
       description,
@@ -46,6 +56,7 @@ export class CreateCarUseCase {
       fineAmount,
       brand,
       categoryId,
+      specifications: specificationsEntities,
     });
   }
 }

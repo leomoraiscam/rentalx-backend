@@ -1,6 +1,5 @@
 import { CarImage } from '../infra/typeorm/entities/CarImage';
 import { Category } from '../infra/typeorm/entities/Category';
-import { Specification } from '../infra/typeorm/entities/Specification';
 
 export interface ICreateCarDTO {
   id?: string;
@@ -11,7 +10,7 @@ export interface ICreateCarDTO {
   fineAmount: number;
   brand: string;
   categoryId: string;
-  specifications?: Specification[];
+  specifications?: unknown; // Specification[] | string[];
   images?: CarImage[];
   category?: Category;
 }

@@ -5,6 +5,8 @@ import { IQueryListAvailableCarsDTO } from '@modules/cars/dtos/IQueryListAvailab
 import { Car } from '@modules/cars/infra/typeorm/entities/Car';
 import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
 
+import { Specification } from '../entities/Specification';
+
 export class CarRepository implements ICarRepository {
   private repository: Repository<Car>;
 
@@ -70,7 +72,7 @@ export class CarRepository implements ICarRepository {
       licensePlate,
       specifications,
     } = data;
-
+    const specificationsEntity = specifications as Specification[];
     const car = this.repository.create({
       name,
       description,
@@ -79,7 +81,7 @@ export class CarRepository implements ICarRepository {
       dailyRate,
       fineAmount,
       licensePlate,
-      specifications,
+      specifications: specificationsEntity,
     });
 
     await this.repository.save(car);
