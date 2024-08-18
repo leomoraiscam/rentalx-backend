@@ -15,29 +15,78 @@ describe('ListCategoriesUseCase', () => {
     );
   });
 
-  it('should be able to return all categories', async () => {
-    await inMemoryCategoryRepository.create({
-      name: 'SUV',
-      description: 'SUV`s cars',
-      type: CategoryType.SUV,
-    });
-    await inMemoryCategoryRepository.create({
-      name: 'Hatch',
-      description: 'Hatch`s cars',
-      type: CategoryType.HATCH,
-    });
-    await inMemoryCategoryRepository.create({
-      name: 'Sedan',
-      description: 'Sedan`s cars',
-      type: CategoryType.SEDAN,
-    });
+  it('should be able to return all categories when categories list with success', async () => {
+    await Promise.all([
+      inMemoryCategoryRepository.create({
+        name: 'SUV',
+        description: 'SUV`s cars',
+        type: CategoryType.SUV,
+      }),
+      inMemoryCategoryRepository.create({
+        name: 'Hatch',
+        description: 'Hatch`s cars',
+        type: CategoryType.HATCH,
+      }),
+      inMemoryCategoryRepository.create({
+        name: 'Sedan',
+        description: 'Sedan`s cars',
+        type: CategoryType.SEDAN,
+      }),
+    ]);
 
-    const categories = await listCategoriesUseCase.execute({
+    const { data: categories } = await listCategoriesUseCase.execute({
       page: 1,
       perPage: 10,
       order: OrdenationProps.ASC,
     });
 
-    expect(categories.data.length).toEqual(3);
+    expect(categories).toHaveLength(3);
+    expect(categories).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ name: 'SUV' }),
+        expect.objectContaining({ name: 'Hatch' }),
+        expect.objectContaining({ name: 'Sedan' }),
+      ])
+    );
+  });
+
+  it('should be able to return categories in ascending order by default', async () => {
+    await Promise.all([
+      inMemoryCategoryRepository.create({
+        name: 'SUV',
+        description: 'SUV cars',
+        type: CategoryType.SUV,
+      }),
+      inMemoryCategoryRepository.create({
+        name: 'Sedan',
+        description: 'Sedan cars',
+        type: CategoryType.SEDAN,
+      }),
+      inMemoryCategoryRepository.create({
+        name: 'Hatch',
+        description: 'Hatch cars',
+        type: CategoryType.HATCH,
+      }),
+    ]);
+
+    const { data: categories } = await listCategoriesUseCase.execute({
+      page: 1,
+      perPage: 10,
+      order: OrdenationProps.ASC,
+    });
+
+    expect(categories[0].name).toBe('Hatch');
+    expect(categories[1].name).toBe('Sedan');
+    expect(categories[2].name).toBe('SUV');
+  });
+
+  it('should be able to return an empty array if no categories exist', async () => {
+    const { data: categories } = await listCategoriesUseCase.execute({
+      page: 1,
+      perPage: 10,
+      order: OrdenationProps.ASC,
+    });
+
+    expect(categories).toEqual([]);
   });
 });
