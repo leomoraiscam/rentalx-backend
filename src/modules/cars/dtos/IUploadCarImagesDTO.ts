@@ -1,4 +1,4 @@
 export interface IUploadCarImagesDTO {
   carId: string;
-  imagesName: string[];
+  images: Express.Multer.File[];
 }

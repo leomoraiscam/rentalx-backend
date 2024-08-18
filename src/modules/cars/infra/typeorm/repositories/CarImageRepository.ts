@@ -11,10 +11,11 @@ export class CarImageRepository implements ICarImageRepository {
     this.repository = getRepository(CarImage);
   }
 
-  async create({ carId, imageName }: IUploadCarImageDTO): Promise<CarImage> {
+  async create(data: IUploadCarImageDTO): Promise<CarImage> {
+    const { carId, image } = data;
     const carImage = this.repository.create({
       carId,
-      imageName,
+      imageName: image,
     });
 
     await this.repository.save(carImage);
