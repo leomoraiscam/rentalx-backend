@@ -1,6 +1,8 @@
 import * as dotenv from 'dotenv';
 import { container } from 'tsyringe';
 
+import { CSVStreamParserProvider } from './CSVStreamParserProvider/implementations/CSVStreamParserProvider';
+import { ICSVStreamParserProvider } from './CSVStreamParserProvider/models/ICSVStreamParserProvider';
 import { DayjsDateProvider } from './DateProvider/implementations/DayjsDateProvider';
 import { IDateProvider } from './DateProvider/models/IDateProvider';
 import { BCryptHashProvider } from './HashProvider/implementations/BCryptHashProvider';
@@ -22,6 +24,11 @@ container.registerSingleton<IDateProvider>('DateProvider', DayjsDateProvider);
 container.registerInstance<IMailProvider>(
   'MailProvider',
   new EtherealMailProvider()
+);
+
+container.registerSingleton<ICSVStreamParserProvider>(
+  'CSVStreamParserProvider',
+  CSVStreamParserProvider
 );
 
 const diskStorage = {
