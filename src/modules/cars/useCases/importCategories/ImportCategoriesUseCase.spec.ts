@@ -1,17 +1,17 @@
 import { InMemoryCSVStreamParserProvider } from '@shared/container/providers/CSVStreamParserProvider/in-memory/InMemoryCSVStreamParserProvider';
 
 import { InMemoryCategoryRepository } from '../../repositories/in-memory/InMemoryCategoryRepository';
-import { ImportCategoryUseCase } from './ImportCategoryUseCase';
+import { ImportCategoriesUseCase } from './ImportCategoriesUseCase';
 
 describe('ImportCategoryUseCase', () => {
   let inMemoryCategoryRepository: InMemoryCategoryRepository;
   let inMemoryCSVStreamParseProvider: InMemoryCSVStreamParserProvider;
-  let importCategoryUseCase: ImportCategoryUseCase;
+  let importCategoriesUseCase: ImportCategoriesUseCase;
 
   beforeEach(() => {
     inMemoryCategoryRepository = new InMemoryCategoryRepository();
     inMemoryCSVStreamParseProvider = new InMemoryCSVStreamParserProvider();
-    importCategoryUseCase = new ImportCategoryUseCase(
+    importCategoriesUseCase = new ImportCategoriesUseCase(
       inMemoryCategoryRepository,
       inMemoryCSVStreamParseProvider
     );
@@ -32,7 +32,7 @@ describe('ImportCategoryUseCase', () => {
     );
     const file = { path: 'fake/path.csv' } as Express.Multer.File;
 
-    await importCategoryUseCase.execute(file);
+    await importCategoriesUseCase.execute(file);
 
     expect(spiedInMemoryCSVStreamParseProvider).toHaveBeenCalledWith(
       file.path,
@@ -71,7 +71,7 @@ describe('ImportCategoryUseCase', () => {
     );
     const file = { path: 'fake/path.csv' } as Express.Multer.File;
 
-    await importCategoryUseCase.execute(file);
+    await importCategoriesUseCase.execute(file);
 
     expect(spiedInMemoryCSVStreamParseProvider).toHaveBeenCalledWith(
       file.path,

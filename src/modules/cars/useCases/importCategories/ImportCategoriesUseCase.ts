@@ -5,7 +5,7 @@ import { ICategoryRepository } from '@modules/cars/repositories/ICategoryReposit
 import { ICSVStreamParserProvider } from '@shared/container/providers/CSVStreamParserProvider/models/ICSVStreamParserProvider';
 
 @injectable()
-export class ImportCategoryUseCase {
+export class ImportCategoriesUseCase {
   constructor(
     @inject('CategoryRepository')
     private categoryRepository: ICategoryRepository,
