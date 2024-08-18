@@ -3,7 +3,7 @@ import { InMemoryCSVStreamParserProvider } from '@shared/container/providers/CSV
 import { InMemoryCategoryRepository } from '../../repositories/in-memory/InMemoryCategoryRepository';
 import { ImportCategoriesUseCase } from './ImportCategoriesUseCase';
 
-describe('ImportCategoryUseCase', () => {
+describe('ImportCategoriesUseCase', () => {
   let inMemoryCategoryRepository: InMemoryCategoryRepository;
   let inMemoryCSVStreamParseProvider: InMemoryCSVStreamParserProvider;
   let importCategoriesUseCase: ImportCategoriesUseCase;
