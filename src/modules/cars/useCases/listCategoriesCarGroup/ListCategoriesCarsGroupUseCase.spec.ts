@@ -5,6 +5,7 @@ import { InMemoryCarRepository } from '@modules/cars/repositories/in-memory/InMe
 import { InMemoryCategoryRepository } from '@modules/cars/repositories/in-memory/InMemoryCategoryRepository';
 import { InMemorySpecificationRepository } from '@modules/cars/repositories/in-memory/InMemorySpecificationRepository';
 import { InMemoryRentalRepository } from '@modules/rentals/repositories/in-memory/InMemoryRentalRepository';
+import { InMemoryLoggerProvider } from '@shared/container/providers/LoggerProvider/in-memory/InMemoryLoggerProvider';
 
 import { ListCategoriesCarsGroupUseCase } from './ListCategoriesCarsGroupUseCase';
 
@@ -13,6 +14,7 @@ describe('ListCategoriesCarsGroupUseCase', () => {
   let inMemoryCategoryRepository: InMemoryCategoryRepository;
   let inMemorySpecificationRepository: InMemorySpecificationRepository;
   let inMemoryRentalRepository: InMemoryRentalRepository;
+  let inMemoryLoggerProvider: InMemoryLoggerProvider;
   let listCategoriesCarsGroupUseCase: ListCategoriesCarsGroupUseCase;
   let category: Category;
   let specification: Specification;
@@ -22,10 +24,12 @@ describe('ListCategoriesCarsGroupUseCase', () => {
     inMemoryCategoryRepository = new InMemoryCategoryRepository();
     inMemoryRentalRepository = new InMemoryRentalRepository();
     inMemorySpecificationRepository = new InMemorySpecificationRepository();
+    inMemoryLoggerProvider = new InMemoryLoggerProvider();
     listCategoriesCarsGroupUseCase = new ListCategoriesCarsGroupUseCase(
       inMemoryCarRepository,
       inMemoryCategoryRepository,
-      inMemoryRentalRepository
+      inMemoryRentalRepository,
+      inMemoryLoggerProvider
     );
 
     category = await inMemoryCategoryRepository.create({
