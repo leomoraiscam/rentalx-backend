@@ -11,13 +11,13 @@ export class InMemoryCarImageRepository implements ICarImageRepository {
   }
 
   async create(data: IUploadCarImageDTO): Promise<CarImage> {
-    const { carId, imageName } = data;
+    const { carId, image } = data;
 
     const carImage = new CarImage();
 
     Object.assign(carImage, {
       carId,
-      imageName,
+      imageName: image,
     });
 
     this.carImages.push(carImage);
