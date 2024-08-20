@@ -1,5 +1,5 @@
-import { CategoryType } from '@modules/cars/dtos/ICreateCategoryDTO';
 import { OrdenationProps } from '@modules/cars/dtos/IQueryListCategoriesDTO';
+import { CategoryType } from '@modules/cars/enums/category';
 import { InMemoryCategoryRepository } from '@modules/cars/repositories/in-memory/InMemoryCategoryRepository';
 
 import { ListCategoriesUseCase } from './ListCategoriesUseCase';

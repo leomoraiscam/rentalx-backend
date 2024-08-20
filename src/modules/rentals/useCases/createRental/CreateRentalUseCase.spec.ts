@@ -42,6 +42,14 @@ describe('CreateRentalUseCase', () => {
       licensePlate: 'AJN-730',
       fineAmount: 80,
       categoryId: 'executive',
+      specifications: [
+        {
+          id: 'fake-id',
+          createdAt: new Date(),
+          description: 'fake-description',
+          name: 'fake-name',
+        },
+      ],
     });
     const rental = await createRentalUseCase.execute({
       userId: 'fake-user-id',
@@ -67,6 +75,14 @@ describe('CreateRentalUseCase', () => {
       licensePlate: 'IKV-911',
       fineAmount: 480,
       categoryId: 'sportive',
+      specifications: [
+        {
+          id: 'fake-id',
+          createdAt: new Date(),
+          description: 'fake-description',
+          name: 'fake-name',
+        },
+      ],
     });
     const rental = await createRentalUseCase.execute({
       userId: 'fake-user-id',
@@ -109,6 +125,14 @@ describe('CreateRentalUseCase', () => {
       licensePlate: 'AJN-730',
       fineAmount: 80,
       categoryId: 'executive',
+      specifications: [
+        {
+          id: 'fake-id',
+          createdAt: new Date(),
+          description: 'fake-description',
+          name: 'fake-name',
+        },
+      ],
     });
 
     await inMemoryRentalRepository.create({
@@ -142,6 +166,14 @@ describe('CreateRentalUseCase', () => {
       licensePlate: 'AJN-730',
       fineAmount: 80,
       categoryId: 'executive',
+      specifications: [
+        {
+          id: 'fake-id',
+          createdAt: new Date(),
+          description: 'fake-description',
+          name: 'fake-name',
+        },
+      ],
     });
     const { id: userId } = await inMemoryUserRepository.create({
       name: 'Teresa Hammond',
@@ -181,6 +213,14 @@ describe('CreateRentalUseCase', () => {
       licensePlate: 'AJN-730',
       fineAmount: 80,
       categoryId: 'executive',
+      specifications: [
+        {
+          id: 'fake-id',
+          createdAt: new Date(),
+          description: 'fake-description',
+          name: 'fake-name',
+        },
+      ],
     });
     const { id: userId } = await inMemoryUserRepository.create({
       name: 'Teresa Hammond',

@@ -39,6 +39,14 @@ describe('DevolutionRentalUseCase', () => {
       licensePlate: 'AJN-730',
       fineAmount: 80,
       categoryId: 'executive',
+      specifications: [
+        {
+          id: 'fake-id',
+          createdAt: new Date(),
+          description: 'fake-description',
+          name: 'fake-name',
+        },
+      ],
     });
 
     const rental = await inMemoryRentalRepository.create({
@@ -91,6 +99,14 @@ describe('DevolutionRentalUseCase', () => {
       licensePlate: 'AJN-730',
       fineAmount: 80,
       categoryId: 'executive',
+      specifications: [
+        {
+          id: 'fake-id',
+          createdAt: new Date(),
+          description: 'fake-description',
+          name: 'fake-name',
+        },
+      ],
     });
 
     const rental = await inMemoryRentalRepository.create({
@@ -119,6 +135,14 @@ describe('DevolutionRentalUseCase', () => {
       licensePlate: 'AJN-730',
       fineAmount: 80,
       categoryId: 'executive',
+      specifications: [
+        {
+          id: 'fake-id',
+          createdAt: new Date(),
+          description: 'fake-description',
+          name: 'fake-name',
+        },
+      ],
     });
 
     const rental = await inMemoryRentalRepository.create({

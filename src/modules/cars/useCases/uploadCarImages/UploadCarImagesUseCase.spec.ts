@@ -37,6 +37,14 @@ describe('UploadCarImagesUseCase', () => {
       licensePlate: 'DJA-002',
       fineAmount: 400,
       categoryId: 'fake-category-id',
+      specifications: [
+        {
+          id: 'fake-id',
+          createdAt: new Date(),
+          description: 'fake-description',
+          name: 'fake-name',
+        },
+      ],
     });
     const images = [
       {
@@ -92,6 +100,14 @@ describe('UploadCarImagesUseCase', () => {
       licensePlate: 'DJA-002',
       fineAmount: 400,
       categoryId: 'fake-category-id',
+      specifications: [
+        {
+          id: 'fake-id',
+          createdAt: new Date(),
+          description: 'fake-description',
+          name: 'fake-name',
+        },
+      ],
     });
     const images = [] as Express.Multer.File[];
 
@@ -113,6 +129,14 @@ describe('UploadCarImagesUseCase', () => {
       licensePlate: 'DJA-002',
       fineAmount: 400,
       categoryId: 'fake-category-id',
+      specifications: [
+        {
+          id: 'fake-id',
+          createdAt: new Date(),
+          description: 'fake-description',
+          name: 'fake-name',
+        },
+      ],
     });
     const images = [
       {
@@ -146,6 +170,14 @@ describe('UploadCarImagesUseCase', () => {
       licensePlate: 'DJA-002',
       fineAmount: 400,
       categoryId: 'fake-category-id',
+      specifications: [
+        {
+          id: 'fake-id',
+          createdAt: new Date(),
+          description: 'fake-description',
+          name: 'fake-name',
+        },
+      ],
     });
     const images = [
       {

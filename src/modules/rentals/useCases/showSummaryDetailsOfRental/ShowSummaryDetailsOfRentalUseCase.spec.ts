@@ -1,4 +1,4 @@
-import { CategoryType } from '@modules/cars/dtos/ICreateCategoryDTO';
+import { CategoryType } from '@modules/cars/enums/category';
 import { Car } from '@modules/cars/infra/typeorm/entities/Car';
 import { InMemoryCarRepository } from '@modules/cars/repositories/in-memory/InMemoryCarRepository';
 import { InMemoryCategoryRepository } from '@modules/cars/repositories/in-memory/InMemoryCategoryRepository';

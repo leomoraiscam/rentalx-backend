@@ -27,6 +27,14 @@ describe('CreateCarSpecificationsUseCase', () => {
       licensePlate: 'ABC-124',
       fineAmount: 120,
       categoryId: 'sedan sportive',
+      specifications: [
+        {
+          id: 'fake-id',
+          createdAt: new Date(),
+          description: 'fake-description',
+          name: 'fake-name',
+        },
+      ],
     });
     const specification = await inMemorySpecificationRepository.create({
       description: 'turbo',

@@ -27,6 +27,14 @@ describe('CreateInventoryToCarsUseCase', () => {
       licensePlate: 'ABC-124',
       fineAmount: 120,
       categoryId: 'sedan sportive',
+      specifications: [
+        {
+          id: 'fake-id',
+          createdAt: new Date(),
+          description: 'fake-description',
+          name: 'fake-name',
+        },
+      ],
     });
 
     const { id: carId02 } = await inMemoryCarRepository.create({
@@ -37,6 +45,14 @@ describe('CreateInventoryToCarsUseCase', () => {
       licensePlate: 'ABC-1234',
       fineAmount: 100,
       categoryId: 'executive',
+      specifications: [
+        {
+          id: 'fake-id',
+          createdAt: new Date(),
+          description: 'fake-description',
+          name: 'fake-name',
+        },
+      ],
     });
 
     const { id: carId03 } = await inMemoryCarRepository.create({
@@ -47,6 +63,14 @@ describe('CreateInventoryToCarsUseCase', () => {
       licensePlate: 'KMD-143',
       fineAmount: 75,
       categoryId: 'SUV',
+      specifications: [
+        {
+          id: 'fake-id',
+          createdAt: new Date(),
+          description: 'fake-description',
+          name: 'fake-name',
+        },
+      ],
     });
 
     const availabilitiesCarQuantity = await createInventoryToCarsUseCase.execute(
@@ -80,6 +104,14 @@ describe('CreateInventoryToCarsUseCase', () => {
       licensePlate: 'ABC-124',
       fineAmount: 120,
       categoryId: 'sedan sportive',
+      specifications: [
+        {
+          id: 'fake-id',
+          createdAt: new Date(),
+          description: 'fake-description',
+          name: 'fake-name',
+        },
+      ],
     });
 
     const { id: carId02 } = await inMemoryCarRepository.create({
@@ -90,6 +122,14 @@ describe('CreateInventoryToCarsUseCase', () => {
       licensePlate: 'ABC-1234',
       fineAmount: 100,
       categoryId: 'executive',
+      specifications: [
+        {
+          id: 'fake-id',
+          createdAt: new Date(),
+          description: 'fake-description',
+          name: 'fake-name',
+        },
+      ],
     });
 
     await expect(
@@ -121,6 +161,14 @@ describe('CreateInventoryToCarsUseCase', () => {
       licensePlate: 'ABC-124',
       fineAmount: 120,
       categoryId: 'sedan sportive',
+      specifications: [
+        {
+          id: 'fake-id',
+          createdAt: new Date(),
+          description: 'fake-description',
+          name: 'fake-name',
+        },
+      ],
     });
 
     const { id: carId02 } = await inMemoryCarRepository.create({
@@ -131,6 +179,14 @@ describe('CreateInventoryToCarsUseCase', () => {
       licensePlate: 'ABC-1234',
       fineAmount: 100,
       categoryId: 'executive',
+      specifications: [
+        {
+          id: 'fake-id',
+          createdAt: new Date(),
+          description: 'fake-description',
+          name: 'fake-name',
+        },
+      ],
     });
 
     await expect(
