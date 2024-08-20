@@ -21,7 +21,6 @@ export class ImportSpecificationsUseCase {
       file.path,
       keys
     );
-
     const specificationsPromises = specifications.map(async (data) => {
       const { name, description } = data;
       const specification = await this.specificationRepository.findByName(name);

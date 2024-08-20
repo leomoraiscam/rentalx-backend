@@ -35,11 +35,10 @@ export class ListCategoriesCarsGroupUseCase {
         }),
         this.carRepository.findAvailable(data),
       ]);
-
       const transformedCategories = categories.result.map(async (category) => {
         const categoryCars = cars
           .filter((car) => car.categoryId === category.id)
-          .map(async ({ id: carId, dailyRate, fineAmount, ...car }) => {
+          .map(async ({ id: carId, dailyRate, fineAmount, ...carRest }) => {
             const rental = await this.rentalRepository.findOpenRentalByDateAndCar(
               {
                 startDate,
@@ -53,8 +52,8 @@ export class ListCategoriesCarsGroupUseCase {
               id: carId,
               dailyRate: Number(dailyRate),
               fineAmount: Number(fineAmount),
-              ...car,
               available,
+              ...carRest,
             };
           });
 
@@ -70,7 +69,6 @@ export class ListCategoriesCarsGroupUseCase {
           available: categoryAvailable,
         };
       });
-
       const promiseAllCarsProcessed = await Promise.all(transformedCategories);
       const carsWithAvailabilityFieldLength = promiseAllCarsProcessed.filter(
         (values) => values.cars.length

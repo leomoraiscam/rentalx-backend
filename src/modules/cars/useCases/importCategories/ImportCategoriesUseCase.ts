@@ -19,7 +19,6 @@ export class ImportCategoriesUseCase {
       file.path,
       keys
     );
-
     const categoriesPromises = categories.map(async (data) => {
       const { name, description, type } = data;
       const category = await this.categoryRepository.findByName(name);

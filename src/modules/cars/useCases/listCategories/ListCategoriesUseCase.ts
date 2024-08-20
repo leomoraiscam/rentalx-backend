@@ -22,7 +22,6 @@ export class ListCategoriesUseCase {
       perPage,
       order,
     });
-
     const { total } = categories;
     const { result: data } = categories;
     const totalPages = Math.ceil(total / perPage);
