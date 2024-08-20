@@ -7,6 +7,9 @@ describe('ImportCategoriesUseCase', () => {
   let inMemoryCategoryRepository: InMemoryCategoryRepository;
   let inMemoryCSVStreamParseProvider: InMemoryCSVStreamParserProvider;
   let importCategoriesUseCase: ImportCategoriesUseCase;
+  let spiedFindByName: unknown;
+  let spiedCreate: unknown;
+  let spiedParserCSV: unknown;
 
   beforeEach(() => {
     inMemoryCategoryRepository = new InMemoryCategoryRepository();
@@ -15,34 +18,23 @@ describe('ImportCategoriesUseCase', () => {
       inMemoryCategoryRepository,
       inMemoryCSVStreamParseProvider
     );
+    spiedFindByName = jest.spyOn(inMemoryCategoryRepository, 'findByName');
+    spiedCreate = jest.spyOn(inMemoryCategoryRepository, 'create');
+    spiedParserCSV = jest.spyOn(inMemoryCSVStreamParseProvider, 'parse');
   });
 
   it('should be able to import all categories when a non exist categories registered', async () => {
-    const spiedFindByNameOfCategoryRepository = jest.spyOn(
-      inMemoryCategoryRepository,
-      'findByName'
-    );
-    const spiedCreateOfCategoryRepository = jest.spyOn(
-      inMemoryCategoryRepository,
-      'create'
-    );
-    const spiedInMemoryCSVStreamParseProvider = jest.spyOn(
-      inMemoryCSVStreamParseProvider,
-      'parse'
-    );
     const file = { path: 'fake/path.csv' } as Express.Multer.File;
 
     await importCategoriesUseCase.execute(file);
 
-    expect(spiedInMemoryCSVStreamParseProvider).toHaveBeenCalledWith(
-      file.path,
-      ['name', 'description', 'type']
-    );
-    expect(spiedFindByNameOfCategoryRepository).toHaveBeenNthCalledWith(
-      2,
-      'Category 2'
-    );
-    expect(spiedCreateOfCategoryRepository).toHaveBeenNthCalledWith(2, {
+    expect(spiedParserCSV).toHaveBeenCalledWith(file.path, [
+      'name',
+      'description',
+      'type',
+    ]);
+    expect(spiedFindByName).toHaveBeenNthCalledWith(2, 'Category 2');
+    expect(spiedCreate).toHaveBeenNthCalledWith(2, {
       description: 'Description 2',
       name: 'Category 2',
       type: 'Type 2',
@@ -50,38 +42,25 @@ describe('ImportCategoriesUseCase', () => {
   });
 
   it('should be able to import some categories when registered categories already exist', async () => {
-    const spiedFindByNameOfCategoryRepository = jest.spyOn(
-      inMemoryCategoryRepository,
-      'findByName'
-    );
-    spiedFindByNameOfCategoryRepository.mockResolvedValueOnce({
+    (spiedFindByName as jest.Mock).mockResolvedValueOnce({
       description: 'Description 1',
       name: 'Category 1',
       type: 'Type 1',
       createdAt: new Date(2024, 1, 1),
       id: 'faked-id',
     });
-    const spiedCreateOfCategoryRepository = jest.spyOn(
-      inMemoryCategoryRepository,
-      'create'
-    );
-    const spiedInMemoryCSVStreamParseProvider = jest.spyOn(
-      inMemoryCSVStreamParseProvider,
-      'parse'
-    );
+
     const file = { path: 'fake/path.csv' } as Express.Multer.File;
 
     await importCategoriesUseCase.execute(file);
 
-    expect(spiedInMemoryCSVStreamParseProvider).toHaveBeenCalledWith(
-      file.path,
-      ['name', 'description', 'type']
-    );
-    expect(spiedFindByNameOfCategoryRepository).toHaveBeenNthCalledWith(
-      2,
-      'Category 2'
-    );
-    expect(spiedCreateOfCategoryRepository).toHaveBeenNthCalledWith(1, {
+    expect(spiedParserCSV).toHaveBeenCalledWith(file.path, [
+      'name',
+      'description',
+      'type',
+    ]);
+    expect(spiedFindByName).toHaveBeenNthCalledWith(2, 'Category 2');
+    expect(spiedCreate).toHaveBeenNthCalledWith(1, {
       description: 'Description 2',
       name: 'Category 2',
       type: 'Type 2',

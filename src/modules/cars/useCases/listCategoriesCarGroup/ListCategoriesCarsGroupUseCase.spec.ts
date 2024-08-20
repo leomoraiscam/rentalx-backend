@@ -17,6 +17,7 @@ describe('ListCategoriesCarsGroupUseCase', () => {
   let inMemoryLoggerProvider: InMemoryLoggerProvider;
   let listCategoriesCarsGroupUseCase: ListCategoriesCarsGroupUseCase;
   let category: Category;
+  let suvCategory: Category;
   let specification: Specification;
 
   beforeEach(async () => {
@@ -32,25 +33,31 @@ describe('ListCategoriesCarsGroupUseCase', () => {
       inMemoryLoggerProvider
     );
 
-    category = await inMemoryCategoryRepository.create({
-      name: 'GROUP L - SPORT',
-      description:
-        'Designed to optimize aerodynamics, reach higher speeds and offer high performance.',
-      type: CategoryType.SPORT,
-    });
-
-    specification = await inMemorySpecificationRepository.create({
-      name: 'Direção Elétrica',
-      description:
-        'Conjunto mecânico que permite ao motorista conduzir o seu veículo de maneira leve.',
-    });
-  });
-
-  it('should be able to list all cars classified by categories', async () => {
     jest.spyOn(Date, 'now').mockImplementationOnce(() => {
       return new Date(2024, 2, 27).getTime();
     });
 
+    [category, suvCategory, specification] = await Promise.all([
+      inMemoryCategoryRepository.create({
+        name: 'GROUP L - SPORT',
+        description:
+          'Designed to optimize aerodynamics, reach higher speeds and offer high performance.',
+        type: CategoryType.SPORT,
+      }),
+      inMemoryCategoryRepository.create({
+        name: 'GROUP L - SUV',
+        description: '',
+        type: CategoryType.SUV,
+      }),
+      inMemorySpecificationRepository.create({
+        name: 'Direção Elétrica',
+        description:
+          'Conjunto mecânico que permite ao motorista conduzir o seu veículo de maneira leve.',
+      }),
+    ]);
+  });
+
+  it('should be able to list all cars classified by categories', async () => {
     await inMemoryCarRepository.create({
       name: 'Mustang',
       brand: 'Ford',
@@ -69,6 +76,7 @@ describe('ListCategoriesCarsGroupUseCase', () => {
         },
       ],
     });
+
     const cars = await listCategoriesCarsGroupUseCase.execute({
       startDate: new Date(2024, 2, 20),
       expectedReturnDate: new Date(2024, 2, 23),
@@ -112,11 +120,7 @@ describe('ListCategoriesCarsGroupUseCase', () => {
     );
   });
 
-  it('should be able to return all cars classified by categories when there is at least one car unavailable but the category is available too', async () => {
-    jest.spyOn(Date, 'now').mockImplementationOnce(() => {
-      return new Date(2024, 2, 27).getTime();
-    });
-
+  it('should be able to return all cars classified by categories with available true when least one car available', async () => {
     const [firstCar, secondCar] = await Promise.all([
       inMemoryCarRepository.create({
         name: 'Mustang',
@@ -174,70 +178,21 @@ describe('ListCategoriesCarsGroupUseCase', () => {
         type: 'sport',
         cars: [
           {
-            id: firstCar.id,
             available: true,
-            name: 'Mustang',
-            description: 'Ford Mustang',
-            brand: 'Ford',
-            categoryId: category.id,
-            dailyRate: 400,
-            fineAmount: 400,
-            licensePlate: 'DJA-002',
-            category,
-            specifications: [
-              {
-                id: specification.id,
-                name: 'Direção Elétrica',
-                description:
-                  'Conjunto mecânico que permite ao motorista conduzir o seu veículo de maneira leve.',
-              },
-            ],
-            images: [
-              {
-                id: 'fake-image-id',
-                imageName: 'mustang-image',
-                createdAt: new Date(2024, 2, 10),
-              },
-            ],
+            ...firstCar,
           },
           {
-            id: secondCar.id,
             available: false,
-            name: 'M2',
-            description: 'BMW M2',
-            brand: 'BMW',
-            categoryId: category.id,
-            dailyRate: 600,
-            fineAmount: 600,
-            licensePlate: 'LKO-001',
-            category,
-            specifications: [
-              {
-                id: specification.id,
-                name: 'Direção Elétrica',
-                description:
-                  'Conjunto mecânico que permite ao motorista conduzir o seu veículo de maneira leve.',
-              },
-            ],
-            images: [
-              {
-                id: 'fake-image-id',
-                imageName: 'bmw-image',
-                createdAt: new Date(2024, 2, 10),
-              },
-            ],
+            ...secondCar,
           },
         ],
         available: true,
       },
     ]);
+    expect(cars[0].available).toBeTruthy();
   });
 
-  it('should be able to return all cars classified by categories when all cars are unavailable and the category must be unavailable too', async () => {
-    jest.spyOn(Date, 'now').mockImplementationOnce(() => {
-      return new Date(2024, 2, 27).getTime();
-    });
-
+  it('should be able to return all cars classified by categories with available false when a non exits available car', async () => {
     const [firstCar, secondCar] = await Promise.all([
       inMemoryCarRepository.create({
         name: 'Mustang',
@@ -303,202 +258,23 @@ describe('ListCategoriesCarsGroupUseCase', () => {
         type: 'sport',
         cars: [
           {
-            id: firstCar.id,
             available: false,
-            name: 'Mustang',
-            description: 'Ford Mustang',
-            brand: 'Ford',
-            categoryId: category.id,
-            dailyRate: 400,
-            fineAmount: 400,
-            licensePlate: 'DJA-002',
-            category,
-            specifications: [
-              {
-                id: specification.id,
-                name: 'Direção Elétrica',
-                description:
-                  'Conjunto mecânico que permite ao motorista conduzir o seu veículo de maneira leve.',
-              },
-            ],
-            images: [
-              {
-                id: 'fake-image-id',
-                imageName: 'mustang-image',
-                createdAt: new Date(2024, 2, 10),
-              },
-            ],
+            ...firstCar,
           },
           {
-            id: secondCar.id,
             available: false,
-            name: 'M2',
-            description: 'BMW M2',
-            brand: 'BMW',
-            categoryId: category.id,
-            dailyRate: 600,
-            fineAmount: 600,
-            licensePlate: 'LKO-001',
-            category,
-            specifications: [
-              {
-                id: specification.id,
-                name: 'Direção Elétrica',
-                description:
-                  'Conjunto mecânico que permite ao motorista conduzir o seu veículo de maneira leve.',
-              },
-            ],
-            images: [
-              {
-                id: 'fake-image-id',
-                imageName: 'bmw-image',
-                createdAt: new Date(2024, 2, 10),
-              },
-            ],
+            ...secondCar,
           },
         ],
         available: false,
       },
     ]);
+    expect(cars[0].available).toBeFalsy();
+    expect(cars).toHaveLength(1);
   });
 
-  it('should be able to return all cars classified by when there is at least one car available and the category must be available too', async () => {
-    jest.spyOn(Date, 'now').mockImplementationOnce(() => {
-      return new Date(2024, 2, 27).getTime();
-    });
-
-    const [firstCar, secondCar] = await Promise.all([
-      inMemoryCarRepository.create({
-        name: 'Mustang',
-        brand: 'Ford',
-        description: 'Ford Mustang',
-        dailyRate: 400,
-        licensePlate: 'DJA-002',
-        fineAmount: 400,
-        categoryId: category.id,
-        category,
-        specifications: [specification],
-        images: [
-          {
-            id: 'fake-image-id',
-            imageName: 'mustang-image',
-            createdAt: new Date(2024, 2, 10),
-          },
-        ],
-      }),
-      inMemoryCarRepository.create({
-        name: 'M2',
-        brand: 'BMW',
-        description: 'BMW M2',
-        dailyRate: 600,
-        licensePlate: 'LKO-001',
-        fineAmount: 600,
-        categoryId: category.id,
-        category,
-        specifications: [specification],
-        images: [
-          {
-            id: 'fake-image-id',
-            imageName: 'bmw-image',
-            createdAt: new Date(2024, 2, 10),
-          },
-        ],
-      }),
-    ]);
-
-    await Promise.all([
-      inMemoryRentalRepository.create({
-        carId: firstCar.id,
-        startDate: new Date(2024, 2, 18),
-        expectedReturnDate: new Date(2024, 2, 20),
-        userId: 'fake-user-id',
-      }),
-      inMemoryRentalRepository.create({
-        carId: secondCar.id,
-        startDate: new Date(2024, 2, 20),
-        expectedReturnDate: new Date(2024, 2, 23),
-        userId: 'fake-user-id',
-      }),
-    ]);
-
-    const cars = await listCategoriesCarsGroupUseCase.execute({
-      startDate: new Date(2024, 2, 21),
-      expectedReturnDate: new Date(2024, 2, 23),
-    });
-
-    expect(cars).toEqual([
-      {
-        name: 'GROUP L - SPORT',
-        type: 'sport',
-        cars: [
-          {
-            id: firstCar.id,
-            available: true,
-            name: 'Mustang',
-            description: 'Ford Mustang',
-            brand: 'Ford',
-            categoryId: category.id,
-            dailyRate: 400,
-            fineAmount: 400,
-            licensePlate: 'DJA-002',
-            category,
-            specifications: [
-              {
-                id: specification.id,
-                name: 'Direção Elétrica',
-                description:
-                  'Conjunto mecânico que permite ao motorista conduzir o seu veículo de maneira leve.',
-              },
-            ],
-            images: [
-              {
-                id: 'fake-image-id',
-                imageName: 'mustang-image',
-                createdAt: new Date(2024, 2, 10),
-              },
-            ],
-          },
-          {
-            id: secondCar.id,
-            available: false,
-            name: 'M2',
-            description: 'BMW M2',
-            brand: 'BMW',
-            categoryId: category.id,
-            dailyRate: 600,
-            fineAmount: 600,
-            licensePlate: 'LKO-001',
-            category,
-            specifications: [
-              {
-                id: specification.id,
-                name: 'Direção Elétrica',
-                description:
-                  'Conjunto mecânico que permite ao motorista conduzir o seu veículo de maneira leve.',
-              },
-            ],
-            images: [
-              {
-                id: 'fake-image-id',
-                imageName: 'bmw-image',
-                createdAt: new Date(2024, 2, 10),
-              },
-            ],
-          },
-        ],
-        available: true,
-      },
-    ]);
-  });
-
-  it('should be able to return all cars classified by categories when received filter by vehicle brand', async () => {
-    const suvCategory = await inMemoryCategoryRepository.create({
-      name: 'GROUP L - SUV',
-      description: '',
-      type: CategoryType.SUV,
-    });
-
-    await Promise.all([
+  it('should be able to return cars classified by categories and brand when received filter by vehicle brand', async () => {
+    const [firstCar] = await Promise.all([
       inMemoryCarRepository.create({
         name: 'Mustang',
         brand: 'Ford',
@@ -541,17 +317,26 @@ describe('ListCategoriesCarsGroupUseCase', () => {
       brand: 'Ford',
     });
 
-    expect(cars.length).toBe(1);
+    expect(cars).toEqual([
+      {
+        name: 'GROUP L - SPORT',
+        type: 'sport',
+        cars: [
+          {
+            available: true,
+            ...firstCar,
+          },
+        ],
+        available: true,
+      },
+    ]);
+    expect(cars[0].available).toBeTruthy();
+    expect(cars).toHaveLength(1);
+    expect(cars[0].cars).toHaveLength(1);
   });
 
-  it('should be able to return cars classified by categories when received filter by vehicle type', async () => {
-    const suvCategory = await inMemoryCategoryRepository.create({
-      name: 'GROUP L - SUV',
-      description: '',
-      type: CategoryType.SUV,
-    });
-
-    await Promise.all([
+  it('should be able to return cars classified by categories and type when received filter by vehicle type', async () => {
+    const [firstCar] = await Promise.all([
       inMemoryCarRepository.create({
         name: 'Mustang',
         brand: 'Ford',
@@ -594,17 +379,26 @@ describe('ListCategoriesCarsGroupUseCase', () => {
       type: CategoryType.SPORT,
     });
 
-    expect(cars.length).toBe(1);
+    expect(cars).toEqual([
+      {
+        name: 'GROUP L - SPORT',
+        type: 'sport',
+        cars: [
+          {
+            available: true,
+            ...firstCar,
+          },
+        ],
+        available: true,
+      },
+    ]);
+    expect(cars[0].available).toBeTruthy();
+    expect(cars).toHaveLength(1);
+    expect(cars[0].cars).toHaveLength(1);
   });
 
-  it('should be able to return cars classified by categories when received filter by vehicle brand and type', async () => {
-    const suvCategory = await inMemoryCategoryRepository.create({
-      name: 'GROUP L - SUV',
-      description: '',
-      type: CategoryType.SUV,
-    });
-
-    await Promise.all([
+  it('should be able to return cars classified by categories, brand and type when received filter by vehicle brand and type', async () => {
+    const [_, secondCar, thirdCar] = await Promise.all([
       inMemoryCarRepository.create({
         name: 'Mustang',
         brand: 'Ford',
@@ -684,6 +478,25 @@ describe('ListCategoriesCarsGroupUseCase', () => {
       brand: 'BMW',
     });
 
-    expect(cars.length).toBe(1);
+    expect(cars).toEqual([
+      {
+        name: 'GROUP L - SPORT',
+        type: 'sport',
+        cars: [
+          {
+            available: true,
+            ...secondCar,
+          },
+          {
+            available: true,
+            ...thirdCar,
+          },
+        ],
+        available: true,
+      },
+    ]);
+    expect(cars[0].available).toBeTruthy();
+    expect(cars).toHaveLength(1);
+    expect(cars[0].cars).toHaveLength(2);
   });
 });
