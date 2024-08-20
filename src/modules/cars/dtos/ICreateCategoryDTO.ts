@@ -1,9 +1,4 @@
-export enum CategoryType {
-  HATCH = 'hatch',
-  SEDAN = 'sedan',
-  SUV = 'suv',
-  SPORT = 'sport',
-}
+import { CategoryType } from '../enums/category';
 
 export interface ICreateCategoryDTO {
   name: string;
