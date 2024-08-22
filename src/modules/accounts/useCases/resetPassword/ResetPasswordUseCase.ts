@@ -51,6 +51,6 @@ export class ResetPasswordUseCase {
     });
     await this.userRepository.create(user);
 
-    await this.userTokenRepository.deleteById(id);
+    await this.userTokenRepository.delete(id);
   }
 }

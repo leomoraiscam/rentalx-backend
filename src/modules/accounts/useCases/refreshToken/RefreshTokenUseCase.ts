@@ -45,7 +45,7 @@ export class RefreshTokenUseCase {
       throw new AppError('Invalid or expired token', 401);
     }
 
-    await this.userTokenRepository.deleteById(userToken.id);
+    await this.userTokenRepository.delete(userToken.id);
 
     if (!secretRefreshToken || !expiresInRefreshToken) {
       this.loggerProvider.log({
