@@ -1,9 +1,7 @@
 import { ICreateUserDTO } from '@modules/accounts/dtos/ICreateUserDTO';
-import {
-  CategoryType,
-  ICreateCategoryDTO,
-} from '@modules/cars/dtos/ICreateCategoryDTO';
+import { ICreateCategoryDTO } from '@modules/cars/dtos/ICreateCategoryDTO';
 import { ICreateSpecificationDTO } from '@modules/cars/dtos/ICreateSpecificationDTO';
+import { CategoryType } from '@modules/cars/enums/category';
 
 export const USER: ICreateUserDTO = {
   name: 'User admin',

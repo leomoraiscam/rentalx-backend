@@ -1,6 +1,6 @@
 import { injectable, inject } from 'tsyringe';
 
-import { IImportCategoriesDTO } from '@modules/cars/dtos/IImportCategoriesDTO';
+import { ICreateCategoryDTO } from '@modules/cars/dtos/ICreateCategoryDTO';
 import { ICategoryRepository } from '@modules/cars/repositories/ICategoryRepository';
 import { ICSVStreamParserProvider } from '@shared/container/providers/CSVStreamParserProvider/models/ICSVStreamParserProvider';
 
@@ -15,7 +15,7 @@ export class ImportCategoriesUseCase {
 
   async execute(file: Express.Multer.File): Promise<void> {
     const keys = ['name', 'description', 'type'];
-    const categories = await this.CSVStreamParserProvider.parse<IImportCategoriesDTO>(
+    const categories = await this.CSVStreamParserProvider.parse<ICreateCategoryDTO>(
       file.path,
       keys
     );

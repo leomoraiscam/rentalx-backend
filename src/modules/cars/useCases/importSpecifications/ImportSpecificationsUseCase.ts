@@ -1,10 +1,8 @@
 import { injectable, inject } from 'tsyringe';
 
-import { IImportCategoriesDTO } from '@modules/cars/dtos/IImportCategoriesDTO';
+import { ICreateSpecificationDTO } from '@modules/cars/dtos/ICreateSpecificationDTO';
 import { ISpecificationRepository } from '@modules/cars/repositories/ISpecificationRepository';
 import { ICSVStreamParserProvider } from '@shared/container/providers/CSVStreamParserProvider/models/ICSVStreamParserProvider';
-
-type IImportSpecificationsDTO = Omit<IImportCategoriesDTO, 'type'>;
 
 @injectable()
 export class ImportSpecificationsUseCase {
@@ -17,7 +15,7 @@ export class ImportSpecificationsUseCase {
 
   async execute(file: Express.Multer.File): Promise<void> {
     const keys = ['name', 'description'];
-    const specifications = await this.CSVStreamParserProvider.parse<IImportSpecificationsDTO>(
+    const specifications = await this.CSVStreamParserProvider.parse<ICreateSpecificationDTO>(
       file.path,
       keys
     );

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
-import { CategoryType } from '@modules/cars/dtos/ICreateCategoryDTO';
+import { CategoryType } from '@modules/cars/enums/category';
 
 import { ListCategoriesCarsGroupUseCase } from './ListCategoriesCarsGroupUseCase';
 
