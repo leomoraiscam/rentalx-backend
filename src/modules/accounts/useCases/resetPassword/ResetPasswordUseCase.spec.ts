@@ -26,7 +26,7 @@ describe('ResetPasswordUseCase', () => {
     );
   });
 
-  it('should be able to reset password', async () => {
+  it('should be able to reset password when received valid token', async () => {
     const generateHashSpied = jest.spyOn(inMemoryHashProvider, 'generateHash');
     const { id: userId } = await inMemoryUserRepository.create({
       name: 'Cody Carr',
@@ -35,20 +35,22 @@ describe('ResetPasswordUseCase', () => {
       driverLicense: '8074109646',
     });
 
-    await inMemoryUserTokenRepository.create({
-      expiresDate: new Date(),
-      refreshToken: 'example-token',
-      userId,
-    });
-    await resetPasswordUseCase.execute({
-      password: 'new-password@123',
-      token: 'example-token',
-    });
+    await Promise.all([
+      inMemoryUserTokenRepository.create({
+        expiresDate: new Date(),
+        refreshToken: 'example-token',
+        userId,
+      }),
+      resetPasswordUseCase.execute({
+        password: 'new-password@123',
+        token: 'example-token',
+      }),
+    ]);
 
     expect(generateHashSpied).toHaveBeenCalledWith('new-password@123');
   });
 
-  it('should not be able to reset the password when token a non exist', async () => {
+  it('should not be able to reset the password when token a non-exist', async () => {
     await expect(
       resetPasswordUseCase.execute({
         token: 'non-existing-token',
@@ -72,15 +74,14 @@ describe('ResetPasswordUseCase', () => {
     ).rejects.toBeInstanceOf(AppError);
   });
 
-  it('should not be able to reset password if passed more than 3 hours', async () => {
+  it('should not be able to reset password when passed more than 3 hours', async () => {
     const { id: userId } = await inMemoryUserRepository.create({
       name: 'Bess Ferguson',
       email: 'gew@jitucas.kg',
       password: 'password@123',
       driverLicense: '3614503223',
     });
-    const expiredDate = new Date();
-    expiredDate.setHours(expiredDate.getHours() - 3);
+    const expiredDate = inMemoryDateProvider.addHours(0);
 
     await inMemoryUserTokenRepository.create({
       expiresDate: expiredDate,
@@ -88,9 +89,8 @@ describe('ResetPasswordUseCase', () => {
       userId,
     });
 
-    const currentDate = new Date();
-    currentDate.setHours(currentDate.getHours() + 3);
-    inMemoryDateProvider.setCurrentDate(currentDate);
+    const mockedHour = inMemoryDateProvider.addHours(3);
+    inMemoryDateProvider.setCurrentDate(mockedHour);
 
     await expect(
       resetPasswordUseCase.execute({

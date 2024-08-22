@@ -49,7 +49,7 @@ export class InMemoryDateProvider implements IDateProvider {
   addHours(hours: number): Date {
     const newDate = new Date(this.currentDate.getTime());
 
-    newDate.setHours(this.currentDate.getHours() + hours);
+    newDate.setHours(this.currentDate.getHours() - 3 + hours);
 
     return newDate;
   }

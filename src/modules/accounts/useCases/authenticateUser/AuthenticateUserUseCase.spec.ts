@@ -16,7 +16,7 @@ describe('AuthenticateUserUseCase', () => {
   let inMemoryLoggerProvider: InMemoryLoggerProvider;
   let authenticateUserUseCase: AuthenticateUserUseCase;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     inMemoryUserRepository = new InMemoryUserRepository();
     inMemoryUserTokenRepository = new InMemoryUserTokenRepository();
     inMemoryDateProvider = new InMemoryDateProvider();
@@ -29,15 +29,15 @@ describe('AuthenticateUserUseCase', () => {
       inMemoryHashProvider,
       inMemoryLoggerProvider
     );
-  });
-
-  it('should be able to return token and refreshToken property to user when the same is authenticate with success', async () => {
     await inMemoryUserRepository.create({
       name: 'Dollie Briggs',
       email: 'lez@cujve.vu',
       password: 'pass@123',
       driverLicense: '8587317685',
     });
+  });
+
+  it('should be able to return token and refreshToken property to user when the same is authenticate with success', async () => {
     const response = await authenticateUserUseCase.execute({
       email: 'lez@cujve.vu',
       password: 'pass@123',
@@ -48,13 +48,6 @@ describe('AuthenticateUserUseCase', () => {
   });
 
   it('should not be able to return token and refreshToken property to user when received incorrect email for existing user', async () => {
-    await inMemoryUserRepository.create({
-      name: 'Jerry Gutierrez',
-      email: 'zowmug@zuk.gt',
-      password: 'pass@123',
-      driverLicense: '3123798406',
-    });
-
     await expect(
       authenticateUserUseCase.execute({
         email: 'wrong-email@email.com',
@@ -64,16 +57,9 @@ describe('AuthenticateUserUseCase', () => {
   });
 
   it('should not be able to return token property to user when received incorrect password for existing user', async () => {
-    await inMemoryUserRepository.create({
-      name: 'Richard Patterson',
-      email: 'unu@uwa.tw',
-      password: 'any-pass@1234',
-      driverLicense: '9046996244',
-    });
-
     await expect(
       authenticateUserUseCase.execute({
-        email: 'unu@uwa.tw',
+        email: 'lez@cujve.vu',
         password: 'wrong-pass',
       })
     ).rejects.toBeInstanceOf(AppError);
@@ -115,20 +101,14 @@ describe('AuthenticateUserUseCase', () => {
     ).rejects.toBeInstanceOf(AppError);
   });
 
-  it('should be able to logging an error if JWT configuration variables are missing', async () => {
+  it('should be able to logging an error when JWT configuration variables are missing', async () => {
     const loggerSpied = jest.spyOn(inMemoryLoggerProvider, 'log');
     auth.secretToken = '';
 
-    await inMemoryUserRepository.create({
-      name: 'Dollie Briggs',
-      email: 'lez@cujve.vu',
-      password: 'any-pass@123',
-      driverLicense: '8587317685',
-    });
     await expect(
       authenticateUserUseCase.execute({
         email: 'lez@cujve.vu',
-        password: 'any-pass@123',
+        password: 'pass@123',
       })
     ).rejects.toBeInstanceOf(AppError);
 

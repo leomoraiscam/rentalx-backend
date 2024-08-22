@@ -12,6 +12,7 @@ describe('SendForgotPasswordMailUseCase', () => {
   let inMemoryDateProvider: InMemoryDateProvider;
   let inMemoryMailProvider: InMemoryMailProvider;
   let sendForgotPasswordMailUseCase: SendForgotPasswordMailUseCase;
+  let sendMailSpied: unknown;
 
   beforeEach(() => {
     inMemoryUserRepository = new InMemoryUserRepository();
@@ -24,10 +25,10 @@ describe('SendForgotPasswordMailUseCase', () => {
       inMemoryDateProvider,
       inMemoryMailProvider
     );
+    sendMailSpied = jest.spyOn(inMemoryMailProvider, 'sendMail') as jest.Mock;
   });
 
-  it('should be able to send recover the password when user exist', async () => {
-    const sendMailSpied = jest.spyOn(inMemoryMailProvider, 'sendMail');
+  it('should be able to send recover the password when received correct data', async () => {
     const { email } = await inMemoryUserRepository.create({
       name: 'Todd Fisher',
       email: 'ogimcak@zad.fj',
@@ -41,9 +42,7 @@ describe('SendForgotPasswordMailUseCase', () => {
     expect(sendMailSpied).toHaveBeenCalledTimes(1);
   });
 
-  it('should not be able to recover the password when user a non exist', async () => {
-    const sendMailSpied = jest.spyOn(inMemoryMailProvider, 'sendMail');
-
+  it('should not be able to recover the password when user a non-exist', async () => {
     await expect(
       sendForgotPasswordMailUseCase.execute('any-mail@email.com')
     ).rejects.toBeInstanceOf(AppError);

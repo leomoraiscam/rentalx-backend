@@ -17,8 +17,9 @@ describe('ResetPasswordUseCase', () => {
   let inMemoryDateProvider: InMemoryDateProvider;
   let inMemoryLoggerProvider: InMemoryLoggerProvider;
   let refreshTokenUseCase: RefreshTokenUseCase;
+  let userId: string;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     inMemoryUserTokenRepository = new InMemoryUserTokenRepository();
     inMemoryDateProvider = new InMemoryDateProvider();
     inMemoryUserRepository = new InMemoryUserRepository();
@@ -28,22 +29,21 @@ describe('ResetPasswordUseCase', () => {
       inMemoryDateProvider,
       inMemoryLoggerProvider
     );
-  });
-
-  it('should be able to generate a new refreshToken', async () => {
-    const { id: userId } = await inMemoryUserRepository.create({
+    const { id } = await inMemoryUserRepository.create({
       name: 'Cody Carr',
       email: 'gawu@lutez.ch',
       password: '@anyPassword',
       driverLicense: '8074109646',
     });
-
+    userId = id;
     await inMemoryUserTokenRepository.create({
       expiresDate: new Date(),
       refreshToken: 'example-token',
       userId,
     });
+  });
 
+  it('should be able to generate a new refreshToken when received correct data', async () => {
     (jwt.verify as jest.Mock).mockReturnValue({
       email: 'example@example.com',
       sub: userId,
@@ -60,22 +60,9 @@ describe('ResetPasswordUseCase', () => {
     );
   });
 
-  it('should be able to logging an error if JWT configuration variables are missing', async () => {
+  it('should be able to logging an error when JWT configuration variables are missing', async () => {
     const loggerSpied = jest.spyOn(inMemoryLoggerProvider, 'log');
     auth.expiresInRefreshToken = '';
-
-    const { id: userId } = await inMemoryUserRepository.create({
-      name: 'Cody Carr',
-      email: 'gawu@lutez.ch',
-      password: '@anyPassword',
-      driverLicense: '8074109646',
-    });
-
-    await inMemoryUserTokenRepository.create({
-      expiresDate: new Date(),
-      refreshToken: 'example-token',
-      userId,
-    });
 
     (jwt.verify as jest.Mock).mockReturnValue({
       email: 'example@example.com',
@@ -85,7 +72,6 @@ describe('ResetPasswordUseCase', () => {
     await expect(
       refreshTokenUseCase.execute('example-token')
     ).rejects.toBeInstanceOf(AppError);
-
     expect(loggerSpied).toHaveBeenCalledTimes(1);
     expect(loggerSpied).toHaveBeenCalledWith({
       level: 'error',

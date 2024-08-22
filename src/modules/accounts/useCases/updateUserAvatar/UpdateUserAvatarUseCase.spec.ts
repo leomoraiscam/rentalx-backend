@@ -18,7 +18,7 @@ describe('UpdateUserAvatarUseCase', () => {
     );
   });
 
-  it('should be able to update avatar a user', async () => {
+  it('should be able to update avatar a user when received correct data', async () => {
     const user = await inMemoryUserRepository.create({
       name: 'Richard Thomas',
       email: 'ana@ru.sv',
@@ -35,7 +35,7 @@ describe('UpdateUserAvatarUseCase', () => {
     expect(user.avatar).toBe('avatar.jpg');
   });
 
-  it('should not be able to update avatar when a non existing user', async () => {
+  it('should not be able to update avatar when a non-existing user', async () => {
     await expect(
       updateUserAvatarUseCase.execute({
         userId: 'non-existing-user',
