@@ -4,7 +4,6 @@ import multer from 'multer';
 
 import { multerConfig } from '@config/upload';
 import { CreateCarController } from '@modules/cars/useCases/createCar/CreateCarController';
-import { CreateCarSpecificationsController } from '@modules/cars/useCases/createCarSpecification/CreateCarSpecificationController';
 import { ListCategoriesCarsGroupController } from '@modules/cars/useCases/listCategoriesCarGroup/ListCategoriesCarsGroupController';
 import { UploadCarImagesController } from '@modules/cars/useCases/uploadCarImages/UploadCarImagesController';
 
@@ -16,7 +15,6 @@ const uploadImages = multer(multerConfig);
 const carsRouter = Router();
 const createCarController = new CreateCarController();
 const listCategoriesCarsGroupController = new ListCategoriesCarsGroupController();
-const createCarSpecificationsController = new CreateCarSpecificationsController();
 const uploadCarImagesController = new UploadCarImagesController();
 
 carsRouter.post(
@@ -36,23 +34,6 @@ carsRouter.post(
   ensureAuthenticated,
   ensureAdmin,
   createCarController.handle
-);
-carsRouter.post(
-  '/:carId/specifications',
-  celebrate({
-    [Segments.BODY]: {
-      specificationsIds: Joi.array()
-        .items(Joi.string().uuid())
-        .min(1)
-        .required(),
-    },
-    [Segments.PARAMS]: {
-      carId: Joi.string().uuid().required(),
-    },
-  }),
-  ensureAuthenticated,
-  ensureAdmin,
-  createCarSpecificationsController.handle
 );
 carsRouter.get(
   '/',
