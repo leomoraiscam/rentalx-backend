@@ -33,7 +33,7 @@ export class ListCategoriesCarsGroupUseCase {
           page: 1,
           perPage: 15,
         }),
-        this.carRepository.findAvailable(data),
+        this.carRepository.list(data),
       ]);
       const transformedCategories = categories.result.map(async (category) => {
         const categoryCars = cars

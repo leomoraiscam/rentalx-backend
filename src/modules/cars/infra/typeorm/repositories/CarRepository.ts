@@ -22,7 +22,7 @@ export class CarRepository implements ICarRepository {
     return this.repository.findOne({ licensePlate });
   }
 
-  async findAvailable(data: IQueryListCarsDTO): Promise<Car[] | null> {
+  async list(data: IQueryListCarsDTO): Promise<Car[] | null> {
     const { brand, type } = data;
 
     const carsQuery = this.repository

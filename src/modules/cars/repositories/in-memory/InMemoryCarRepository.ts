@@ -15,7 +15,7 @@ export class InMemoryCarRepository implements ICarRepository {
     return this.car.find((car) => car.licensePlate === licensePlate);
   }
 
-  async findAvailable(data: IQueryListCarsDTO): Promise<Car[] | null> {
+  async list(data: IQueryListCarsDTO): Promise<Car[] | null> {
     return this.car.filter((car) => {
       if (
         (!data.brand || car.brand === data.brand) &&
