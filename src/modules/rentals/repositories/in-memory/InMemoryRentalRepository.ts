@@ -1,4 +1,4 @@
-import { IQueryListAvailableCarsDTO } from '@modules/cars/dtos/IQueryListAvailableCarsDTO';
+import { IQueryListCarsDTO } from '@modules/cars/dtos/IQueryListCarsDTO';
 
 import { ICreateRentalDTO } from '../../dtos/ICreateRentalDTO';
 import { Rental } from '../../infra/typeorm/entities/Rental';
@@ -25,7 +25,7 @@ export class InMemoryRentalRepository implements IRentalRepository {
     startDate,
     expectedReturnDate,
     carId,
-  }: IQueryListAvailableCarsDTO): Promise<Rental | null> {
+  }: IQueryListCarsDTO): Promise<Rental | null> {
     return this.rentals.find((rental) => {
       return (
         rental.carId === carId &&

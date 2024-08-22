@@ -1,6 +1,6 @@
 import { CategoryType } from '@modules/cars/enums/category';
 
-export interface IQueryListAvailableCarsDTO {
+export interface IQueryListCarsDTO {
   startDate?: Date;
   expectedReturnDate?: Date;
   carId?: string;

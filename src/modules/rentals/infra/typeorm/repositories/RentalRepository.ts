@@ -5,7 +5,7 @@ import {
   Repository,
 } from 'typeorm';
 
-import { IQueryListAvailableCarsDTO } from '@modules/cars/dtos/IQueryListAvailableCarsDTO';
+import { IQueryListCarsDTO } from '@modules/cars/dtos/IQueryListCarsDTO';
 import { ICreateRentalDTO } from '@modules/rentals/dtos/ICreateRentalDTO';
 import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
@@ -45,7 +45,7 @@ export class RentalRepository implements IRentalRepository {
   }
 
   async findOpenRentalByDateAndCar(
-    data: IQueryListAvailableCarsDTO
+    data: IQueryListCarsDTO
   ): Promise<Rental | undefined> {
     const { carId, startDate, expectedReturnDate } = data;
 

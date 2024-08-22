@@ -1,7 +1,7 @@
 import { getRepository, Repository } from 'typeorm';
 
 import { ICreateCarDTO } from '@modules/cars/dtos/ICreateCarDTO';
-import { IQueryListAvailableCarsDTO } from '@modules/cars/dtos/IQueryListAvailableCarsDTO';
+import { IQueryListCarsDTO } from '@modules/cars/dtos/IQueryListCarsDTO';
 import { Car } from '@modules/cars/infra/typeorm/entities/Car';
 import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
 
@@ -22,7 +22,7 @@ export class CarRepository implements ICarRepository {
     return this.repository.findOne({ licensePlate });
   }
 
-  async findAvailable(data: IQueryListAvailableCarsDTO): Promise<Car[] | null> {
+  async findAvailable(data: IQueryListCarsDTO): Promise<Car[] | null> {
     const { brand, type } = data;
 
     const carsQuery = this.repository

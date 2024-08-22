@@ -1,4 +1,4 @@
-import { IQueryListAvailableCarsDTO } from '@modules/cars/dtos/IQueryListAvailableCarsDTO';
+import { IQueryListCarsDTO } from '@modules/cars/dtos/IQueryListCarsDTO';
 import { Car } from '@modules/cars/infra/typeorm/entities/Car';
 
 import { ICreateCarDTO } from '../../dtos/ICreateCarDTO';
@@ -15,7 +15,7 @@ export class InMemoryCarRepository implements ICarRepository {
     return this.car.find((car) => car.licensePlate === licensePlate);
   }
 
-  async findAvailable(data: IQueryListAvailableCarsDTO): Promise<Car[] | null> {
+  async findAvailable(data: IQueryListCarsDTO): Promise<Car[] | null> {
     return this.car.filter((car) => {
       if (
         (!data.brand || car.brand === data.brand) &&
