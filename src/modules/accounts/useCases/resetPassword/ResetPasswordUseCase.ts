@@ -49,10 +49,8 @@ export class ResetPasswordUseCase {
     Object.assign(user, {
       password: hashedPassword,
     });
+    await this.userRepository.create(user);
 
-    await Promise.all([
-      this.userRepository.create(user),
-      this.userTokenRepository.deleteById(id),
-    ]);
+    await this.userTokenRepository.deleteById(id);
   }
 }
