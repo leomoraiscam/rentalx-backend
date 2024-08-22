@@ -1,6 +1,6 @@
 import { ICreateCategoryDTO } from '@modules/cars/dtos/ICreateCategoryDTO';
 import { IPaginationQueryResponseDTO } from '@modules/cars/dtos/IPaginationResponseDTO';
-import { IQueryListCategoriesDTO } from '@modules/cars/dtos/IQueryListCategoriesDTO';
+import { IQueryListOptionsDTO } from '@modules/cars/dtos/IQueryListOptionsDTO';
 
 import { Category } from '../../infra/typeorm/entities/Category';
 import { ICategoryRepository } from '../ICategoryRepository';
@@ -17,7 +17,7 @@ export class InMemoryCategoryRepository implements ICategoryRepository {
   }
 
   async list(
-    options: IQueryListCategoriesDTO
+    options: IQueryListOptionsDTO
   ): Promise<IPaginationQueryResponseDTO<Category>> {
     let sortedCategories = this.categories;
 

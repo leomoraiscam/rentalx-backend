@@ -2,7 +2,7 @@ import { getRepository, Repository } from 'typeorm';
 
 import { ICreateCategoryDTO } from '@modules/cars/dtos/ICreateCategoryDTO';
 import { IPaginationQueryResponseDTO } from '@modules/cars/dtos/IPaginationResponseDTO';
-import { IQueryListCategoriesDTO } from '@modules/cars/dtos/IQueryListCategoriesDTO';
+import { IQueryListOptionsDTO } from '@modules/cars/dtos/IQueryListOptionsDTO';
 import { Category } from '@modules/cars/infra/typeorm/entities/Category';
 import { ICategoryRepository } from '@modules/cars/repositories/ICategoryRepository';
 
@@ -24,7 +24,7 @@ export class CategoryRepository implements ICategoryRepository {
   }
 
   async list(
-    options?: IQueryListCategoriesDTO
+    options?: IQueryListOptionsDTO
   ): Promise<IPaginationQueryResponseDTO<Category>> {
     const take = options.perPage || 10;
     const page = options.page || 1;

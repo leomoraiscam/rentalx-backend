@@ -2,7 +2,7 @@ import { getRepository, Repository } from 'typeorm';
 
 import { ICreateSpecificationDTO } from '@modules/cars/dtos/ICreateSpecificationDTO';
 import { IPaginationQueryResponseDTO } from '@modules/cars/dtos/IPaginationResponseDTO';
-import { IQueryListCategoriesDTO } from '@modules/cars/dtos/IQueryListCategoriesDTO';
+import { IQueryListOptionsDTO } from '@modules/cars/dtos/IQueryListOptionsDTO';
 import { ISpecificationRepository } from '@modules/cars/repositories/ISpecificationRepository';
 
 import { Specification } from '../entities/Specification';
@@ -23,7 +23,7 @@ export class SpecificationRepository implements ISpecificationRepository {
   }
 
   async list(
-    options?: IQueryListCategoriesDTO
+    options?: IQueryListOptionsDTO
   ): Promise<IPaginationQueryResponseDTO<Specification>> {
     const take = options.perPage || 10;
     const page = options.page || 1;

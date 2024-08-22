@@ -3,7 +3,7 @@ export enum OrdenationProps {
   DESC = 'DESC',
 }
 
-export interface IQueryListCategoriesDTO {
+export interface IQueryListOptionsDTO {
   page?: number;
   perPage?: number;
   order?: OrdenationProps;

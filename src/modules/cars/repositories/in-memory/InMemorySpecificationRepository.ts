@@ -1,6 +1,6 @@
 import { ICreateSpecificationDTO } from '@modules/cars/dtos/ICreateSpecificationDTO';
 import { IPaginationQueryResponseDTO } from '@modules/cars/dtos/IPaginationResponseDTO';
-import { IQueryListCategoriesDTO } from '@modules/cars/dtos/IQueryListCategoriesDTO';
+import { IQueryListOptionsDTO } from '@modules/cars/dtos/IQueryListOptionsDTO';
 
 import { Specification } from '../../infra/typeorm/entities/Specification';
 import { ISpecificationRepository } from '../ISpecificationRepository';
@@ -22,7 +22,7 @@ export class InMemorySpecificationRepository
   }
 
   async list(
-    options: IQueryListCategoriesDTO
+    options: IQueryListOptionsDTO
   ): Promise<IPaginationQueryResponseDTO<Specification>> {
     let sortedSpecifications = this.specifications;
 

@@ -2,7 +2,7 @@ import { injectable, inject } from 'tsyringe';
 
 import { IListCategoriesCarsGroupDTO } from '@modules/cars/dtos/IListCategoriesCarsGroupDTO';
 import { IQueryListCarsDTO } from '@modules/cars/dtos/IQueryListCarsDTO';
-import { OrdenationProps } from '@modules/cars/dtos/IQueryListCategoriesDTO';
+import { OrdenationProps } from '@modules/cars/dtos/IQueryListOptionsDTO';
 import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
 import { ICategoryRepository } from '@modules/cars/repositories/ICategoryRepository';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';

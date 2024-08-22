@@ -1,7 +1,7 @@
 import { injectable, inject } from 'tsyringe';
 
 import { IPaginationResponseDTO } from '@modules/cars/dtos/IPaginationResponseDTO';
-import { IQueryListCategoriesDTO } from '@modules/cars/dtos/IQueryListCategoriesDTO';
+import { IQueryListOptionsDTO } from '@modules/cars/dtos/IQueryListOptionsDTO';
 import { ICategoryRepository } from '@modules/cars/repositories/ICategoryRepository';
 
 import { Category } from '../../infra/typeorm/entities/Category';
@@ -14,7 +14,7 @@ export class ListCategoriesUseCase {
   ) {}
 
   async execute(
-    query: IQueryListCategoriesDTO
+    query: IQueryListOptionsDTO
   ): Promise<IPaginationResponseDTO<Category>> {
     const { page, perPage, order } = query;
     const categories = await this.categoryRepository.list({

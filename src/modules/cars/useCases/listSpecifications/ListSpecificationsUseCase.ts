@@ -1,7 +1,7 @@
 import { injectable, inject } from 'tsyringe';
 
 import { IPaginationResponseDTO } from '@modules/cars/dtos/IPaginationResponseDTO';
-import { IQueryListCategoriesDTO } from '@modules/cars/dtos/IQueryListCategoriesDTO';
+import { IQueryListOptionsDTO } from '@modules/cars/dtos/IQueryListOptionsDTO';
 import { Specification } from '@modules/cars/infra/typeorm/entities/Specification';
 import { ISpecificationRepository } from '@modules/cars/repositories/ISpecificationRepository';
 
@@ -13,7 +13,7 @@ export class ListSpecificationsUseCase {
   ) {}
 
   async execute(
-    query: IQueryListCategoriesDTO
+    query: IQueryListOptionsDTO
   ): Promise<IPaginationResponseDTO<Specification>> {
     const { page, perPage, order } = query;
     const specifications = await this.specificationRepository.list({
