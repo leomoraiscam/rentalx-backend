@@ -30,12 +30,12 @@ export class SendForgotPasswordMailUseCase {
 
     const { id: userId, name } = user;
     const token = uuidV4();
-    const expiresDate = this.dateProvider.addHours(3);
+    const expiresDateLimitToken = this.dateProvider.addHours(3);
 
     await this.userTokenRepository.create({
       refreshToken: token,
       userId,
-      expiresDate,
+      expiresDate: expiresDateLimitToken,
     });
 
     const templatePath = path.resolve(
@@ -48,9 +48,9 @@ export class SendForgotPasswordMailUseCase {
     );
     const variables = {
       name,
-      resetPasswordUrl: `${
-        process.env.FORGOT_MAIL_URL || 'http://localhost:3333'
-      }/password/reset?token=${token}`,
+      resetPasswordUrl:
+        `${process.env.APP_URL}:${process.env.APP_PORT}/password/reset?token=${token}` ||
+        `http://localhost:3333/password/reset?token=${token}`,
     };
 
     await this.mailProvider.sendMail<{
