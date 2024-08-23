@@ -29,7 +29,7 @@ describe('UpdateUserAvatarUseCase', () => {
 
     await updateUserAvatarUseCase.execute({
       userId,
-      avatarFile: 'avatar.jpg',
+      avatar: 'avatar.jpg',
     });
 
     expect(user.avatar).toBe('avatar.jpg');
@@ -39,14 +39,14 @@ describe('UpdateUserAvatarUseCase', () => {
     await expect(
       updateUserAvatarUseCase.execute({
         userId: 'non-existing-user',
-        avatarFile: 'avatar.jpg',
+        avatar: 'avatar.jpg',
       })
     ).rejects.toBeInstanceOf(AppError);
   });
 
   it('should be able to delete old avatar file when updating user avatar', async () => {
     const deleteFileSpied = jest.spyOn(inMemoryStorageProvider, 'delete');
-    const avatarFile = 'avatar-file.jpg';
+    const avatar = 'avatar-file.jpg';
     const { id: userId } = await inMemoryUserRepository.create({
       name: 'Cody Reid',
       email: 'weppute@lubpep.cu',
@@ -55,7 +55,7 @@ describe('UpdateUserAvatarUseCase', () => {
       avatar: 'old-avatar-file.jpg',
     });
 
-    await updateUserAvatarUseCase.execute({ userId, avatarFile });
+    await updateUserAvatarUseCase.execute({ userId, avatar });
 
     expect(deleteFileSpied).toHaveBeenCalledTimes(1);
     expect(deleteFileSpied).toHaveBeenCalledWith(
