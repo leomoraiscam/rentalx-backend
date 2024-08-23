@@ -2,6 +2,7 @@ import { inject, injectable } from 'tsyringe';
 
 import { ICreateUserDTO } from '@modules/accounts/dtos/ICreateUserDTO';
 import { User } from '@modules/accounts/infra/typeorm/entities/User';
+import { UserMap } from '@modules/accounts/mapper/UserMap';
 import { IUserRepository } from '@modules/accounts/repositories/IUserRepository';
 import { IHashProvider } from '@shared/container/providers/HashProvider/models/IHashProvider';
 import { AppError } from '@shared/errors/AppError';
@@ -32,13 +33,14 @@ export class CreateUserUseCase {
     }
 
     const hashedPassword = await this.hashProvider.generateHash(password);
-
-    return this.userRepository.create({
+    const userInstanceCreated = await this.userRepository.create({
       name,
       email,
       password: hashedPassword,
       driverLicense,
       isAdmin,
     });
+
+    return UserMap.toDTO(userInstanceCreated) as User;
   }
 }

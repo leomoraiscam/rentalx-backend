@@ -1,8 +1,5 @@
-import { plainToClass } from 'class-transformer';
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
-
-import { User } from '@modules/accounts/infra/typeorm/entities/User';
 
 import { CreateUserUseCase } from './CreateUserUseCase';
 
@@ -16,8 +13,7 @@ export class CreateUserController {
       password,
       driverLicense,
     });
-    const userInstance = plainToClass(User, user);
 
-    return response.status(201).json(userInstance);
+    return response.status(201).json(user);
   }
 }

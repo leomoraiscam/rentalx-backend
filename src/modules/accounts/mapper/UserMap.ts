@@ -5,7 +5,16 @@ import { User } from '../infra/typeorm/entities/User';
 
 export class UserMap {
   static toDTO(data: User): IProfileUserDTO {
-    const { id, name, email, driverLicense, avatarUrl, avatar } = data;
+    const {
+      id,
+      name,
+      email,
+      driverLicense,
+      avatarUrl,
+      avatar,
+      createdAt,
+      isAdmin,
+    } = data;
 
     return classToClass({
       id,
@@ -14,6 +23,8 @@ export class UserMap {
       driverLicense,
       avatarUrl,
       avatar,
+      createdAt,
+      isAdmin,
     });
   }
 }
