@@ -16,7 +16,7 @@ export class UpdateUserAvatarUseCase {
   ) {}
 
   async execute(data: IUpdateUserAvatarDTO): Promise<User> {
-    const { userId, avatarFile } = data;
+    const { userId, avatar } = data;
     const user = await this.userRepository.findById(userId);
 
     if (!user) {
@@ -27,9 +27,9 @@ export class UpdateUserAvatarUseCase {
       await this.storageProvider.delete(user.avatar, 'avatar');
     }
 
-    await this.storageProvider.save(avatarFile, 'avatar');
+    await this.storageProvider.save(avatar, 'avatar');
 
-    const updatedUserAvatar = Object.assign(user, { avatar: avatarFile });
+    const updatedUserAvatar = Object.assign(user, { avatar });
 
     return this.userRepository.create(updatedUserAvatar);
   }

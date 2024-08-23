@@ -1,4 +1,4 @@
 export interface IUpdateUserAvatarDTO {
   userId: string;
-  avatarFile: string;
+  avatar: string;
 }
