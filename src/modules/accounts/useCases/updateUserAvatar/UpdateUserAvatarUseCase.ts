@@ -5,6 +5,7 @@ import { User } from '@modules/accounts/infra/typeorm/entities/User';
 import { IUserRepository } from '@modules/accounts/repositories/IUserRepository';
 import { IStorageProvider } from '@shared/container/providers/StorageProvider/models/IStorageProvider';
 import { AppError } from '@shared/errors/AppError';
+import { UploadFolder } from '@config/upload';
 
 @injectable()
 export class UpdateUserAvatarUseCase {
@@ -24,10 +25,10 @@ export class UpdateUserAvatarUseCase {
     }
 
     if (user.avatar) {
-      await this.storageProvider.delete(user.avatar, 'avatar');
+      await this.storageProvider.delete(user.avatar, UploadFolder.AVATAR);
     }
 
-    await this.storageProvider.save(avatar, 'avatar');
+    await this.storageProvider.save(avatar, UploadFolder.AVATAR);
 
     const updatedUserAvatar = Object.assign(user, { avatar });
 

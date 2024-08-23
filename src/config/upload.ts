@@ -2,7 +2,13 @@ import crypto from 'crypto';
 import multer from 'multer';
 import { resolve } from 'path';
 
-const tmpFolder = resolve(__dirname, '..', '..', 'tmp');
+export enum UploadFolder {
+  AVATAR = 'avatar',
+  CARS = 'cars',
+  TMP = 'tmp',
+}
+
+const tmpFolder = resolve(__dirname, '..', '..', UploadFolder.TMP);
 
 export const multerConfig = {
   tmpFolder,

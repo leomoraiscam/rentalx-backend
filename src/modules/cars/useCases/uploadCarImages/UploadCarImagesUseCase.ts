@@ -6,6 +6,7 @@ import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
 import { ILoggerProvider } from '@shared/container/providers/LoggerProvider/models/ILoggerProvider';
 import { IStorageProvider } from '@shared/container/providers/StorageProvider/models/IStorageProvider';
 import { AppError } from '@shared/errors/AppError';
+import { UploadFolder } from '@config/upload';
 
 @injectable()
 export class UploadCarImagesUseCase {
@@ -43,7 +44,7 @@ export class UploadCarImagesUseCase {
           });
 
           await this.carsImageRepository.create({ carId, image });
-          await this.storageProvider.save(image, 'cars');
+          await this.storageProvider.save(image, UploadFolder.CARS);
         });
 
       await Promise.all(parsedImages);
