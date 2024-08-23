@@ -4,6 +4,8 @@ import { inject, injectable } from 'tsyringe';
 import { auth } from '@config/auth';
 import { IAuthenticatedUserDTO } from '@modules/accounts/dtos/IAuthenticatedUserDTO';
 import { IAuthenticationUserDTO } from '@modules/accounts/dtos/IAuthenticationUserDTO';
+import { User } from '@modules/accounts/infra/typeorm/entities/User';
+import { UserMap } from '@modules/accounts/mapper/UserMap';
 import { IUserRepository } from '@modules/accounts/repositories/IUserRepository';
 import { IUserTokenRepository } from '@modules/accounts/repositories/IUserTokenRepository';
 import { IDateProvider } from '@shared/container/providers/DateProvider/models/IDateProvider';
@@ -28,15 +30,15 @@ export class AuthenticateUserUseCase {
 
   async execute(data: IAuthenticationUserDTO): Promise<IAuthenticatedUserDTO> {
     const { email, password } = data;
-    const user = await this.userRepository.findByEmail(email);
+    const existingUser = await this.userRepository.findByEmail(email);
 
-    if (!user) {
+    if (!existingUser) {
       throw new AppError('Email or password incorrect', 401);
     }
 
     const matchPassword = await this.hashProvider.compareHash(
       password,
-      user.password
+      existingUser.password
     );
 
     if (!matchPassword) {
@@ -61,7 +63,7 @@ export class AuthenticateUserUseCase {
       throw new AppError('Internal dependency is missing', 424);
     }
 
-    const { id: userId } = user;
+    const { id: userId } = existingUser;
     const token = sign({}, secretToken, {
       subject: userId,
       expiresIn,
@@ -70,16 +72,17 @@ export class AuthenticateUserUseCase {
       subject: userId,
       expiresIn: expiresInRefreshToken,
     });
-    const parsedExpiresRefreshTokenDays = Number(expiresRefreshTokenDays);
-    const refreshTokenExpiresDate = this.dateProvider.addDays(
-      parsedExpiresRefreshTokenDays
+    const expiresDateLimitRefreshToken = this.dateProvider.addDays(
+      Number(expiresRefreshTokenDays)
     );
 
     await this.userTokenRepository.create({
       userId,
       refreshToken,
-      expiresDate: refreshTokenExpiresDate,
+      expiresDate: expiresDateLimitRefreshToken,
     });
+
+    const user = UserMap.toDTO(existingUser) as User;
 
     return {
       token,
