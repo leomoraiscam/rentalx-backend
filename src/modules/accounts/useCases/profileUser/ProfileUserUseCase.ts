@@ -1,21 +1,19 @@
 import { inject, injectable } from 'tsyringe';
 
-import IUserResponseDTO from '@modules/accounts/dtos/IUserResponseDTO';
-import UserMap from '@modules/accounts/mapper/UserMap';
+import { IProfileUserDTO } from '@modules/accounts/dtos/IProfileUserDTO';
+import { UserMap } from '@modules/accounts/mapper/UserMap';
 import { IUserRepository } from '@modules/accounts/repositories/IUserRepository';
 
 @injectable()
-class ProfileUserUseCase {
+export class ProfileUserUseCase {
   constructor(
     @inject('UserRepository')
     private usersRepository: IUserRepository
   ) {}
 
-  async execute(id: string): Promise<IUserResponseDTO> {
+  async execute(id: string): Promise<IProfileUserDTO> {
     const user = await this.usersRepository.findById(id);
 
     return UserMap.toDTO(user);
   }
 }
-
-export default ProfileUserUseCase;

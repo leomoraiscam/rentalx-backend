@@ -1,28 +1,19 @@
 import { classToClass } from 'class-transformer';
 
-import IUserResponseDTO from '../dtos/IUserResponseDTO';
-import User from '../infra/typeorm/entities/User';
+import { IProfileUserDTO } from '../dtos/IProfileUserDTO';
+import { User } from '../infra/typeorm/entities/User';
 
-class UserMap {
-  static toDTO({
-    id,
-    name,
-    email,
-    avatar,
-    driver_license,
-    avatar_url,
-  }: User): IUserResponseDTO {
-    const user = classToClass({
+export class UserMap {
+  static toDTO(data: User): IProfileUserDTO {
+    const { id, name, email, driverLicense, avatarUrl, avatar } = data;
+
+    return classToClass({
       id,
       name,
       email,
+      driverLicense,
+      avatarUrl,
       avatar,
-      driver_license,
-      avatar_url,
     });
-
-    return user;
   }
 }
-
-export default UserMap;
