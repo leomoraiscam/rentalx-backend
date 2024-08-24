@@ -34,7 +34,7 @@ export class UploadCarImagesUseCase {
     }
 
     try {
-      const parsedImages = images
+      const carImagesPromises = images
         .map((file) => file.filename)
         .map(async (image) => {
           this.loggerProvider.log({
@@ -47,7 +47,7 @@ export class UploadCarImagesUseCase {
           await this.storageProvider.save(image, UploadFolder.CARS);
         });
 
-      await Promise.all(parsedImages);
+      await Promise.all(carImagesPromises);
     } catch (error) {
       this.loggerProvider.log({
         level: 'error',

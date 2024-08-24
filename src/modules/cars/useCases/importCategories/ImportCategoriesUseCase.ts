@@ -15,11 +15,11 @@ export class ImportCategoriesUseCase {
 
   async execute(file: Express.Multer.File): Promise<void> {
     const keys = ['name', 'description', 'type'];
-    const categories = await this.CSVStreamParserProvider.parse<ICreateCategoryDTO>(
+    const categoriesToUpload = await this.CSVStreamParserProvider.parse<ICreateCategoryDTO>(
       file.path,
       keys
     );
-    const categoriesPromises = categories.map(async (data) => {
+    const categoriesPromises = categoriesToUpload.map(async (data) => {
       const { name, description, type } = data;
       const category = await this.categoryRepository.findByName(name);
 

@@ -8,5 +8,4 @@ export interface ICarRepository {
   findByLicensePlate(licensePlate: string): Promise<Car | null>;
   list(data: IQueryListCarsDTO): Promise<Car[] | null>;
   create(data: ICreateCarDTO): Promise<Car>;
-  save(car: Car): Promise<Car>;
 }

@@ -8,7 +8,7 @@ import { ICategoryRepository } from '../ICategoryRepository';
 export class InMemoryCategoryRepository implements ICategoryRepository {
   private categories: Category[] = [];
 
-  async findById(id: string): Promise<Category> {
+  async findById(id: string): Promise<Category | null> {
     return this.categories.find((category) => category.id === id);
   }
 

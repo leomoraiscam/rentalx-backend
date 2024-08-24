@@ -58,7 +58,7 @@ export class ListCategoriesCarsGroupUseCase {
           });
 
         const carsWithAvailabilityField = await Promise.all(categoryCars);
-        const categoryAvailable = carsWithAvailabilityField.some(
+        const isAvailableCategory = carsWithAvailabilityField.some(
           (car) => car.available
         );
 
@@ -66,11 +66,13 @@ export class ListCategoriesCarsGroupUseCase {
           name: category.name,
           type: category.type,
           cars: carsWithAvailabilityField,
-          available: categoryAvailable,
+          available: isAvailableCategory,
         };
       });
-      const promiseAllCarsProcessed = await Promise.all(transformedCategories);
-      const carsWithAvailabilityFieldLength = promiseAllCarsProcessed.filter(
+      const categoryCarsProcessedPromises = await Promise.all(
+        transformedCategories
+      );
+      const carsWithAvailabilityFieldLength = categoryCarsProcessedPromises.filter(
         (values) => values.cars.length
       );
 
