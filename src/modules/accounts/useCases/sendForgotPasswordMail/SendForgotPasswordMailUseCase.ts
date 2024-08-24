@@ -10,6 +10,8 @@ import { AppError } from '@shared/errors/AppError';
 
 @injectable()
 export class SendForgotPasswordMailUseCase {
+  private readonly TOKEN_EXPIRATION_HOURS = 3;
+
   constructor(
     @inject('UserRepository')
     private userRepository: IUserRepository,
@@ -30,7 +32,9 @@ export class SendForgotPasswordMailUseCase {
 
     const { id: userId, name } = user;
     const token = uuidV4();
-    const expiresDateLimitToken = this.dateProvider.addHours(3);
+    const expiresDateLimitToken = this.dateProvider.addHours(
+      this.TOKEN_EXPIRATION_HOURS
+    );
 
     await this.userTokenRepository.create({
       refreshToken: token,
@@ -46,11 +50,13 @@ export class SendForgotPasswordMailUseCase {
       'emails',
       'forgotPassword.hbs'
     );
+    const resetPasswordUrl =
+      process.env.APP_URL && process.env.APP_PORT
+        ? `${process.env.APP_URL}:${process.env.APP_PORT}/password/reset?token=${token}`
+        : `http://localhost:3333/password/reset?token=${token}`;
     const variables = {
       name,
-      resetPasswordUrl:
-        `${process.env.APP_URL}:${process.env.APP_PORT}/password/reset?token=${token}` ||
-        `http://localhost:3333/password/reset?token=${token}`,
+      resetPasswordUrl,
     };
 
     await this.mailProvider.sendMail<{

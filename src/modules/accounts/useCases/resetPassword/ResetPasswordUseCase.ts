@@ -35,12 +35,12 @@ export class ResetPasswordUseCase {
       throw new AppError('User not found', 404);
     }
 
-    const isBeforeNow = this.dateProvider.compareIfBefore(
+    const isExpiredToken = this.dateProvider.compareIfBefore(
       expiresDate,
       this.dateProvider.dateNow()
     );
 
-    if (isBeforeNow) {
+    if (isExpiredToken) {
       throw new AppError('Invalid or expired token', 401);
     }
 

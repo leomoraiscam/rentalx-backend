@@ -61,13 +61,12 @@ export class RefreshTokenUseCase {
       subject: userId,
       expiresIn: expiresInRefreshToken,
     });
-    const parsedExpiresRefreshTokenDays = Number(expiresRefreshTokenDays);
-    const expiresDate = this.dateProvider.addDays(
-      parsedExpiresRefreshTokenDays
+    const expiresDateLimitRefreshToken = this.dateProvider.addDays(
+      Number(expiresRefreshTokenDays)
     );
 
     await this.userTokenRepository.create({
-      expiresDate,
+      expiresDate: expiresDateLimitRefreshToken,
       refreshToken,
       userId,
     });

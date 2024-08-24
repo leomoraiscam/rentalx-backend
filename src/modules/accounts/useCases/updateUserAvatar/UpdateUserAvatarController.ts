@@ -1,8 +1,5 @@
-import { plainToClass } from 'class-transformer';
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
-
-import { User } from '@modules/accounts/infra/typeorm/entities/User';
 
 import { UpdateUserAvatarUseCase } from './UpdateUserAvatarUseCase';
 
@@ -15,8 +12,7 @@ export class UpdateUserAvatarController {
       userId,
       avatar: imageFileName,
     });
-    const userInstance = plainToClass(User, updatedUser);
 
-    return response.status(200).json(userInstance);
+    return response.status(200).json(updatedUser);
   }
 }

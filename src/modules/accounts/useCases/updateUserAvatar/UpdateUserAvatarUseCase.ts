@@ -1,11 +1,12 @@
 import { inject, injectable } from 'tsyringe';
 
+import { UploadFolder } from '@config/upload';
 import { IUpdateUserAvatarDTO } from '@modules/accounts/dtos/IUpdateUserAvatarDTO';
 import { User } from '@modules/accounts/infra/typeorm/entities/User';
+import { UserMap } from '@modules/accounts/mapper/UserMap';
 import { IUserRepository } from '@modules/accounts/repositories/IUserRepository';
 import { IStorageProvider } from '@shared/container/providers/StorageProvider/models/IStorageProvider';
 import { AppError } from '@shared/errors/AppError';
-import { UploadFolder } from '@config/upload';
 
 @injectable()
 export class UpdateUserAvatarUseCase {
@@ -31,7 +32,10 @@ export class UpdateUserAvatarUseCase {
     await this.storageProvider.save(avatar, UploadFolder.AVATAR);
 
     const updatedUserAvatar = Object.assign(user, { avatar });
+    const userInstanceCreated = await this.userRepository.create(
+      updatedUserAvatar
+    );
 
-    return this.userRepository.create(updatedUserAvatar);
+    return UserMap.toDTO(userInstanceCreated) as User;
   }
 }

@@ -8,11 +8,11 @@ import { IUserRepository } from '@modules/accounts/repositories/IUserRepository'
 export class ProfileUserUseCase {
   constructor(
     @inject('UserRepository')
-    private usersRepository: IUserRepository
+    private userRepository: IUserRepository
   ) {}
 
   async execute(id: string): Promise<IProfileUserDTO> {
-    const user = await this.usersRepository.findById(id);
+    const user = await this.userRepository.findById(id);
 
     return UserMap.toDTO(user);
   }
