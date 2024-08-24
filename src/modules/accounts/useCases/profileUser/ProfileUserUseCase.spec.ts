@@ -29,6 +29,8 @@ describe('ProfileUserUseCase', () => {
       driverLicense: '5304286925',
       avatar: 'fake-avatar',
       avatarUrl: 'http://localhost:3333/avatar/fake-avatar',
+      createdAt: undefined,
+      isAdmin: false,
     });
   });
 });
