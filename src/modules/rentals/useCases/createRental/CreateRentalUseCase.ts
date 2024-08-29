@@ -12,6 +12,8 @@ import { IRentalRepository } from '../../repositories/IRentalRepository';
 
 @injectable()
 export class CreateRentalUseCase {
+  private MINIMUM_HOURS = 24;
+
   constructor(
     @inject('RentalRepository')
     private rentalRepository: IRentalRepository,
@@ -24,7 +26,6 @@ export class CreateRentalUseCase {
   ) {}
 
   async execute(data: ICreateRentalDTO): Promise<Rental> {
-    const minimumHours = 24;
     const { userId, carId, expectedReturnDate, startDate } = data;
     const car = await this.carRepository.findById(carId);
 
@@ -36,13 +37,11 @@ export class CreateRentalUseCase {
     this.rentalDateService.validateRentalHours(startDate);
     this.rentalDateService.validateRentalHours(expectedReturnDate);
 
-    const existingRental = await this.rentalRepository.findOpenRentalByDateAndCar(
-      {
-        carId,
-        startDate,
-        expectedReturnDate,
-      }
-    );
+    const existingRental = await this.rentalRepository.findByCarAndDateRange({
+      carId,
+      startDate,
+      expectedReturnDate,
+    });
 
     if (existingRental) {
       throw new AppError(
@@ -51,7 +50,7 @@ export class CreateRentalUseCase {
       );
     }
 
-    const userHasActiveRental = await this.rentalRepository.findOpenRentalByUser(
+    const userHasActiveRental = await this.rentalRepository.findActiveRentalByUser(
       userId
     );
 
@@ -67,7 +66,7 @@ export class CreateRentalUseCase {
       expectedReturnDate
     );
 
-    if (rentalDurationInHours < minimumHours) {
+    if (rentalDurationInHours < this.MINIMUM_HOURS) {
       throw new AppError('Invalid return time!', 422);
     }
 
