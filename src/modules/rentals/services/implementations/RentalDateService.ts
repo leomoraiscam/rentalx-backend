@@ -33,6 +33,7 @@ export class RentalDateService {
 
   calculateTotal(car: Car, startDate: Date, endDate: Date): number {
     const days = this.dateProvider.compareInDays(startDate, endDate);
+
     return days * car.dailyRate;
   }
 }

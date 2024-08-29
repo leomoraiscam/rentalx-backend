@@ -16,8 +16,8 @@ import { ICategoryRepository } from '@modules/cars/repositories/ICategoryReposit
 import { ISpecificationRepository } from '@modules/cars/repositories/ISpecificationRepository';
 import { RentalRepository } from '@modules/rentals/infra/typeorm/repositories/RentalRepository';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
+import { RentalDateService } from '@modules/rentals/services/implementations/RentalDateService';
 import { IRentalDateService } from '@modules/rentals/services/IRentalDateService';
-import { RentalDateService } from '@modules/rentals/services/RentalDateService';
 
 container.registerSingleton<ICategoryRepository>(
   'CategoryRepository',
