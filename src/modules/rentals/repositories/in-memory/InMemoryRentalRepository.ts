@@ -21,7 +21,7 @@ export class InMemoryRentalRepository implements IRentalRepository {
     );
   }
 
-  async findOpenRentalByDateAndCar({
+  async findByCarAndDateRange({
     startDate,
     expectedReturnDate,
     carId,
@@ -35,7 +35,7 @@ export class InMemoryRentalRepository implements IRentalRepository {
     });
   }
 
-  async findOpenRentalByUser(userId: string): Promise<Rental | undefined> {
+  async findActiveRentalByUser(userId: string): Promise<Rental | undefined> {
     return this.rentals.find(
       (rental) => rental.userId === userId && !rental.endDate
     );

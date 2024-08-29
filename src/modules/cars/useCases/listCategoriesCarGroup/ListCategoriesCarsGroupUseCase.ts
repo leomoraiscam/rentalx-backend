@@ -39,13 +39,11 @@ export class ListCategoriesCarsGroupUseCase {
         const categoryCars = cars
           .filter((car) => car.categoryId === category.id)
           .map(async ({ id: carId, dailyRate, fineAmount, ...carRest }) => {
-            const rental = await this.rentalRepository.findOpenRentalByDateAndCar(
-              {
-                startDate,
-                expectedReturnDate,
-                carId,
-              }
-            );
+            const rental = await this.rentalRepository.findByCarAndDateRange({
+              startDate,
+              expectedReturnDate,
+              carId,
+            });
             const available = !rental;
 
             return {

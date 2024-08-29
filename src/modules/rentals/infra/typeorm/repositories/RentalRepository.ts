@@ -44,7 +44,7 @@ export class RentalRepository implements IRentalRepository {
     });
   }
 
-  async findOpenRentalByDateAndCar(
+  async findByCarAndDateRange(
     data: IQueryListCarsDTO
   ): Promise<Rental | undefined> {
     const { carId, startDate, expectedReturnDate } = data;
@@ -60,7 +60,7 @@ export class RentalRepository implements IRentalRepository {
     return rental;
   }
 
-  async findOpenRentalByUser(userId: string): Promise<Rental> {
+  async findActiveRentalByUser(userId: string): Promise<Rental> {
     return this.repository.findOne({
       where: {
         userId,

@@ -7,8 +7,8 @@ export interface IRentalRepository {
   findById(id: string): Promise<Rental>;
   findByUser(userId: string): Promise<Rental[]>;
   findOpenRentalByCar(carId: string): Promise<Rental>;
-  findOpenRentalByUser(userId: string): Promise<Rental>;
-  findOpenRentalByDateAndCar(data: IQueryListCarsDTO): Promise<Rental | null>;
+  findActiveRentalByUser(userId: string): Promise<Rental>;
+  findByCarAndDateRange(data: IQueryListCarsDTO): Promise<Rental | null>;
   create(data: ICreateRentalDTO): Promise<Rental>;
   save(data: Rental): Promise<Rental>;
 }
