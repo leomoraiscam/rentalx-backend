@@ -10,6 +10,7 @@ import {
 import { v4 as uuidV4 } from 'uuid';
 
 import { Car } from '@modules/cars/infra/typeorm/entities/Car';
+import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
 
 @Entity('rentals')
 export class Rental {
@@ -38,8 +39,12 @@ export class Rental {
   @Column()
   total: number;
 
-  @Column()
-  status: string;
+  @Column({
+    type: 'enum',
+    enum: RentalStatus,
+    nullable: true,
+  })
+  status: RentalStatus;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
