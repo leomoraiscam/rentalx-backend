@@ -88,4 +88,8 @@ export class CarRepository implements ICarRepository {
 
     return car;
   }
+
+  async save(data: Car): Promise<void> {
+    await this.repository.save(data);
+  }
 }
