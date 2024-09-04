@@ -10,6 +10,8 @@ import { AppError } from '@shared/errors/AppError';
 
 @injectable()
 export class DevolutionRentalUseCase {
+  private MINIMUM_DAILY_DAYS = 1;
+
   constructor(
     @inject('RentalRepository')
     private rentalRepository: IRentalRepository,
@@ -19,8 +21,8 @@ export class DevolutionRentalUseCase {
     private dateProvider: IDateProvider
   ) {}
 
-  async execute({ id }: ICreateDevolutionCarDTO): Promise<Rental> {
-    const minimumDaily = 1;
+  async execute(data: ICreateDevolutionCarDTO): Promise<Rental> {
+    const { id } = data;
     const rental = await this.rentalRepository.findById(id);
 
     if (!rental) {
@@ -37,29 +39,23 @@ export class DevolutionRentalUseCase {
       throw new AppError('Car not found', 404);
     }
 
-    const dateNow = this.dateProvider.dateNow();
-    let daily = this.dateProvider.compareInDays(rental.startDate, dateNow);
-
-    if (daily <= 0) {
-      daily = minimumDaily;
-    }
-
-    const delay = this.dateProvider.compareInDays(
-      dateNow,
-      rental.expectedReturnDate
+    const currentDate = this.dateProvider.dateNow();
+    let daysRented = this.dateProvider.compareInDays(
+      rental.startDate,
+      currentDate
     );
 
-    let total = 0;
+    daysRented = daysRented > 0 ? daysRented : this.MINIMUM_DAILY_DAYS;
 
-    if (delay > 0) {
-      const calculateFine = delay * car.fineAmount;
-      total = calculateFine;
-    }
+    const daysOverdue = this.dateProvider.compareInDays(
+      currentDate,
+      rental.expectedReturnDate
+    );
+    const fine = daysOverdue > 0 ? daysOverdue * car.fineAmount : 0;
+    const rentalTotal = daysRented * car.dailyRate + fine;
 
-    total += daily * car.dailyRate;
-
-    rental.endDate = this.dateProvider.dateNow();
-    rental.total = total;
+    rental.endDate = currentDate;
+    rental.total = rentalTotal;
 
     await this.rentalRepository.create(rental);
 
