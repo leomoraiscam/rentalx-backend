@@ -60,4 +60,10 @@ export class InMemoryCarRepository implements ICarRepository {
 
     return car;
   }
+
+  async save(data: Car): Promise<void> {
+    const findCarIndex = this.car.findIndex((car) => car.id === data.id);
+
+    this.car[findCarIndex] = data;
+  }
 }
