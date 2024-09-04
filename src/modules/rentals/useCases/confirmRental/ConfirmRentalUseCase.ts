@@ -2,7 +2,7 @@ import path from 'path';
 import { inject, injectable } from 'tsyringe';
 
 import { IUserRepository } from '@modules/accounts/repositories/IUserRepository';
-import { RentalStatus } from '@modules/rentals/dtos/enums/RentatStatus';
+import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
 import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
 import { IDateProvider } from '@shared/container/providers/DateProvider/models/IDateProvider';

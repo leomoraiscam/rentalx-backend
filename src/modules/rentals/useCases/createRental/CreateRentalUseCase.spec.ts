@@ -1,6 +1,6 @@
 import { InMemoryUserRepository } from '@modules/accounts/repositories/in-memory/InMemoryUserRepository';
 import { InMemoryCarRepository } from '@modules/cars/repositories/in-memory/InMemoryCarRepository';
-import { RentalStatus } from '@modules/rentals/dtos/enums/RentatStatus';
+import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
 import { InMemoryRentalRepository } from '@modules/rentals/repositories/in-memory/InMemoryRentalRepository';
 import { InMemoryRentalDateService } from '@modules/rentals/services/in-memory/InMemoryRentalDateService';
 import { IRentalDateService } from '@modules/rentals/services/IRentalDateService';
@@ -77,7 +77,7 @@ describe('CreateRentalUseCase', () => {
     });
 
     expect(rental).toHaveProperty('id');
-    expect(rental.status).toBe(RentalStatus.PENDING);
+    expect(rental.status).toBe(RentalStatus.CONFIRMED);
   });
 
   it('should not be able to create a new rental when the car a non exist', async () => {

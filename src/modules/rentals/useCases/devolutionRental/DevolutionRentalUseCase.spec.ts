@@ -1,4 +1,5 @@
 import { InMemoryCarRepository } from '@modules/cars/repositories/in-memory/InMemoryCarRepository';
+import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
 import { InMemoryDateProvider } from '@shared/container/providers/DateProvider/in-memory/InMemoryDateProvider';
 import { AppError } from '@shared/errors/AppError';
 
@@ -49,7 +50,7 @@ describe('DevolutionRentalUseCase', () => {
     const { id } = await inMemoryRentalRepository.create({
       userId: 'fake-user-id',
       carId,
-      status: 'confirmed',
+      status: RentalStatus.CONFIRMED,
       expectedReturnDate: new Date(2024, 3, 11, 12),
       startDate: new Date(2024, 3, 10, 12),
     });
@@ -71,7 +72,7 @@ describe('DevolutionRentalUseCase', () => {
       carId,
       startDate: new Date(2024, 3, 3, 10),
       expectedReturnDate: new Date(2024, 3, 3, 12),
-      status: 'confirmed',
+      status: RentalStatus.CONFIRMED,
     });
     const devolutionRental = await devolutionRentalUseCase.execute({
       id,
@@ -90,7 +91,7 @@ describe('DevolutionRentalUseCase', () => {
       carId,
       expectedReturnDate: new Date(2024, 3, 4, 11),
       startDate: new Date(2024, 3, 3, 11),
-      status: 'confirmed',
+      status: RentalStatus.CONFIRMED,
     });
     const devolutionRental = await devolutionRentalUseCase.execute({
       id,
@@ -127,7 +128,7 @@ describe('DevolutionRentalUseCase', () => {
       carId: 'faked-car',
       expectedReturnDate: new Date(2024, 3, 11, 12),
       startDate: new Date(2024, 3, 10, 12),
-      status: 'confirmed',
+      status: RentalStatus.CONFIRMED,
     });
 
     await expect(

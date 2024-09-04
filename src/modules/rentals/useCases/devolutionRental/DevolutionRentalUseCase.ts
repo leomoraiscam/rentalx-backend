@@ -1,8 +1,8 @@
 import { inject, injectable } from 'tsyringe';
 
 import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
-import { RentalStatus } from '@modules/rentals/dtos/enums/RentatStatus';
 import { ICreateDevolutionCarDTO } from '@modules/rentals/dtos/ICreateDevolutionCarDTO';
+import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
 import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
 import { IDateProvider } from '@shared/container/providers/DateProvider/models/IDateProvider';

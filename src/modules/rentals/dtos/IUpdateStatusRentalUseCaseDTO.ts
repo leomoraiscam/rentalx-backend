@@ -1,4 +1,4 @@
-import { RentalStatus } from './enums/RentatStatus';
+import { RentalStatus } from '../enums/RentatStatus';
 
 export interface IUpdateStatusRentalDTO {
   id: string;

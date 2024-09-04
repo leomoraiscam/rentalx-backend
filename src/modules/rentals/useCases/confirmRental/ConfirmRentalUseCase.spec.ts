@@ -6,7 +6,7 @@ import { Specification } from '@modules/cars/infra/typeorm/entities/Specificatio
 import { InMemoryCarRepository } from '@modules/cars/repositories/in-memory/InMemoryCarRepository';
 import { InMemoryCategoryRepository } from '@modules/cars/repositories/in-memory/InMemoryCategoryRepository';
 import { InMemorySpecificationRepository } from '@modules/cars/repositories/in-memory/InMemorySpecificationRepository';
-import { RentalStatus } from '@modules/rentals/dtos/enums/RentatStatus';
+import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
 import { InMemoryRentalRepository } from '@modules/rentals/repositories/in-memory/InMemoryRentalRepository';
 import { InMemoryDateProvider } from '@shared/container/providers/DateProvider/in-memory/InMemoryDateProvider';
 import { InMemoryMailProvider } from '@shared/container/providers/MailProvider/in-memory/InMemoryMailProvider';
@@ -103,8 +103,7 @@ describe('ConfirmRentalUseCase', () => {
 
     expect(updatedRental.id).toEqual(id);
     expect(updatedRental.status).toEqual(RentalStatus.CONFIRMED);
-    expect(updatedRental.status).not.toEqual(RentalStatus.PENDING);
-    expect(updatedRental.status).not.toEqual(RentalStatus.CANCELED);
+    expect(updatedRental.status).not.toEqual(RentalStatus.CANCELLED);
     expect(sendMailSpied).toHaveBeenCalledTimes(1);
   });
 

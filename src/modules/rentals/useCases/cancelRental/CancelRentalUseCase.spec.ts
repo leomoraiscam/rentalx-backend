@@ -5,7 +5,7 @@ import { Specification } from '@modules/cars/infra/typeorm/entities/Specificatio
 import { InMemoryCarRepository } from '@modules/cars/repositories/in-memory/InMemoryCarRepository';
 import { InMemoryCategoryRepository } from '@modules/cars/repositories/in-memory/InMemoryCategoryRepository';
 import { InMemorySpecificationRepository } from '@modules/cars/repositories/in-memory/InMemorySpecificationRepository';
-import { RentalStatus } from '@modules/rentals/dtos/enums/RentatStatus';
+import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
 import { InMemoryRentalRepository } from '@modules/rentals/repositories/in-memory/InMemoryRentalRepository';
 import { AppError } from '@shared/errors/AppError';
 
@@ -76,8 +76,7 @@ describe('CancelUseCase', () => {
     const updatedRental = await cancelRentalUseCase.execute(id);
 
     expect(updatedRental.id).toEqual(id);
-    expect(updatedRental.status).toEqual(RentalStatus.CANCELED);
-    expect(updatedRental.status).not.toEqual(RentalStatus.PENDING);
+    expect(updatedRental.status).toEqual(RentalStatus.CANCELLED);
     expect(updatedRental.status).not.toEqual(RentalStatus.CONFIRMED);
   });
 

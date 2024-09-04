@@ -5,7 +5,7 @@ import { Specification } from '@modules/cars/infra/typeorm/entities/Specificatio
 import { InMemoryCarRepository } from '@modules/cars/repositories/in-memory/InMemoryCarRepository';
 import { InMemoryCategoryRepository } from '@modules/cars/repositories/in-memory/InMemoryCategoryRepository';
 import { InMemorySpecificationRepository } from '@modules/cars/repositories/in-memory/InMemorySpecificationRepository';
-import { RentalStatus } from '@modules/rentals/dtos/enums/RentatStatus';
+import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
 import { InMemoryRentalRepository } from '@modules/rentals/repositories/in-memory/InMemoryRentalRepository';
 
 import { UpdateStatusRentalUseCase } from './UpdateStatusRentalUseCase';
@@ -80,7 +80,6 @@ describe('UpdateStatusRentalUseCase', () => {
 
     expect(updatedRental.id).toEqual(id);
     expect(updatedRental.status).toEqual(RentalStatus.CONFIRMED);
-    expect(updatedRental.status).not.toEqual(RentalStatus.PENDING);
   });
 
   it('should be able to update status rental when the same has canceled', async () => {
@@ -96,13 +95,12 @@ describe('UpdateStatusRentalUseCase', () => {
     });
     const updatedRental = await updateStatusRentalUseCase.execute({
       id,
-      status: RentalStatus.CANCELED,
+      status: RentalStatus.CANCELLED,
     });
 
     expect(updatedRental.id).toEqual(id);
-    expect(updatedRental.status).toEqual(RentalStatus.CANCELED);
+    expect(updatedRental.status).toEqual(RentalStatus.CANCELLED);
     expect(updatedRental.status).not.toEqual(RentalStatus.CONFIRMED);
-    expect(updatedRental.status).not.toEqual(RentalStatus.PENDING);
   });
 
   it('should be able to update status rental when the same has pending', async () => {
@@ -115,16 +113,15 @@ describe('UpdateStatusRentalUseCase', () => {
       startDate: new Date(2024, 2, 20),
       expectedReturnDate: new Date(2024, 2, 23),
       userId: 'fake-user-id',
+      status: null,
     });
 
     const updatedRental = await updateStatusRentalUseCase.execute({
       id,
-      status: RentalStatus.PENDING,
+      status: RentalStatus.CONFIRMED,
     });
 
     expect(updatedRental.id).toEqual(id);
-    expect(updatedRental.status).toEqual(RentalStatus.PENDING);
-    expect(updatedRental.status).not.toEqual(RentalStatus.CONFIRMED);
-    expect(updatedRental.status).not.toEqual(RentalStatus.CONFIRMED);
+    expect(updatedRental.status).toEqual(RentalStatus.CONFIRMED);
   });
 });

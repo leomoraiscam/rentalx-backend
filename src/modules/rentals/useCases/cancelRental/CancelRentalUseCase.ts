@@ -1,6 +1,6 @@
 import { inject, injectable } from 'tsyringe';
 
-import { RentalStatus } from '@modules/rentals/dtos/enums/RentatStatus';
+import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
 import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
 import { AppError } from '@shared/errors/AppError';
@@ -20,7 +20,7 @@ export class CancelRentalUseCase {
     }
 
     Object.assign(rental, {
-      status: RentalStatus.CANCELED,
+      status: RentalStatus.CANCELLED,
     });
 
     return this.rentalRepository.save(rental);
