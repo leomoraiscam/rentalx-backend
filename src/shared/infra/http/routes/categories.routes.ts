@@ -2,7 +2,7 @@ import { Joi, Segments, celebrate } from 'celebrate';
 import { Router } from 'express';
 import multer from 'multer';
 
-import { CategoryType } from '@modules/cars/enums/categoryType';
+import { CategoryType } from '@modules/cars/enums/CategoryType';
 import { CreateCategoryController } from '@modules/cars/useCases/createCategory/CreateCategoryController';
 import { ImportCategoriesController } from '@modules/cars/useCases/importCategories/ImportCategoriesController';
 import { ListCategoriesController } from '@modules/cars/useCases/listCategories/ListCategoriesController';

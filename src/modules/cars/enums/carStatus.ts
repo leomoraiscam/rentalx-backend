@@ -1,0 +1,8 @@
+export enum CarStatus {
+  AVAILABLE,
+  RENTED,
+  UNDER_MAINTENANCE,
+  UNDER_CLEANING,
+  RESERVED,
+  OUT_OF_SERVICE,
+}
