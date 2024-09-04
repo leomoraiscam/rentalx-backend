@@ -11,6 +11,8 @@ import {
 } from 'typeorm';
 import { v4 as uuidV4 } from 'uuid';
 
+import { CarStatus } from '@modules/cars/enums/CarStatus';
+
 import { CarImage } from './CarImage';
 import { Category } from './Category';
 import { Specification } from './Specification';
@@ -37,6 +39,13 @@ export class Car {
 
   @Column()
   brand: string;
+
+  @Column({
+    type: 'enum',
+    enum: CarStatus,
+    nullable: true,
+  })
+  status: CarStatus;
 
   @ManyToOne(() => Category)
   @JoinColumn({ name: 'category_id' })
