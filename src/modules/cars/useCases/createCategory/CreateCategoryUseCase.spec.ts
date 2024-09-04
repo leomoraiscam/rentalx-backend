@@ -1,4 +1,4 @@
-import { CategoryType } from '@modules/cars/enums/category';
+import { CategoryType } from '@modules/cars/enums/categoryType';
 import { InMemoryCategoryRepository } from '@modules/cars/repositories/in-memory/InMemoryCategoryRepository';
 import { AppError } from '@shared/errors/AppError';
 

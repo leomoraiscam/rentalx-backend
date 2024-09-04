@@ -1,4 +1,4 @@
-import { CategoryType } from '@modules/cars/enums/category';
+import { CategoryType } from '@modules/cars/enums/categoryType';
 
 export interface IQueryListCarsDTO {
   startDate?: Date;

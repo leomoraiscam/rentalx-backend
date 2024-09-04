@@ -1,4 +1,4 @@
-import { CategoryType } from '@modules/cars/enums/category';
+import { CategoryType } from '@modules/cars/enums/categoryType';
 import { Car } from '@modules/cars/infra/typeorm/entities/Car';
 import { Category } from '@modules/cars/infra/typeorm/entities/Category';
 import { Specification } from '@modules/cars/infra/typeorm/entities/Specification';
