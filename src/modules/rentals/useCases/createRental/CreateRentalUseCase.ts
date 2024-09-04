@@ -1,8 +1,9 @@
 import { inject, injectable } from 'tsyringe';
 
+import { CarStatus } from '@modules/cars/enums/CarStatus';
 import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
-import { RentalStatus } from '@modules/rentals/dtos/enums/RentatStatus';
 import { ICreateRentalDTO } from '@modules/rentals/dtos/ICreateRentalDTO';
+import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
 import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
 import { IRentalDateService } from '@modules/rentals/services/IRentalDateService';
 import { IDateProvider } from '@shared/container/providers/DateProvider/models/IDateProvider';
@@ -76,13 +77,22 @@ export class CreateRentalUseCase {
       expectedReturnDate
     );
 
-    return this.rentalRepository.create({
-      userId,
-      carId,
-      expectedReturnDate,
-      startDate,
-      total,
-      status: RentalStatus.PENDING,
+    Object.assign(car, {
+      status: CarStatus.RESERVED,
     });
+
+    const [rental] = await Promise.all([
+      await this.rentalRepository.create({
+        userId,
+        carId,
+        expectedReturnDate,
+        startDate,
+        total,
+        status: RentalStatus.CONFIRMED,
+      }),
+      await this.carRepository.save({ ...car }),
+    ]);
+
+    return rental;
   }
 }
