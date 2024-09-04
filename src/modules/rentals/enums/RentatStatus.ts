@@ -1,0 +1,7 @@
+export enum RentalStatus {
+  CONFIRMED = 'CONFIRMED',
+  PICKED_UP = 'PICKED_UP',
+  CANCELLED = 'CANCELLED',
+  OVERDUE = 'OVERDUE',
+  CLOSED = 'CLOSED',
+}
