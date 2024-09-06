@@ -6,7 +6,6 @@ import { CancelRentalUseCase } from './CancelRentalUseCase';
 export class CancelRentalController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { id } = request.params;
-
     const cancelRentalUseCase = container.resolve(CancelRentalUseCase);
     const updatedRental = await cancelRentalUseCase.execute(id);
 
