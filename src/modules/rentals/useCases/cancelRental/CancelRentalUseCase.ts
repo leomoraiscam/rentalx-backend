@@ -1,7 +1,8 @@
 import { inject, injectable } from 'tsyringe';
 
+import { CarStatus } from '@modules/cars/enums/CarStatus';
+import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
 import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
-import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
 import { AppError } from '@shared/errors/AppError';
 
@@ -9,20 +10,33 @@ import { AppError } from '@shared/errors/AppError';
 export class CancelRentalUseCase {
   constructor(
     @inject('RentalRepository')
-    private rentalRepository: IRentalRepository
+    private rentalRepository: IRentalRepository,
+    @inject('CarRepository')
+    private carRepository: ICarRepository
   ) {}
 
-  async execute(id: string): Promise<Rental> {
+  async execute(id: string): Promise<void> {
     const rental = await this.rentalRepository.findById(id);
 
     if (!rental) {
       throw new AppError('Rental not found', 404);
     }
 
-    Object.assign(rental, {
-      status: RentalStatus.CANCELLED,
-    });
+    if (!rental.status.includes(RentalStatus.CONFIRMED)) {
+      throw new AppError(
+        'The rent cannot be cancelled as it has passed the period',
+        422
+      );
+    }
 
-    return this.rentalRepository.save(rental);
+    const car = await this.carRepository.findById(rental.carId);
+
+    car.status = CarStatus.AVAILABLE;
+    rental.status = RentalStatus.CANCELLED;
+
+    await Promise.all([
+      this.rentalRepository.save(rental),
+      this.carRepository.save(car),
+    ]);
   }
 }
