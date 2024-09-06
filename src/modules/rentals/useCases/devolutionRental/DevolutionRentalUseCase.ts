@@ -29,8 +29,15 @@ export class DevolutionRentalUseCase {
       throw new AppError('Rental not found', 404);
     }
 
-    if (rental.status !== RentalStatus.CONFIRMED) {
-      throw new AppError('This rental isn`t confirmed', 422);
+    if (rental.status.includes(RentalStatus.CLOSED)) {
+      throw new AppError('This rental already finished', 422);
+    }
+
+    if (
+      !rental.status.includes(RentalStatus.PICKED_UP) &&
+      !rental.status.includes(RentalStatus.OVERDUE)
+    ) {
+      throw new AppError('This rental isn`t eligible for devolution', 422);
     }
 
     const car = await this.carRepository.findById(rental.carId);
@@ -52,13 +59,14 @@ export class DevolutionRentalUseCase {
       rental.expectedReturnDate
     );
     const fine = daysOverdue > 0 ? daysOverdue * car.fineAmount : 0;
-    const rentalTotal = daysRented * car.dailyRate + fine;
+    const total = daysRented * car.dailyRate + fine;
 
-    rental.endDate = currentDate;
-    rental.total = rentalTotal;
+    Object.assign(rental, {
+      endDate: currentDate,
+      total,
+      status: RentalStatus.CLOSED,
+    });
 
-    await this.rentalRepository.create(rental);
-
-    return rental;
+    return this.rentalRepository.save(rental);
   }
 }
