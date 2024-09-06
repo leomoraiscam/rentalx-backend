@@ -38,8 +38,8 @@ rentalRouter.post(
   ensureAuthenticated,
   createRentalController.handle
 );
-rentalRouter.post(
-  '/devolution/:id',
+rentalRouter.put(
+  '/:id/devolution',
   celebrate({
     [Segments.PARAMS]: {
       id: Joi.string().uuid().required(),
