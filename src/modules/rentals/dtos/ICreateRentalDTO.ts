@@ -1,6 +1,8 @@
 import { User } from '@modules/accounts/infra/typeorm/entities/User';
 import { Car } from '@modules/cars/infra/typeorm/entities/Car';
 
+import { RentalStatus } from '../enums/RentatStatus';
+
 export interface ICreateRentalDTO {
   userId: string;
   user?: User;
@@ -10,6 +12,6 @@ export interface ICreateRentalDTO {
   id?: string;
   endDate?: Date;
   total?: number;
-  status?: string;
+  status?: RentalStatus;
   car?: Car;
 }

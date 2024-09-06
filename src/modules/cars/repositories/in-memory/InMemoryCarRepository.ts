@@ -40,6 +40,7 @@ export class InMemoryCarRepository implements ICarRepository {
       specifications,
       images,
       category,
+      status,
     } = data;
     const car = new Car();
 
@@ -54,6 +55,7 @@ export class InMemoryCarRepository implements ICarRepository {
       specifications,
       images,
       category,
+      status,
     });
 
     this.car.push(car);

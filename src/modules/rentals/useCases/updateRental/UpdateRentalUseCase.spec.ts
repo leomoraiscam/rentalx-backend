@@ -1,3 +1,4 @@
+import { CarStatus } from '@modules/cars/enums/CarStatus';
 import { CategoryType } from '@modules/cars/enums/CategoryType';
 import { Car } from '@modules/cars/infra/typeorm/entities/Car';
 import { Category } from '@modules/cars/infra/typeorm/entities/Category';
@@ -5,6 +6,7 @@ import { Specification } from '@modules/cars/infra/typeorm/entities/Specificatio
 import { InMemoryCarRepository } from '@modules/cars/repositories/in-memory/InMemoryCarRepository';
 import { InMemoryCategoryRepository } from '@modules/cars/repositories/in-memory/InMemoryCategoryRepository';
 import { InMemorySpecificationRepository } from '@modules/cars/repositories/in-memory/InMemorySpecificationRepository';
+import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
 import { InMemoryRentalRepository } from '@modules/rentals/repositories/in-memory/InMemoryRentalRepository';
 import { InMemoryRentalDateService } from '@modules/rentals/services/in-memory/InMemoryRentalDateService';
 import { IRentalDateService } from '@modules/rentals/services/IRentalDateService';
@@ -69,6 +71,7 @@ describe('UpdateRentalUseCase', () => {
             createdAt: new Date(),
           },
         ],
+        status: CarStatus.AVAILABLE,
       }),
       inMemoryCarRepository.create({
         name: 'M2',
@@ -87,6 +90,7 @@ describe('UpdateRentalUseCase', () => {
             createdAt: new Date(2024, 2, 26),
           },
         ],
+        status: CarStatus.AVAILABLE,
       }),
     ]);
     jest.useFakeTimers().setSystemTime(new Date('2024-03-20 08:00:00'));
@@ -100,6 +104,7 @@ describe('UpdateRentalUseCase', () => {
       startDate: new Date(2024, 2, 20),
       expectedReturnDate: new Date(2024, 2, 23),
       userId: 'fake-user-id',
+      status: RentalStatus.CONFIRMED,
     });
     const updatedRental = await updateRentalUseCase.execute({
       id,
@@ -123,7 +128,7 @@ describe('UpdateRentalUseCase', () => {
       startDate: new Date(2024, 2, 20, 8),
       expectedReturnDate: new Date(2024, 2, 23, 8),
       userId: 'fake-user-id',
-      status: 'confirmed',
+      status: RentalStatus.CONFIRMED,
     });
     const updatedRental = await updateRentalUseCase.execute({
       id,
@@ -134,13 +139,47 @@ describe('UpdateRentalUseCase', () => {
     expect(updatedRental.total).toEqual(1800);
     expect(updatedRental.startDate).toEqual(new Date(2024, 2, 20, 8));
     expect(updatedRental.expectedReturnDate).toEqual(new Date(2024, 2, 23, 8));
+    expect(firstCar.status).toEqual(CarStatus.AVAILABLE);
+    expect(secondCar.status).toEqual(CarStatus.RESERVED);
   });
 
   it('should not be able to update rental when the car a non exist', async () => {
+    const { id } = await inMemoryRentalRepository.create({
+      carId: firstCar.id,
+      car: firstCar,
+      startDate: new Date(2024, 2, 20),
+      expectedReturnDate: new Date(2024, 2, 23),
+      userId: 'fake-user-id',
+      status: RentalStatus.CONFIRMED,
+    });
+
     expect(
       updateRentalUseCase.execute({
+        id,
         userId: 'fake-user-id',
-        carId: 'fake-car-id',
+        carId: 'faked-car',
+        startDate: new Date(2024, 3, 10, 6),
+        expectedReturnDate: new Date(2024, 3, 12, 7),
+      })
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should not be able to update rental when the car has status different from available', async () => {
+    secondCar.status = CarStatus.UNDER_MAINTENANCE;
+    const { id } = await inMemoryRentalRepository.create({
+      carId: firstCar.id,
+      car: firstCar,
+      startDate: new Date(2024, 2, 20),
+      expectedReturnDate: new Date(2024, 2, 23),
+      userId: 'fake-user-id',
+      status: RentalStatus.CONFIRMED,
+    });
+
+    expect(
+      updateRentalUseCase.execute({
+        id,
+        userId: 'fake-user-id',
+        carId: secondCar.id,
         startDate: new Date(2024, 3, 10, 6),
         expectedReturnDate: new Date(2024, 3, 12, 7),
       })
@@ -166,6 +205,7 @@ describe('UpdateRentalUseCase', () => {
       startDate: new Date(2024, 2, 20),
       expectedReturnDate: new Date(2024, 2, 23),
       userId: 'fake-user-id',
+      status: RentalStatus.CONFIRMED,
     });
 
     expect(
@@ -184,7 +224,7 @@ describe('UpdateRentalUseCase', () => {
       startDate: new Date(2024, 2, 20, 8),
       expectedReturnDate: new Date(2024, 2, 23, 8),
       userId: 'fake-user-id',
-      status: 'confirmed',
+      status: RentalStatus.CONFIRMED,
     });
 
     expect(
@@ -192,8 +232,28 @@ describe('UpdateRentalUseCase', () => {
         id,
         userId: 'fake-user-id',
         carId: firstCar.id,
-        startDate: new Date(2024, 2, 21, 8),
-        expectedReturnDate: new Date(2024, 2, 23, 8),
+        startDate: new Date(2024, 2, 19, 8),
+        expectedReturnDate: new Date(2024, 2, 20, 8),
+      })
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should not be able to update rental when status is different from confirmed', async () => {
+    const { id } = await inMemoryRentalRepository.create({
+      userId: 'fake-user-id',
+      carId: firstCar.id,
+      startDate: new Date(2024, 2, 10, 8),
+      expectedReturnDate: new Date(2024, 2, 13, 8),
+      status: RentalStatus.PICKED_UP,
+    });
+
+    expect(
+      updateRentalUseCase.execute({
+        id,
+        userId: 'fake-user-id',
+        carId: secondCar.id,
+        startDate: new Date(2024, 2, 21, 9),
+        expectedReturnDate: new Date(2024, 2, 25, 9),
       })
     ).rejects.toBeInstanceOf(AppError);
   });
