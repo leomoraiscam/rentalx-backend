@@ -47,10 +47,12 @@ rentalRouter.post(
   devolutionRentalController.handle
 );
 rentalRouter.put(
-  '/',
+  '/:id',
   celebrate({
-    [Segments.BODY]: {
+    [Segments.PARAMS]: {
       id: Joi.string().uuid().required(),
+    },
+    [Segments.BODY]: {
       startDate: Joi.date().optional(),
       expectedReturnDate: Joi.date().optional(),
       carId: Joi.string().uuid().optional(),
