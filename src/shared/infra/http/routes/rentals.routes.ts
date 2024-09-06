@@ -2,10 +2,10 @@ import { Joi, Segments, celebrate } from 'celebrate';
 import { Router } from 'express';
 
 import { CancelRentalController } from '@modules/rentals/useCases/cancelRental/CancelRentalController';
-import { ConfirmRentalController } from '@modules/rentals/useCases/confirmRental/ConfirmRentalController';
 import { CreateRentalController } from '@modules/rentals/useCases/createRental/CreateRentalController';
 import { DevolutionRentalController } from '@modules/rentals/useCases/devolutionRental/DevolutionRentalController';
 import { ListRentalsByUserController } from '@modules/rentals/useCases/listRentalsByUser/ListRentalsByUserController';
+import { PickupRentalController } from '@modules/rentals/useCases/pickupRental/PickupRentalController';
 import { ShowSummaryDetailsOfRentalController } from '@modules/rentals/useCases/showSummaryDetailsOfRental/ShowSummaryDetailsOfRentalController';
 import { UpdateRentalController } from '@modules/rentals/useCases/updateRental/UpdateRentalController';
 
@@ -17,7 +17,7 @@ const devolutionRentalController = new DevolutionRentalController();
 const listRentalsByUserController = new ListRentalsByUserController();
 const showSummaryDetailsOfRentalController = new ShowSummaryDetailsOfRentalController();
 const updateRentalController = new UpdateRentalController();
-const confirmRentalController = new ConfirmRentalController();
+const pickupRentalController = new PickupRentalController();
 const cancelRentalController = new CancelRentalController();
 
 rentalRouter.get('/', ensureAuthenticated, listRentalsByUserController.handle);
@@ -64,14 +64,14 @@ rentalRouter.put(
   updateRentalController.handle
 );
 rentalRouter.patch(
-  '/:id',
+  '/:id/pickup',
   celebrate({
     [Segments.PARAMS]: {
       id: Joi.string().uuid().required(),
     },
   }),
   ensureAuthenticated,
-  confirmRentalController.handle
+  pickupRentalController.handle
 );
 rentalRouter.put(
   '/:id/cancel',
