@@ -50,7 +50,7 @@ describe('DevolutionRentalUseCase', () => {
     const { id } = await inMemoryRentalRepository.create({
       userId: 'fake-user-id',
       carId,
-      status: RentalStatus.CONFIRMED,
+      status: RentalStatus.PICKED_UP,
       expectedReturnDate: new Date(2024, 3, 11, 12),
       startDate: new Date(2024, 3, 10, 12),
     });
@@ -72,7 +72,7 @@ describe('DevolutionRentalUseCase', () => {
       carId,
       startDate: new Date(2024, 3, 3, 10),
       expectedReturnDate: new Date(2024, 3, 3, 12),
-      status: RentalStatus.CONFIRMED,
+      status: RentalStatus.PICKED_UP,
     });
     const devolutionRental = await devolutionRentalUseCase.execute({
       id,
@@ -91,7 +91,7 @@ describe('DevolutionRentalUseCase', () => {
       carId,
       expectedReturnDate: new Date(2024, 3, 4, 11),
       startDate: new Date(2024, 3, 3, 11),
-      status: RentalStatus.CONFIRMED,
+      status: RentalStatus.PICKED_UP,
     });
     const devolutionRental = await devolutionRentalUseCase.execute({
       id,
@@ -106,7 +106,7 @@ describe('DevolutionRentalUseCase', () => {
     ).rejects.toBeInstanceOf(AppError);
   });
 
-  it('should not be able to return an devolution rental when status is different of confirmed', async () => {
+  it('should not be able to return an devolution rental when status is different of picked up', async () => {
     jest.spyOn(Date, 'now').mockImplementation(() => {
       return new Date(2024, 3, 8).getTime();
     });
@@ -116,6 +116,24 @@ describe('DevolutionRentalUseCase', () => {
       carId,
       expectedReturnDate: new Date(2024, 3, 11, 12),
       startDate: new Date(2024, 3, 10, 12),
+      status: RentalStatus.CONFIRMED,
+    });
+    await expect(
+      devolutionRentalUseCase.execute({ id })
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should not be able to return an devolution rental when status is different of overdue', async () => {
+    jest.spyOn(Date, 'now').mockImplementation(() => {
+      return new Date(2024, 3, 8).getTime();
+    });
+
+    const { id } = await inMemoryRentalRepository.create({
+      userId: 'fake-user-id',
+      carId,
+      expectedReturnDate: new Date(2024, 3, 11, 12),
+      startDate: new Date(2024, 3, 10, 12),
+      status: RentalStatus.CLOSED,
     });
     await expect(
       devolutionRentalUseCase.execute({ id })
@@ -128,7 +146,7 @@ describe('DevolutionRentalUseCase', () => {
       carId: 'faked-car',
       expectedReturnDate: new Date(2024, 3, 11, 12),
       startDate: new Date(2024, 3, 10, 12),
-      status: RentalStatus.CONFIRMED,
+      status: RentalStatus.PICKED_UP,
     });
 
     await expect(
