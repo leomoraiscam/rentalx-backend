@@ -4,7 +4,7 @@ import { Router } from 'express';
 import { CancelRentalController } from '@modules/rentals/useCases/cancelRental/CancelRentalController';
 import { CreateRentalController } from '@modules/rentals/useCases/createRental/CreateRentalController';
 import { DevolutionRentalController } from '@modules/rentals/useCases/devolutionRental/DevolutionRentalController';
-import { ListRentalsByUserController } from '@modules/rentals/useCases/listRentalsByUser/ListRentalsByUserController';
+import { ListRentalsController } from '@modules/rentals/useCases/listRentals/ListRentalsController';
 import { PickupRentalController } from '@modules/rentals/useCases/pickupRental/PickupRentalController';
 import { ShowSummaryDetailsOfRentalController } from '@modules/rentals/useCases/showSummaryDetailsOfRental/ShowSummaryDetailsOfRentalController';
 import { UpdateRentalController } from '@modules/rentals/useCases/updateRental/UpdateRentalController';
@@ -14,13 +14,25 @@ import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 const rentalRouter = Router();
 const createRentalController = new CreateRentalController();
 const devolutionRentalController = new DevolutionRentalController();
-const listRentalsByUserController = new ListRentalsByUserController();
 const showSummaryDetailsOfRentalController = new ShowSummaryDetailsOfRentalController();
 const updateRentalController = new UpdateRentalController();
 const pickupRentalController = new PickupRentalController();
 const cancelRentalController = new CancelRentalController();
+const listRentalsController = new ListRentalsController();
 
-rentalRouter.get('/', ensureAuthenticated, listRentalsByUserController.handle);
+rentalRouter.get(
+  '/',
+  celebrate({
+    [Segments.QUERY]: {
+      startDate: Joi.date(),
+      endDate: Joi.date(),
+      status: Joi.string(),
+      categoryIds: Joi.string(),
+    },
+  }),
+  ensureAuthenticated,
+  listRentalsController.handle
+);
 rentalRouter.get(
   '/:id',
   ensureAuthenticated,
@@ -63,7 +75,7 @@ rentalRouter.put(
   ensureAuthenticated,
   updateRentalController.handle
 );
-rentalRouter.patch(
+rentalRouter.put(
   '/:id/pickup',
   celebrate({
     [Segments.PARAMS]: {
