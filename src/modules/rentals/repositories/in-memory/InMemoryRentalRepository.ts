@@ -1,6 +1,8 @@
 import { IQueryListCarsDTO } from '@modules/cars/dtos/IQueryListCarsDTO';
 
 import { ICreateRentalDTO } from '../../dtos/ICreateRentalDTO';
+import { IListRentalsDTO } from '../../dtos/IListRentalsDTO';
+import { IPaginationQueryResponseDTO } from '../../dtos/IPaginationResponseDTO';
 import { Rental } from '../../infra/typeorm/entities/Rental';
 import { IRentalRepository } from '../IRentalRepository';
 
@@ -39,6 +41,58 @@ export class InMemoryRentalRepository implements IRentalRepository {
     return this.rentals.find(
       (rental) => rental.userId === userId && !rental.endDate
     );
+  }
+
+  async list(
+    options: IListRentalsDTO
+  ): Promise<IPaginationQueryResponseDTO<Rental>> {
+    let filteredRentals = [...this.rentals];
+    const {
+      order,
+      page,
+      perPage: take,
+      status,
+      startDate,
+      endDate,
+      categoryIds,
+    } = options;
+
+    if (status) {
+      filteredRentals = filteredRentals.filter((rental) =>
+        status.includes(rental.status)
+      );
+    }
+
+    if (startDate && endDate) {
+      filteredRentals = filteredRentals.filter(
+        (rental) => rental.startDate >= startDate && rental.startDate <= endDate
+      );
+    }
+
+    if (categoryIds) {
+      filteredRentals = filteredRentals.filter((rental) =>
+        categoryIds.includes(rental?.car?.categoryId)
+      );
+    }
+
+    if (order === 'ASC') {
+      filteredRentals = filteredRentals.sort(
+        (a, b) => a.startDate.getTime() - b.startDate.getTime()
+      );
+    } else if (order === 'DESC') {
+      filteredRentals = filteredRentals.sort(
+        (a, b) => b.startDate.getTime() - a.startDate.getTime()
+      );
+    }
+
+    const startIndex = (page - 1) * take;
+    const endIndex = startIndex + take;
+    const data = filteredRentals.slice(startIndex, endIndex);
+
+    return {
+      result: data,
+      total: this.rentals.length,
+    };
   }
 
   async create(data: ICreateRentalDTO): Promise<Rental> {
