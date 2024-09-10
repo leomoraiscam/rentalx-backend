@@ -10,6 +10,9 @@ import { ICreateRentalDTO } from '@modules/rentals/dtos/ICreateRentalDTO';
 import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
 
+import { IListRentalsDTO } from '../../../dtos/IListRentalsDTO';
+import { IPaginationQueryResponseDTO } from '../../../dtos/IPaginationResponseDTO';
+
 export class RentalRepository implements IRentalRepository {
   private repository: Repository<Rental>;
 
@@ -67,6 +70,68 @@ export class RentalRepository implements IRentalRepository {
         endDate: null,
       },
     });
+  }
+
+  async list(
+    options: IListRentalsDTO
+  ): Promise<IPaginationQueryResponseDTO<Rental>> {
+    const {
+      page,
+      perPage: take,
+      order,
+      status,
+      startDate,
+      endDate,
+      categoryIds,
+    } = options;
+
+    const skip = (page - 1) * take;
+    const queryBuilder = this.repository
+      .createQueryBuilder('rental')
+      .select([
+        'rental.id',
+        'rental.carId',
+        'rental.userId',
+        'rental.endDate',
+        'rental.expectedReturnDate',
+        'rental.total',
+        'rental.createdAt',
+        'rental.startDate',
+        'rental.updatedAt',
+        'rental.status',
+      ])
+      .leftJoinAndSelect('rental.car', 'car');
+
+    if (status && status.length > 0) {
+      queryBuilder.andWhere('rental.status IN (:...status)', { status });
+    }
+
+    if (startDate && endDate) {
+      queryBuilder.andWhere(
+        'rental.startDate BETWEEN :startDate AND :endDate',
+        {
+          startDate,
+          endDate,
+        }
+      );
+    }
+
+    if (categoryIds) {
+      queryBuilder.andWhere('car.category_id IN (:...categoryIds)', {
+        categoryIds,
+      });
+    }
+
+    const [result, total] = await queryBuilder
+      .skip(skip)
+      .take(take)
+      .orderBy('rental.startDate', order)
+      .getManyAndCount();
+
+    return {
+      result,
+      total,
+    };
   }
 
   async create(data: ICreateRentalDTO): Promise<Rental> {
