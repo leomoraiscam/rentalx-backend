@@ -1,12 +1,12 @@
 import { inject, injectable } from 'tsyringe';
 
-import { IShowSummaryDetailsRentalDTO } from '@modules/rentals/dtos/IShowSummaryDetailsRentalDTO';
+import { IShowRentalDTO } from '@modules/rentals/dtos/IShowRentalDTO';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
 import { IDateProvider } from '@shared/container/providers/DateProvider/models/IDateProvider';
 import { AppError } from '@shared/errors/AppError';
 
 @injectable()
-export class ShowSummaryDetailsOfRentalUseCase {
+export class ShowRentalUseCase {
   constructor(
     @inject('RentalRepository')
     private rentalRepository: IRentalRepository,
@@ -14,7 +14,7 @@ export class ShowSummaryDetailsOfRentalUseCase {
     private dateProvider: IDateProvider
   ) {}
 
-  async execute(id: string): Promise<IShowSummaryDetailsRentalDTO> {
+  async execute(id: string): Promise<IShowRentalDTO> {
     const rental = await this.rentalRepository.findById(id);
 
     if (!rental) {
@@ -35,11 +35,11 @@ export class ShowSummaryDetailsOfRentalUseCase {
       },
       offer: {
         dailies,
-        quoteCarDailyRate: Number(rental?.car.dailyRate),
-        total: rental?.car.dailyRate * dailies,
+        total: rental.car.dailyRate * dailies,
       },
       withdrawal: rental.startDate,
       devolution: rental.expectedReturnDate,
+      status: rental.status,
     };
   }
 }

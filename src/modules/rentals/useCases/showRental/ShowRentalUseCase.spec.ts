@@ -7,24 +7,24 @@ import { InMemoryRentalRepository } from '@modules/rentals/repositories/in-memor
 import { InMemoryDateProvider } from '@shared/container/providers/DateProvider/in-memory/InMemoryDateProvider';
 import { AppError } from '@shared/errors/AppError';
 
-import { ShowSummaryDetailsOfRentalUseCase } from './ShowSummaryDetailsOfRentalUseCase';
+import { ShowRentalUseCase } from './ShowRentalUseCase';
 
-let inMemoryCategoryRepository: InMemoryCategoryRepository;
-let inMemorySpecificationRepository: InMemorySpecificationRepository;
-let inMemoryCarRepository: InMemoryCarRepository;
-let inMemoryRentalRepository: InMemoryRentalRepository;
-let inMemoryDateProvider: InMemoryDateProvider;
-let showSummaryDetailsOfRentalUseCase: ShowSummaryDetailsOfRentalUseCase;
-let car: Car;
+describe('ShowRentalUseCase', () => {
+  let inMemoryCategoryRepository: InMemoryCategoryRepository;
+  let inMemorySpecificationRepository: InMemorySpecificationRepository;
+  let inMemoryCarRepository: InMemoryCarRepository;
+  let inMemoryRentalRepository: InMemoryRentalRepository;
+  let inMemoryDateProvider: InMemoryDateProvider;
+  let showRentalUseCase: ShowRentalUseCase;
+  let car: Car;
 
-describe('ShowSummaryDetailsOfRentalUseCase', () => {
   beforeEach(async () => {
     inMemoryCategoryRepository = new InMemoryCategoryRepository();
     inMemorySpecificationRepository = new InMemorySpecificationRepository();
     inMemoryCarRepository = new InMemoryCarRepository();
     inMemoryRentalRepository = new InMemoryRentalRepository();
     inMemoryDateProvider = new InMemoryDateProvider();
-    showSummaryDetailsOfRentalUseCase = new ShowSummaryDetailsOfRentalUseCase(
+    showRentalUseCase = new ShowRentalUseCase(
       inMemoryRentalRepository,
       inMemoryDateProvider
     );
@@ -35,13 +35,11 @@ describe('ShowSummaryDetailsOfRentalUseCase', () => {
         'Designed to optimize aerodynamics, reach higher speeds and offer high performance.',
       type: CategoryType.SPORT,
     });
-
     const specification = await inMemorySpecificationRepository.create({
       name: 'Direção Elétrica',
       description:
         'Conjunto mecânico que permite ao motorista conduzir o seu veículo de maneira leve.',
     });
-
     car = await inMemoryCarRepository.create({
       name: 'Mustang',
       brand: 'Ford',
@@ -63,10 +61,6 @@ describe('ShowSummaryDetailsOfRentalUseCase', () => {
   });
 
   it('should be able to return details of rental when received correct id', async () => {
-    jest.spyOn(Date, 'now').mockImplementationOnce(() => {
-      return new Date(2024, 2, 27).getTime();
-    });
-
     const { id } = await inMemoryRentalRepository.create({
       carId: car.id,
       car,
@@ -74,16 +68,15 @@ describe('ShowSummaryDetailsOfRentalUseCase', () => {
       expectedReturnDate: new Date(2024, 2, 23),
       userId: 'fake-user-id',
     });
+    const rental = await showRentalUseCase.execute(id);
 
-    const rentalDetails = await showSummaryDetailsOfRentalUseCase.execute(id);
-
-    expect(rentalDetails).toHaveProperty('car');
-    expect(rentalDetails).toHaveProperty('offer');
+    expect(rental).toHaveProperty('car');
+    expect(rental).toHaveProperty('offer');
   });
 
   it('should not be able to return details of rental when rental a non exist', async () => {
     await expect(
-      showSummaryDetailsOfRentalUseCase.execute('fake-rental-id')
+      showRentalUseCase.execute('fake-rental-id')
     ).rejects.toBeInstanceOf(AppError);
   });
 });

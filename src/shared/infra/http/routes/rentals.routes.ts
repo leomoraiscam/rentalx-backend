@@ -6,7 +6,7 @@ import { CreateRentalController } from '@modules/rentals/useCases/createRental/C
 import { DevolutionRentalController } from '@modules/rentals/useCases/devolutionRental/DevolutionRentalController';
 import { ListRentalsController } from '@modules/rentals/useCases/listRentals/ListRentalsController';
 import { PickupRentalController } from '@modules/rentals/useCases/pickupRental/PickupRentalController';
-import { ShowSummaryDetailsOfRentalController } from '@modules/rentals/useCases/showSummaryDetailsOfRental/ShowSummaryDetailsOfRentalController';
+import { ShowRentalController } from '@modules/rentals/useCases/showRental/ShowRentalController';
 import { UpdateRentalController } from '@modules/rentals/useCases/updateRental/UpdateRentalController';
 
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
@@ -14,7 +14,7 @@ import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 const rentalRouter = Router();
 const createRentalController = new CreateRentalController();
 const devolutionRentalController = new DevolutionRentalController();
-const showSummaryDetailsOfRentalController = new ShowSummaryDetailsOfRentalController();
+const showRentalController = new ShowRentalController();
 const updateRentalController = new UpdateRentalController();
 const pickupRentalController = new PickupRentalController();
 const cancelRentalController = new CancelRentalController();
@@ -33,11 +33,7 @@ rentalRouter.get(
   ensureAuthenticated,
   listRentalsController.handle
 );
-rentalRouter.get(
-  '/:id',
-  ensureAuthenticated,
-  showSummaryDetailsOfRentalController.handle
-);
+rentalRouter.get('/:id', ensureAuthenticated, showRentalController.handle);
 rentalRouter.post(
   '/',
   celebrate({
