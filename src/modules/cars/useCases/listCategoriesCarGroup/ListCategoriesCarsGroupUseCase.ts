@@ -3,6 +3,7 @@ import { injectable, inject } from 'tsyringe';
 import { IListCategoriesCarsGroupDTO } from '@modules/cars/dtos/IListCategoriesCarsGroupDTO';
 import { IQueryListCarsDTO } from '@modules/cars/dtos/IQueryListCarsDTO';
 import { OrdenationProps } from '@modules/cars/dtos/IQueryListOptionsDTO';
+import { CarStatus } from '@modules/cars/enums/CarStatus';
 import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
 import { ICategoryRepository } from '@modules/cars/repositories/ICategoryRepository';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
@@ -38,22 +39,42 @@ export class ListCategoriesCarsGroupUseCase {
       const transformedCategories = categories.result.map(async (category) => {
         const categoryCars = cars
           .filter((car) => car.categoryId === category.id)
-          .map(async ({ id: carId, dailyRate, fineAmount, ...carRest }) => {
-            const rental = await this.rentalRepository.findByCarAndDateRange({
-              startDate,
-              expectedReturnDate,
-              carId,
-            });
-            const available = !rental;
-
-            return {
+          .map(
+            async ({
               id: carId,
-              dailyRate: Number(dailyRate),
-              fineAmount: Number(fineAmount),
-              available,
-              ...carRest,
-            };
-          });
+              dailyRate,
+              fineAmount,
+              status,
+              ...carRest
+            }) => {
+              let available = true;
+
+              if (
+                status === CarStatus.OUT_OF_SERVICE ||
+                status === CarStatus.UNDER_MAINTENANCE
+              ) {
+                available = false;
+              } else {
+                const rental = await this.rentalRepository.findByCarAndDateRange(
+                  {
+                    startDate,
+                    expectedReturnDate,
+                    carId,
+                  }
+                );
+                available = !rental;
+              }
+
+              return {
+                id: carId,
+                dailyRate: Number(dailyRate),
+                fineAmount: Number(fineAmount),
+                available,
+                status,
+                ...carRest,
+              };
+            }
+          );
 
         const carsWithAvailabilityField = await Promise.all(categoryCars);
         const isAvailableCategory = carsWithAvailabilityField.some(

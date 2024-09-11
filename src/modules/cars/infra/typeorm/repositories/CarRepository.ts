@@ -38,6 +38,7 @@ export class CarRepository implements ICarRepository {
         'c.licensePlate',
         'c.fineAmount',
         'c.brand',
+        'c.status',
         'c.categoryId',
         'category.name',
         'category.description',
