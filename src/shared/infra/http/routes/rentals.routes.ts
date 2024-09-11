@@ -5,6 +5,7 @@ import { CancelRentalController } from '@modules/rentals/useCases/cancelRental/C
 import { CreateRentalController } from '@modules/rentals/useCases/createRental/CreateRentalController';
 import { DevolutionRentalController } from '@modules/rentals/useCases/devolutionRental/DevolutionRentalController';
 import { ListRentalsController } from '@modules/rentals/useCases/listRentals/ListRentalsController';
+import { ListRentalsByUserController } from '@modules/rentals/useCases/listRentalsByUser/ListRentalsByUserController';
 import { PickupRentalController } from '@modules/rentals/useCases/pickupRental/PickupRentalController';
 import { ShowRentalController } from '@modules/rentals/useCases/showRental/ShowRentalController';
 import { UpdateRentalController } from '@modules/rentals/useCases/updateRental/UpdateRentalController';
@@ -19,6 +20,7 @@ const updateRentalController = new UpdateRentalController();
 const pickupRentalController = new PickupRentalController();
 const cancelRentalController = new CancelRentalController();
 const listRentalsController = new ListRentalsController();
+const listRentalsByUserController = new ListRentalsByUserController();
 
 rentalRouter.get(
   '/',
@@ -32,6 +34,11 @@ rentalRouter.get(
   }),
   ensureAuthenticated,
   listRentalsController.handle
+);
+rentalRouter.get(
+  '/me',
+  ensureAuthenticated,
+  listRentalsByUserController.handle
 );
 rentalRouter.get('/:id', ensureAuthenticated, showRentalController.handle);
 rentalRouter.post(
