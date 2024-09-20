@@ -22,8 +22,8 @@ export class CarRepository implements ICarRepository {
     return this.repository.findOne({ licensePlate });
   }
 
-  async list(data: IQueryListCarsDTO): Promise<Car[] | null> {
-    const { brand, type } = data;
+  async list(data: IQueryListCarsDTO): Promise<Car[]> {
+    const { brand, categoryId, type } = data;
 
     const carsQuery = this.repository
       .createQueryBuilder('c')
@@ -40,11 +40,14 @@ export class CarRepository implements ICarRepository {
         'c.brand',
         'c.status',
         'c.categoryId',
+        'category.id',
         'category.name',
         'category.description',
         'category.type',
+        'specifications.id',
         'specifications.name',
         'specifications.description',
+        'images.id',
         'images.imageName',
       ]);
 
@@ -52,9 +55,12 @@ export class CarRepository implements ICarRepository {
       carsQuery.where('c.brand = :brand', { brand });
     }
 
-    // TODO: this filter does not operation, add functionality to begin operate
     if (type) {
-      carsQuery.andWhere('c.category.type = :type', { type });
+      carsQuery.andWhere('category.type = :type', { type });
+    }
+
+    if (categoryId) {
+      carsQuery.andWhere('c.categoryId = :categoryId', { categoryId });
     }
 
     const cars = await carsQuery.getMany();
