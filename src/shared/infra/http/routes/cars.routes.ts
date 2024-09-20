@@ -4,7 +4,8 @@ import multer from 'multer';
 
 import { multerConfig } from '@config/upload';
 import { CreateCarController } from '@modules/cars/useCases/createCar/CreateCarController';
-import { ListCategoriesCarsGroupController } from '@modules/cars/useCases/listCategoriesCarGroup/ListCategoriesCarsGroupController';
+import { ListCarsGroupedByCategoryController } from '@modules/cars/useCases/listCarsGroupedByCategory/ListCarsGroupedByCategoryController';
+import { ListCategoriesWithGroupedCarsController } from '@modules/cars/useCases/ListCategoriesWithGroupedCars/ListCategoriesWithGroupedCarsController';
 import { UploadCarImagesController } from '@modules/cars/useCases/uploadCarImages/UploadCarImagesController';
 
 import ensureAdmin from '../middlewares/ensureAdmin';
@@ -14,7 +15,8 @@ const uploadImages = multer(multerConfig);
 
 const carsRouter = Router();
 const createCarController = new CreateCarController();
-const listCategoriesCarsGroupController = new ListCategoriesCarsGroupController();
+const listCategoriesWithGroupedCarsController = new ListCategoriesWithGroupedCarsController();
+const listCarsGroupedByCategoryController = new ListCarsGroupedByCategoryController();
 const uploadCarImagesController = new UploadCarImagesController();
 
 carsRouter.post(
@@ -41,9 +43,23 @@ carsRouter.get(
     [Segments.QUERY]: {
       startDate: Joi.date().iso().required(),
       expectedReturnDate: Joi.date().iso().required(),
+      brand: Joi.string(),
+      type: Joi.string(),
+      categoryId: Joi.string().uuid(),
     },
   }),
-  listCategoriesCarsGroupController.handle
+  listCategoriesWithGroupedCarsController.handle
+);
+carsRouter.get(
+  '/models',
+  celebrate({
+    [Segments.QUERY]: {
+      categoryId: Joi.string().uuid().required(),
+      startDate: Joi.date().iso().required(),
+      expectedReturnDate: Joi.date().iso().required(),
+    },
+  }),
+  listCarsGroupedByCategoryController.handle
 );
 carsRouter.post(
   '/:id/images',
