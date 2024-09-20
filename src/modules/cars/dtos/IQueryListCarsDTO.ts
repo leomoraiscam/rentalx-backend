@@ -6,4 +6,5 @@ export interface IQueryListCarsDTO {
   carId?: string;
   brand?: string;
   type?: CategoryType;
+  categoryId?: string;
 }
