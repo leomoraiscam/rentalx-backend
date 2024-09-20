@@ -19,7 +19,9 @@ export class InMemoryCarRepository implements ICarRepository {
     return this.car.filter((car) => {
       if (
         (!data.brand || car.brand === data.brand) &&
-        (!data.type || car.category.type === data.type)
+        (!data.type ||
+          car.categoryId === data.categoryId ||
+          car.category.type === data.type)
       ) {
         return car;
       }

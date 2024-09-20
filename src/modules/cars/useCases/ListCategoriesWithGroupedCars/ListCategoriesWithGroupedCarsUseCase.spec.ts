@@ -7,15 +7,15 @@ import { InMemorySpecificationRepository } from '@modules/cars/repositories/in-m
 import { InMemoryRentalRepository } from '@modules/rentals/repositories/in-memory/InMemoryRentalRepository';
 import { InMemoryLoggerProvider } from '@shared/container/providers/LoggerProvider/in-memory/InMemoryLoggerProvider';
 
-import { ListCategoriesCarsGroupUseCase } from './ListCategoriesCarsGroupUseCase';
+import { ListCategoriesWithGroupedCarsUseCase } from './ListCategoriesWithGroupedCarsUseCase';
 
-describe('ListCategoriesCarsGroupUseCase', () => {
+describe('ListCategoriesWithGroupedCarsUseCase', () => {
   let inMemoryCarRepository: InMemoryCarRepository;
   let inMemoryCategoryRepository: InMemoryCategoryRepository;
   let inMemorySpecificationRepository: InMemorySpecificationRepository;
   let inMemoryRentalRepository: InMemoryRentalRepository;
   let inMemoryLoggerProvider: InMemoryLoggerProvider;
-  let listCategoriesCarsGroupUseCase: ListCategoriesCarsGroupUseCase;
+  let listCategoriesWithGroupedCarsUseCase: ListCategoriesWithGroupedCarsUseCase;
   let category: Category;
   let suvCategory: Category;
   let specification: Specification;
@@ -26,7 +26,7 @@ describe('ListCategoriesCarsGroupUseCase', () => {
     inMemoryRentalRepository = new InMemoryRentalRepository();
     inMemorySpecificationRepository = new InMemorySpecificationRepository();
     inMemoryLoggerProvider = new InMemoryLoggerProvider();
-    listCategoriesCarsGroupUseCase = new ListCategoriesCarsGroupUseCase(
+    listCategoriesWithGroupedCarsUseCase = new ListCategoriesWithGroupedCarsUseCase(
       inMemoryCarRepository,
       inMemoryCategoryRepository,
       inMemoryRentalRepository,
@@ -55,69 +55,6 @@ describe('ListCategoriesCarsGroupUseCase', () => {
           'Conjunto mecânico que permite ao motorista conduzir o seu veículo de maneira leve.',
       }),
     ]);
-  });
-
-  it('should be able to list all cars classified by categories', async () => {
-    await inMemoryCarRepository.create({
-      name: 'Mustang',
-      brand: 'Ford',
-      description: 'Ford Mustang',
-      dailyRate: 400,
-      licensePlate: 'DJA-002',
-      fineAmount: 400,
-      categoryId: category.id,
-      category,
-      specifications: [specification],
-      images: [
-        {
-          id: 'fake-id',
-          imageName: 'fake-image',
-          createdAt: new Date(),
-        },
-      ],
-    });
-
-    const cars = await listCategoriesCarsGroupUseCase.execute({
-      startDate: new Date(2024, 2, 20),
-      expectedReturnDate: new Date(2024, 2, 23),
-    });
-
-    expect(cars).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          name: expect.any(String),
-          type: expect.any(String),
-          cars: expect.arrayContaining([
-            expect.objectContaining({
-              id: expect.any(String),
-              available: expect.any(Boolean),
-              name: expect.any(String),
-              description: expect.any(String),
-              brand: expect.any(String),
-              categoryId: expect.any(String),
-              dailyRate: expect.any(Number),
-              fineAmount: expect.any(Number),
-              licensePlate: expect.any(String),
-              specifications: expect.arrayContaining([
-                expect.objectContaining({
-                  id: expect.any(String),
-                  name: expect.any(String),
-                  description: expect.any(String),
-                }),
-              ]),
-              images: expect.arrayContaining([
-                expect.objectContaining({
-                  id: expect.any(String),
-                  imageName: expect.any(String),
-                  createdAt: expect.any(Date),
-                }),
-              ]),
-            }),
-          ]),
-          available: expect.any(Boolean),
-        }),
-      ])
-    );
   });
 
   it('should be able to return all cars classified by categories with available true when least one car available', async () => {
@@ -167,29 +104,43 @@ describe('ListCategoriesCarsGroupUseCase', () => {
       userId: 'fake-user-id',
     });
 
-    const cars = await listCategoriesCarsGroupUseCase.execute({
+    const cars = await listCategoriesWithGroupedCarsUseCase.execute({
       startDate: new Date(2024, 2, 20),
       expectedReturnDate: new Date(2024, 2, 23),
     });
 
     expect(cars).toEqual([
       {
-        name: 'GROUP L - SPORT',
-        type: 'sport',
-        cars: [
+        id: category.id,
+        name: category.name,
+        type: category.type,
+        models: [
           {
-            available: true,
-            ...firstCar,
+            name: firstCar.name,
+            brand: firstCar.brand,
+            description: firstCar.description,
+            dailyRate: firstCar.dailyRate,
+            fineAmount: firstCar.fineAmount,
+            specifications: firstCar.specifications,
+            images: firstCar.images,
+            total: 1,
+            totalAvailable: 1,
           },
           {
-            available: false,
-            ...secondCar,
+            name: secondCar.name,
+            brand: secondCar.brand,
+            description: secondCar.description,
+            dailyRate: secondCar.dailyRate,
+            fineAmount: secondCar.fineAmount,
+            specifications: secondCar.specifications,
+            images: secondCar.images,
+            total: 1,
+            totalAvailable: 0,
           },
         ],
         available: true,
       },
     ]);
-    expect(cars[0].available).toBeTruthy();
   });
 
   it('should be able to return all cars classified by categories with available false when a non exits available car', async () => {
@@ -247,29 +198,43 @@ describe('ListCategoriesCarsGroupUseCase', () => {
       }),
     ]);
 
-    const cars = await listCategoriesCarsGroupUseCase.execute({
+    const cars = await listCategoriesWithGroupedCarsUseCase.execute({
       startDate: new Date(2024, 2, 20),
       expectedReturnDate: new Date(2024, 2, 23),
     });
 
     expect(cars).toEqual([
       {
-        name: 'GROUP L - SPORT',
-        type: 'sport',
-        cars: [
+        id: category.id,
+        name: category.name,
+        type: category.type,
+        models: [
           {
-            available: false,
-            ...firstCar,
+            name: firstCar.name,
+            brand: firstCar.brand,
+            description: firstCar.description,
+            dailyRate: firstCar.dailyRate,
+            fineAmount: firstCar.fineAmount,
+            specifications: firstCar.specifications,
+            images: firstCar.images,
+            total: 1,
+            totalAvailable: 0,
           },
           {
-            available: false,
-            ...secondCar,
+            name: secondCar.name,
+            brand: secondCar.brand,
+            description: secondCar.description,
+            dailyRate: secondCar.dailyRate,
+            fineAmount: secondCar.fineAmount,
+            specifications: secondCar.specifications,
+            images: secondCar.images,
+            total: 1,
+            totalAvailable: 0,
           },
         ],
         available: false,
       },
     ]);
-    expect(cars[0].available).toBeFalsy();
     expect(cars).toHaveLength(1);
   });
 
@@ -312,19 +277,26 @@ describe('ListCategoriesCarsGroupUseCase', () => {
         ],
       }),
     ]);
-
-    const cars = await listCategoriesCarsGroupUseCase.execute({
+    const cars = await listCategoriesWithGroupedCarsUseCase.execute({
       brand: 'Ford',
     });
 
     expect(cars).toEqual([
       {
-        name: 'GROUP L - SPORT',
-        type: 'sport',
-        cars: [
+        id: category.id,
+        name: category.name,
+        type: category.type,
+        models: [
           {
-            available: true,
-            ...firstCar,
+            name: firstCar.name,
+            brand: firstCar.brand,
+            description: firstCar.description,
+            dailyRate: firstCar.dailyRate,
+            fineAmount: firstCar.fineAmount,
+            specifications: firstCar.specifications,
+            images: firstCar.images,
+            total: 1,
+            totalAvailable: 1,
           },
         ],
         available: true,
@@ -332,7 +304,7 @@ describe('ListCategoriesCarsGroupUseCase', () => {
     ]);
     expect(cars[0].available).toBeTruthy();
     expect(cars).toHaveLength(1);
-    expect(cars[0].cars).toHaveLength(1);
+    expect(cars[0].models).toHaveLength(1);
   });
 
   it('should be able to return cars classified by categories and type when received filter by vehicle type', async () => {
@@ -375,18 +347,26 @@ describe('ListCategoriesCarsGroupUseCase', () => {
       }),
     ]);
 
-    const cars = await listCategoriesCarsGroupUseCase.execute({
+    const cars = await listCategoriesWithGroupedCarsUseCase.execute({
       type: CategoryType.SPORT,
     });
 
     expect(cars).toEqual([
       {
-        name: 'GROUP L - SPORT',
-        type: 'sport',
-        cars: [
+        id: category.id,
+        name: category.name,
+        type: category.type,
+        models: [
           {
-            available: true,
-            ...firstCar,
+            name: firstCar.name,
+            brand: firstCar.brand,
+            description: firstCar.description,
+            dailyRate: firstCar.dailyRate,
+            fineAmount: firstCar.fineAmount,
+            specifications: firstCar.specifications,
+            images: firstCar.images,
+            total: 1,
+            totalAvailable: 1,
           },
         ],
         available: true,
@@ -394,7 +374,7 @@ describe('ListCategoriesCarsGroupUseCase', () => {
     ]);
     expect(cars[0].available).toBeTruthy();
     expect(cars).toHaveLength(1);
-    expect(cars[0].cars).toHaveLength(1);
+    expect(cars[0].models).toHaveLength(1);
   });
 
   it('should be able to return cars classified by categories, brand and type when received filter by vehicle brand and type', async () => {
@@ -473,23 +453,38 @@ describe('ListCategoriesCarsGroupUseCase', () => {
       }),
     ]);
 
-    const cars = await listCategoriesCarsGroupUseCase.execute({
+    const cars = await listCategoriesWithGroupedCarsUseCase.execute({
       type: CategoryType.SPORT,
       brand: 'BMW',
     });
 
     expect(cars).toEqual([
       {
-        name: 'GROUP L - SPORT',
-        type: 'sport',
-        cars: [
+        id: category.id,
+        name: category.name,
+        type: category.type,
+        models: [
           {
-            available: true,
-            ...secondCar,
+            name: secondCar.name,
+            brand: secondCar.brand,
+            description: secondCar.description,
+            dailyRate: secondCar.dailyRate,
+            fineAmount: secondCar.fineAmount,
+            specifications: secondCar.specifications,
+            images: secondCar.images,
+            total: 1,
+            totalAvailable: 1,
           },
           {
-            available: true,
-            ...thirdCar,
+            name: thirdCar.name,
+            brand: thirdCar.brand,
+            description: thirdCar.description,
+            dailyRate: thirdCar.dailyRate,
+            fineAmount: thirdCar.fineAmount,
+            specifications: thirdCar.specifications,
+            images: thirdCar.images,
+            total: 1,
+            totalAvailable: 1,
           },
         ],
         available: true,
@@ -497,6 +492,6 @@ describe('ListCategoriesCarsGroupUseCase', () => {
     ]);
     expect(cars[0].available).toBeTruthy();
     expect(cars).toHaveLength(1);
-    expect(cars[0].cars).toHaveLength(2);
+    expect(cars[0].models).toHaveLength(2);
   });
 });
