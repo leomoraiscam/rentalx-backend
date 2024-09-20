@@ -1,5 +1,6 @@
 import { inject, injectable } from 'tsyringe';
 
+import { CarStatus } from '@modules/cars/enums/CarStatus';
 import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
 import { ICreateDevolutionCarDTO } from '@modules/rentals/dtos/ICreateDevolutionCarDTO';
 import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
@@ -66,7 +67,13 @@ export class DevolutionRentalUseCase {
       total,
       status: RentalStatus.CLOSED,
     });
+    car.status = CarStatus.AVAILABLE;
 
-    return this.rentalRepository.save(rental);
+    const [devolutionRental] = await Promise.all([
+      this.rentalRepository.save(rental),
+      this.carRepository.save(car),
+    ]);
+
+    return devolutionRental;
   }
 }
