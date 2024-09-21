@@ -33,7 +33,7 @@ export class CreateUserUseCase {
     }
 
     const hashedPassword = await this.hashProvider.generateHash(password);
-    const userInstanceCreated = await this.userRepository.create({
+    const createdUser = await this.userRepository.create({
       name,
       email,
       password: hashedPassword,
@@ -41,6 +41,6 @@ export class CreateUserUseCase {
       isAdmin,
     });
 
-    return UserMap.toDTO(userInstanceCreated) as User;
+    return UserMap.toDTO(createdUser) as User;
   }
 }

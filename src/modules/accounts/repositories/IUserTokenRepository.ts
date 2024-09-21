@@ -1,10 +1,10 @@
 import { ICreateUserTokenDTO } from '../dtos/ICreateUserTokenDTO';
-import { IFindTokensByUserIdDTO } from '../dtos/IFindTokensByUserIdDTO';
+import { IFindTokenByUserIdDTO } from '../dtos/IFindTokenByUserIdDTO';
 import { UserToken } from '../infra/typeorm/entities/UserToken';
 
 export interface IUserTokenRepository {
   findByUserIdAndRefreshToken(
-    data: IFindTokensByUserIdDTO
+    data: IFindTokenByUserIdDTO
   ): Promise<UserToken | null>;
   findByRefreshToken(refreshToken: string): Promise<UserToken | null>;
   create(data: ICreateUserTokenDTO): Promise<UserToken>;

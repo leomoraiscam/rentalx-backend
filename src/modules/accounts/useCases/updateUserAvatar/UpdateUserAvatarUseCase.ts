@@ -29,13 +29,12 @@ export class UpdateUserAvatarUseCase {
       await this.storageProvider.delete(user.avatar, UploadFolder.AVATAR);
     }
 
+    user.avatar = avatar;
+
     await this.storageProvider.save(avatar, UploadFolder.AVATAR);
 
-    const updatedUserAvatar = Object.assign(user, { avatar });
-    const userInstanceCreated = await this.userRepository.create(
-      updatedUserAvatar
-    );
+    const updatedUser = await this.userRepository.save(user);
 
-    return UserMap.toDTO(userInstanceCreated) as User;
+    return UserMap.toDTO(updatedUser) as User;
   }
 }

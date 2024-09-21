@@ -42,7 +42,7 @@ export class CreateCarUseCase {
       throw new AppError('Car with this licensePlate already exist', 409);
     }
 
-    const specificationsEntities = await this.specificationRepository.findByIds(
+    const specificationsInstancies = await this.specificationRepository.findByIds(
       specifications as string[]
     );
 
@@ -54,7 +54,7 @@ export class CreateCarUseCase {
       fineAmount,
       brand,
       categoryId,
-      specifications: specificationsEntities,
+      specifications: specificationsInstancies,
     });
   }
 }

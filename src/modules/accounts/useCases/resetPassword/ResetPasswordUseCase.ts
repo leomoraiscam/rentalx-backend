@@ -50,7 +50,6 @@ export class ResetPasswordUseCase {
       password: hashedPassword,
     });
     await this.userRepository.create(user);
-
     await this.userTokenRepository.delete(id);
   }
 }

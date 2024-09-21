@@ -3,7 +3,7 @@ import { inject, injectable } from 'tsyringe';
 
 import { auth } from '@config/auth';
 import { IAuthenticatedUserDTO } from '@modules/accounts/dtos/IAuthenticatedUserDTO';
-import { IAuthenticationUserDTO } from '@modules/accounts/dtos/IAuthenticationUserDTO';
+import { IAuthenticateUserDTO } from '@modules/accounts/dtos/IAuthenticateUserDTO';
 import { User } from '@modules/accounts/infra/typeorm/entities/User';
 import { UserMap } from '@modules/accounts/mapper/UserMap';
 import { IUserRepository } from '@modules/accounts/repositories/IUserRepository';
@@ -28,7 +28,7 @@ export class AuthenticateUserUseCase {
     private loggerProvider: ILoggerProvider
   ) {}
 
-  async execute(data: IAuthenticationUserDTO): Promise<IAuthenticatedUserDTO> {
+  async execute(data: IAuthenticateUserDTO): Promise<IAuthenticatedUserDTO> {
     const { email, password } = data;
     const existingUser = await this.userRepository.findByEmail(email);
 

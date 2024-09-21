@@ -30,8 +30,8 @@ export class SendForgotPasswordMailUseCase {
       throw new AppError('User not found', 404);
     }
 
-    const { id: userId, name } = user;
     const token = uuidV4();
+    const { id: userId, name } = user;
     const expiresDateLimitToken = this.dateProvider.addHours(
       this.TOKEN_EXPIRATION_HOURS
     );

@@ -1,5 +1,5 @@
 import { ICreateUserTokenDTO } from '@modules/accounts/dtos/ICreateUserTokenDTO';
-import { IFindTokensByUserIdDTO } from '@modules/accounts/dtos/IFindTokensByUserIdDTO';
+import { IFindTokenByUserIdDTO } from '@modules/accounts/dtos/IFindTokenByUserIdDTO';
 import { UserToken } from '@modules/accounts/infra/typeorm/entities/UserToken';
 
 import { IUserTokenRepository } from '../IUserTokenRepository';
@@ -8,7 +8,7 @@ export class InMemoryUserTokenRepository implements IUserTokenRepository {
   private userTokens: UserToken[] = [];
 
   async findByUserIdAndRefreshToken(
-    data: IFindTokensByUserIdDTO
+    data: IFindTokenByUserIdDTO
   ): Promise<UserToken | null> {
     const { refreshToken, userId } = data;
 

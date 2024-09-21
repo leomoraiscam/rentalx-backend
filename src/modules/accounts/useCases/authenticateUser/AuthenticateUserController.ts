@@ -6,12 +6,12 @@ import { AuthenticateUserUseCase } from './AuthenticateUserUseCase';
 export class AuthenticateUserController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { email, password } = request.body;
-    const authenticatedUserUseCase = container.resolve(AuthenticateUserUseCase);
-    const authenticatedUser = await authenticatedUserUseCase.execute({
+    const authenticateUserUseCase = container.resolve(AuthenticateUserUseCase);
+    const authenticateUser = await authenticateUserUseCase.execute({
       email,
       password,
     });
 
-    return response.status(200).json(authenticatedUser);
+    return response.status(200).json(authenticateUser);
   }
 }
