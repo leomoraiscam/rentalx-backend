@@ -29,6 +29,7 @@ export class CreateCarUseCase {
       brand,
       categoryId,
       specifications,
+      status,
     } = data;
     const category = await this.categoryRepository.findById(categoryId);
 
@@ -55,6 +56,7 @@ export class CreateCarUseCase {
       brand,
       categoryId,
       specifications: specificationsInstancies,
+      status,
     });
   }
 }

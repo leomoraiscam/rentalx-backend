@@ -15,11 +15,11 @@ export class ImportSpecificationsUseCase {
 
   async execute(file: Express.Multer.File): Promise<void> {
     const keys = ['name', 'description'];
-    const specificationsToUpload = await this.CSVStreamParserProvider.parse<ICreateSpecificationDTO>(
+    const specifications = await this.CSVStreamParserProvider.parse<ICreateSpecificationDTO>(
       file.path,
       keys
     );
-    const specificationsPromises = specificationsToUpload.map(async (data) => {
+    const specificationsPromises = specifications.map(async (data) => {
       const { name, description } = data;
       const specification = await this.specificationRepository.findByName(name);
 

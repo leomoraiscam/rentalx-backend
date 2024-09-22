@@ -1,10 +1,10 @@
 import { injectable, inject } from 'tsyringe';
 
-import { IListCarsGroupedByCategoryDTO } from '@modules/cars/dtos/IListCarsGroupedByCategoryDTO';
+import { IListCarsGroupedByCategoryDTO } from '@modules/cars/dtos/IListCarsByCategoryDTO';
 import {
-  IListCarsGroupedByCategoryResponseDTO,
-  ICarsModel,
-} from '@modules/cars/dtos/IListCarsGroupedByCategoryResponseDTO';
+  IListCarsByCategoryResponseDTO,
+  IGroupedCarsWithOptionsDTO,
+} from '@modules/cars/dtos/IListCarsByCategoryResponseDTO';
 import { CarStatus } from '@modules/cars/enums/CarStatus';
 import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
 import { ICategoryRepository } from '@modules/cars/repositories/ICategoryRepository';
@@ -27,13 +27,12 @@ export class ListCarsGroupedByCategoryUseCase {
 
   async execute(
     data: IListCarsGroupedByCategoryDTO
-  ): Promise<IListCarsGroupedByCategoryResponseDTO> {
+  ): Promise<IListCarsByCategoryResponseDTO> {
     const { categoryId, expectedReturnDate, startDate } = data;
     const [category, cars] = await Promise.all([
       this.categoryRepository.findById(categoryId),
       this.carRepository.list({ categoryId }),
     ]);
-
     const models = cars.reduce(async (accPromise, car) => {
       const acc = await accPromise;
       let available = true;
@@ -83,15 +82,14 @@ export class ListCarsGroupedByCategoryUseCase {
       });
 
       return acc;
-    }, Promise.resolve({} as Record<string, ICarsModel>));
-
-    const carsWithAvailabilityField = Object.values(await models);
+    }, Promise.resolve({} as Record<string, IGroupedCarsWithOptionsDTO>));
+    const modelsWithEachProperties = Object.values(await models);
 
     return {
       id: category.id,
       name: category.name,
       type: category.type,
-      models: carsWithAvailabilityField,
+      models: modelsWithEachProperties,
     };
   }
 }

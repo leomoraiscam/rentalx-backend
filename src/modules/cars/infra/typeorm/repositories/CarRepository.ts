@@ -24,7 +24,6 @@ export class CarRepository implements ICarRepository {
 
   async list(data: IQueryListCarsDTO): Promise<Car[]> {
     const { brand, categoryId, type } = data;
-
     const carsQuery = this.repository
       .createQueryBuilder('c')
       .leftJoinAndSelect('c.category', 'category')
@@ -78,6 +77,7 @@ export class CarRepository implements ICarRepository {
       fineAmount,
       licensePlate,
       specifications,
+      status,
     } = data;
     const specificationsEntity = specifications as Specification[];
     const car = this.repository.create({
@@ -89,6 +89,7 @@ export class CarRepository implements ICarRepository {
       fineAmount,
       licensePlate,
       specifications: specificationsEntity,
+      status,
     });
 
     await this.repository.save(car);

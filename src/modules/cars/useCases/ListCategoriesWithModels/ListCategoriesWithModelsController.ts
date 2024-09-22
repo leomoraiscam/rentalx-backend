@@ -3,9 +3,9 @@ import { container } from 'tsyringe';
 
 import { CategoryType } from '@modules/cars/enums/CategoryType';
 
-import { ListCategoriesWithGroupedCarsUseCase } from './ListCategoriesWithGroupedCarsUseCase';
+import { ListCategoriesWithModelsUseCase } from './ListCategoriesWithModelsUseCase';
 
-export class ListCategoriesWithGroupedCarsController {
+export class ListCategoriesWithModelsController {
   async handle(request: Request, response: Response): Promise<Response> {
     const {
       brand,
@@ -14,10 +14,10 @@ export class ListCategoriesWithGroupedCarsController {
       expectedReturnDate,
       categoryId,
     } = request.query;
-    const listCategoriesCarsGroupUseCase = container.resolve(
-      ListCategoriesWithGroupedCarsUseCase
+    const listCategoriesWithModelsUseCase = container.resolve(
+      ListCategoriesWithModelsUseCase
     );
-    const cars = await listCategoriesCarsGroupUseCase.execute({
+    const cars = await listCategoriesWithModelsUseCase.execute({
       brand: brand as string,
       type: type as CategoryType,
       startDate: new Date(startDate as string),

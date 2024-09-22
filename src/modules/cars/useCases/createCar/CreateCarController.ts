@@ -14,6 +14,7 @@ export class CreateCarController {
       brand,
       categoryId,
       specifications,
+      status,
     } = request.body;
     const createCarUseCase = container.resolve(CreateCarUseCase);
     const car = await createCarUseCase.execute({
@@ -25,6 +26,7 @@ export class CreateCarController {
       brand,
       categoryId,
       specifications,
+      status,
     });
 
     return response.status(201).json(car);

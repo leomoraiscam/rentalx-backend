@@ -3,9 +3,10 @@ import { Router } from 'express';
 import multer from 'multer';
 
 import { multerConfig } from '@config/upload';
+import { CarStatus } from '@modules/cars/enums/CarStatus';
 import { CreateCarController } from '@modules/cars/useCases/createCar/CreateCarController';
 import { ListCarsGroupedByCategoryController } from '@modules/cars/useCases/listCarsGroupedByCategory/ListCarsGroupedByCategoryController';
-import { ListCategoriesWithGroupedCarsController } from '@modules/cars/useCases/ListCategoriesWithGroupedCars/ListCategoriesWithGroupedCarsController';
+import { ListCategoriesWithModelsController } from '@modules/cars/useCases/ListCategoriesWithModels/ListCategoriesWithModelsController';
 import { UploadCarImagesController } from '@modules/cars/useCases/uploadCarImages/UploadCarImagesController';
 
 import ensureAdmin from '../middlewares/ensureAdmin';
@@ -15,7 +16,7 @@ const uploadImages = multer(multerConfig);
 
 const carsRouter = Router();
 const createCarController = new CreateCarController();
-const listCategoriesWithGroupedCarsController = new ListCategoriesWithGroupedCarsController();
+const listCategoriesWithModelsController = new ListCategoriesWithModelsController();
 const listCarsGroupedByCategoryController = new ListCarsGroupedByCategoryController();
 const uploadCarImagesController = new UploadCarImagesController();
 
@@ -31,6 +32,9 @@ carsRouter.post(
       licensePlate: Joi.string().min(7).max(8).required(),
       categoryId: Joi.string().uuid().required(),
       specifications: Joi.array().min(1).max(10),
+      status: Joi.string()
+        .valid(...Object.values(CarStatus))
+        .required(),
     },
   }),
   ensureAuthenticated,
@@ -48,10 +52,10 @@ carsRouter.get(
       categoryId: Joi.string().uuid(),
     },
   }),
-  listCategoriesWithGroupedCarsController.handle
+  listCategoriesWithModelsController.handle
 );
 carsRouter.get(
-  '/models',
+  '/options',
   celebrate({
     [Segments.QUERY]: {
       categoryId: Joi.string().uuid().required(),

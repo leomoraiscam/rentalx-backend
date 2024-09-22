@@ -7,15 +7,15 @@ import { InMemorySpecificationRepository } from '@modules/cars/repositories/in-m
 import { InMemoryRentalRepository } from '@modules/rentals/repositories/in-memory/InMemoryRentalRepository';
 import { InMemoryLoggerProvider } from '@shared/container/providers/LoggerProvider/in-memory/InMemoryLoggerProvider';
 
-import { ListCategoriesWithGroupedCarsUseCase } from './ListCategoriesWithGroupedCarsUseCase';
+import { ListCategoriesWithModelsUseCase } from './ListCategoriesWithModelsUseCase';
 
-describe('ListCategoriesWithGroupedCarsUseCase', () => {
+describe('ListCategoriesWithModelsUseCase', () => {
   let inMemoryCarRepository: InMemoryCarRepository;
   let inMemoryCategoryRepository: InMemoryCategoryRepository;
   let inMemorySpecificationRepository: InMemorySpecificationRepository;
   let inMemoryRentalRepository: InMemoryRentalRepository;
   let inMemoryLoggerProvider: InMemoryLoggerProvider;
-  let listCategoriesWithGroupedCarsUseCase: ListCategoriesWithGroupedCarsUseCase;
+  let listCategoriesWithModelsUseCase: ListCategoriesWithModelsUseCase;
   let category: Category;
   let suvCategory: Category;
   let specification: Specification;
@@ -26,7 +26,7 @@ describe('ListCategoriesWithGroupedCarsUseCase', () => {
     inMemoryRentalRepository = new InMemoryRentalRepository();
     inMemorySpecificationRepository = new InMemorySpecificationRepository();
     inMemoryLoggerProvider = new InMemoryLoggerProvider();
-    listCategoriesWithGroupedCarsUseCase = new ListCategoriesWithGroupedCarsUseCase(
+    listCategoriesWithModelsUseCase = new ListCategoriesWithModelsUseCase(
       inMemoryCarRepository,
       inMemoryCategoryRepository,
       inMemoryRentalRepository,
@@ -104,7 +104,7 @@ describe('ListCategoriesWithGroupedCarsUseCase', () => {
       userId: 'fake-user-id',
     });
 
-    const cars = await listCategoriesWithGroupedCarsUseCase.execute({
+    const cars = await listCategoriesWithModelsUseCase.execute({
       startDate: new Date(2024, 2, 20),
       expectedReturnDate: new Date(2024, 2, 23),
     });
@@ -198,7 +198,7 @@ describe('ListCategoriesWithGroupedCarsUseCase', () => {
       }),
     ]);
 
-    const cars = await listCategoriesWithGroupedCarsUseCase.execute({
+    const cars = await listCategoriesWithModelsUseCase.execute({
       startDate: new Date(2024, 2, 20),
       expectedReturnDate: new Date(2024, 2, 23),
     });
@@ -277,7 +277,7 @@ describe('ListCategoriesWithGroupedCarsUseCase', () => {
         ],
       }),
     ]);
-    const cars = await listCategoriesWithGroupedCarsUseCase.execute({
+    const cars = await listCategoriesWithModelsUseCase.execute({
       brand: 'Ford',
     });
 
@@ -347,7 +347,7 @@ describe('ListCategoriesWithGroupedCarsUseCase', () => {
       }),
     ]);
 
-    const cars = await listCategoriesWithGroupedCarsUseCase.execute({
+    const cars = await listCategoriesWithModelsUseCase.execute({
       type: CategoryType.SPORT,
     });
 
@@ -453,7 +453,7 @@ describe('ListCategoriesWithGroupedCarsUseCase', () => {
       }),
     ]);
 
-    const cars = await listCategoriesWithGroupedCarsUseCase.execute({
+    const cars = await listCategoriesWithModelsUseCase.execute({
       type: CategoryType.SPORT,
       brand: 'BMW',
     });
