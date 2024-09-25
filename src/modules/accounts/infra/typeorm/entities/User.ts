@@ -1,5 +1,11 @@
 import { Exclude, Expose } from 'class-transformer';
-import { Entity, PrimaryColumn, Column, CreateDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { v4 as uuidV4 } from 'uuid';
 
 @Entity('users')
@@ -28,6 +34,9 @@ export class User {
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @Expose({ name: 'avatarUrl' })
   avatarUrl(): string {

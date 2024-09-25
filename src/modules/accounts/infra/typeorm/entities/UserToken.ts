@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   JoinColumn,
   ManyToOne,
+  DeleteDateColumn,
 } from 'typeorm';
 import { v4 as uuidV4 } from 'uuid';
 
@@ -30,6 +31,9 @@ export class UserToken {
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
+
+  @DeleteDateColumn({ name: 'updated_at' })
+  deletedAt: Date;
 
   constructor() {
     if (!this.id) {
