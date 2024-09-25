@@ -32,7 +32,7 @@ export class UserToken {
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @DeleteDateColumn({ name: 'updated_at' })
+  @DeleteDateColumn({ name: 'deleted_at' })
   deletedAt: Date;
 
   constructor() {
