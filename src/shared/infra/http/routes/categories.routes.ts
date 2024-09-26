@@ -31,6 +31,7 @@ categoriesRouter.get(
     },
   }),
   ensureAuthenticated,
+  ensureAdmin,
   listCategoriesController.handle
 );
 categoriesRouter.post(

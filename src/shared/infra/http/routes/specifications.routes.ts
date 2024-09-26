@@ -29,6 +29,7 @@ specificationRouter.get(
     },
   }),
   ensureAuthenticated,
+  ensureAdmin,
   listSpecificationsController.handle
 );
 specificationRouter.post(
