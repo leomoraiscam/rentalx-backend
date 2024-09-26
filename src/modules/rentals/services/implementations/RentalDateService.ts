@@ -23,8 +23,8 @@ export class RentalDateService {
   }
 
   validateStartDate(startDate: Date): void {
-    const dateNow = this.dateProvider.dateNow();
-    const isBefore = this.dateProvider.compareIfBefore(startDate, dateNow);
+    const currentDate = this.dateProvider.dateNow();
+    const isBefore = this.dateProvider.compareIfBefore(startDate, currentDate);
 
     if (isBefore) {
       throw new AppError('You can’t create a rental on a past date', 422);

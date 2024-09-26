@@ -4,14 +4,14 @@ import { Car } from '@modules/cars/infra/typeorm/entities/Car';
 import { RentalStatus } from '../enums/RentatStatus';
 
 export interface ICreateRentalDTO {
+  id?: string;
   userId: string;
   user?: User;
   carId: string;
-  expectedReturnDate: Date;
+  car?: Car;
   startDate: Date;
-  id?: string;
+  expectedReturnDate: Date;
   endDate?: Date;
   total?: number;
   status?: RentalStatus;
-  car?: Car;
 }
