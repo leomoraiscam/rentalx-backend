@@ -6,6 +6,7 @@ import { IRentalRepository } from '@modules/rentals/repositories/IRentalReposito
 
 import { IListRentalsDTO } from '../../dtos/IListRentalsDTO';
 import { IPaginationResponseDTO } from '../../dtos/IPaginationResponseDTO';
+import { convertQueryStringToFilterArray } from '../../utils/convertQueryStringToFilterArray';
 
 @injectable()
 export class ListRentalsUseCase {
@@ -25,13 +26,11 @@ export class ListRentalsUseCase {
       status,
       ...rest
     } = options;
-    const parsedCategoryIds = categoryIds
-      ? (categoryIds as string).split(',').map((id) => id.trim())
-      : undefined;
-    const parsedStatus =
-      typeof status === 'string'
-        ? (status as string).split(',').map((stat) => stat.trim())
-        : status;
+
+    const parsedCategoryIds = convertQueryStringToFilterArray(
+      categoryIds as string
+    );
+    const parsedStatus = convertQueryStringToFilterArray(status as string[]);
     const rentals = await this.rentalRepository.list({
       page,
       perPage,
