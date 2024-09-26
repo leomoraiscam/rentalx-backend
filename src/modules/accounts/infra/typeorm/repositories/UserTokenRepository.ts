@@ -30,6 +30,15 @@ export class UserTokenRepository implements IUserTokenRepository {
     });
   }
 
+  async findByUserId(userId: string): Promise<UserToken | null> {
+    return this.repository.findOne({
+      where: {
+        userId,
+        deletedAt: null,
+      },
+    });
+  }
+
   async create(data: ICreateUserTokenDTO): Promise<UserToken> {
     const { userId, refreshToken, expiresDate } = data;
     const userToken = this.repository.create({
@@ -44,6 +53,6 @@ export class UserTokenRepository implements IUserTokenRepository {
   }
 
   async delete(id: string): Promise<void> {
-    await this.repository.delete(id);
+    await this.repository.softDelete(id);
   }
 }

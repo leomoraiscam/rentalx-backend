@@ -76,11 +76,24 @@ export class AuthenticateUserUseCase {
       Number(expiresRefreshTokenDays)
     );
 
-    await this.userTokenRepository.create({
-      userId,
-      refreshToken,
-      expiresDate: expiresDateLimitRefreshToken,
-    });
+    const userHasToken = await this.userTokenRepository.findByUserId(userId);
+
+    if (userHasToken) {
+      await Promise.all([
+        this.userTokenRepository.delete(userHasToken.id),
+        this.userTokenRepository.create({
+          userId,
+          refreshToken,
+          expiresDate: expiresDateLimitRefreshToken,
+        }),
+      ]);
+    } else {
+      await this.userTokenRepository.create({
+        userId,
+        refreshToken,
+        expiresDate: expiresDateLimitRefreshToken,
+      });
+    }
 
     const user = UserMap.toDTO(existingUser) as User;
 
