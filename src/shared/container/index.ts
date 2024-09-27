@@ -41,7 +41,6 @@ container.registerSingleton<IUserTokenRepository>(
   'UserTokenRepository',
   UserTokenRepository
 );
-
 container.registerSingleton<IRentalDateService>(
   'RentalDateService',
   RentalDateService

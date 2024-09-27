@@ -2,16 +2,17 @@ import { IDateProvider } from '../models/IDateProvider';
 
 export class InMemoryDateProvider implements IDateProvider {
   private currentDate: Date;
+  private readonly UTC_OFFSET_HOURS = 3;
+  private readonly MONTH_INDEX_OFFSET = 1;
+  private readonly MILLISECONDS_IN_HOUR = 1000 * 60 * 60;
+  private readonly HOURS_IN_DAY = 24;
+  private readonly MILLISECONDS_IN_MINUTE = 1000 * 60;
 
   constructor(initialDate: Date = new Date()) {
     this.currentDate = initialDate;
   }
 
-  setCurrentDate(date: Date): void {
-    this.currentDate = date;
-  }
-
-  getMonthName(month: number): string {
+  private getMonthName(month: number): string {
     const monthNames = [
       'jan',
       'fev',
@@ -26,7 +27,11 @@ export class InMemoryDateProvider implements IDateProvider {
       'nov',
       'dez',
     ];
-    return monthNames[month - 1];
+    return monthNames[month - this.MONTH_INDEX_OFFSET];
+  }
+
+  setCurrentDate(date: Date): void {
+    this.currentDate = date;
   }
 
   dateNow(): Date {
@@ -34,22 +39,23 @@ export class InMemoryDateProvider implements IDateProvider {
   }
 
   getHours(hour: Date): string {
-    const hourString = hour.toTimeString();
-
-    return hourString;
+    return hour.toTimeString();
   }
 
   getDate(date: Date): string {
     const day = date.getDate();
     const month = this.getMonthName(date.getMonth() + 1);
     const year = date.getFullYear();
+
     return `${day}, ${month} ${year}`;
   }
 
   addHours(hours: number): Date {
     const newDate = new Date(this.currentDate.getTime());
 
-    newDate.setHours(this.currentDate.getHours() - 3 + hours);
+    newDate.setHours(
+      this.currentDate.getHours() - this.UTC_OFFSET_HOURS + hours
+    );
 
     return newDate;
   }
@@ -69,8 +75,7 @@ export class InMemoryDateProvider implements IDateProvider {
     return (
       Math.abs(
         new Date(endDateUTC).getTime() - new Date(startDateUTC).getTime()
-      ) /
-      (1000 * 60 * 60)
+      ) / this.MILLISECONDS_IN_HOUR
     );
   }
 
@@ -81,10 +86,9 @@ export class InMemoryDateProvider implements IDateProvider {
     const hoursDifference =
       Math.abs(
         new Date(endDateUTC).getTime() - new Date(startDateUTC).getTime()
-      ) /
-      (1000 * 60 * 60);
+      ) / this.MILLISECONDS_IN_HOUR;
 
-    return Math.round(hoursDifference / 24);
+    return Math.round(hoursDifference / this.HOURS_IN_DAY);
   }
 
   compareIfBefore(startDate: Date, endDate: Date): boolean {
@@ -92,7 +96,10 @@ export class InMemoryDateProvider implements IDateProvider {
   }
 
   convertToUTC(date: Date): string {
-    const utcDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+    const utcDate = new Date(
+      date.getTime() + date.getTimezoneOffset() * this.MILLISECONDS_IN_MINUTE
+    );
+
     return utcDate.toISOString();
   }
 }

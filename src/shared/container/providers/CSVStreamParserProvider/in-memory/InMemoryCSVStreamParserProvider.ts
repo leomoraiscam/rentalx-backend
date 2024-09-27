@@ -2,7 +2,7 @@ import { ICSVStreamParserProvider } from '../models/ICSVStreamParserProvider';
 
 export class InMemoryCSVStreamParserProvider
   implements ICSVStreamParserProvider {
-  async parse<T>(filePath: string, keys: string[]): Promise<T[]> {
+  public async parse<T>(filePath: string, keys: string[]): Promise<T[]> {
     const isCategoryData = keys.includes('type');
     const isSpecificationData =
       !keys.includes('type') && keys.includes('description');

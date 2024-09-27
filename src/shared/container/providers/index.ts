@@ -17,30 +17,25 @@ import { IStorageProvider } from './StorageProvider/models/IStorageProvider';
 
 dotenv.config();
 
-container.registerSingleton<IHashProvider>('HashProvider', BCryptHashProvider);
-
-container.registerSingleton<IDateProvider>('DateProvider', DayjsDateProvider);
-
-container.registerInstance<IMailProvider>(
-  'MailProvider',
-  new EtherealMailProvider()
-);
-
-container.registerSingleton<ICSVStreamParserProvider>(
-  'CSVStreamParserProvider',
-  CSVStreamParserProvider
-);
-
 const diskStorage = {
   local: LocalStorageProvider,
   s3: S3StorageProvider,
 };
 
+container.registerSingleton<IHashProvider>('HashProvider', BCryptHashProvider);
+container.registerSingleton<IDateProvider>('DateProvider', DayjsDateProvider);
+container.registerInstance<IMailProvider>(
+  'MailProvider',
+  new EtherealMailProvider()
+);
+container.registerSingleton<ICSVStreamParserProvider>(
+  'CSVStreamParserProvider',
+  CSVStreamParserProvider
+);
 container.registerSingleton<IStorageProvider>(
   'StorageProvider',
   diskStorage[process.env.DISK]
 );
-
 container.registerSingleton<ILoggerProvider>(
   'LoggerProvider',
   WinstonLoggerProvider
