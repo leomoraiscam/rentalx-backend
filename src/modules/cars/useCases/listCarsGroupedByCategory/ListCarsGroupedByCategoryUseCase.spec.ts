@@ -102,6 +102,8 @@ describe('ListCarsGroupedByCategoryUseCase', () => {
 
     const cars = await listCarsGroupedByCategoryUseCase.execute({
       categoryId: category.id,
+      startDate: new Date(2024, 5, 10),
+      expectedReturnDate: new Date(2024, 5, 15),
     });
 
     expect(cars).toEqual({
