@@ -22,6 +22,7 @@ import { router } from './routes';
 
 createConnection();
 const app = express();
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 app.use(rateLimiter);
 Sentry.init({
@@ -35,10 +36,9 @@ Sentry.init({
 app.use(Sentry.Handlers.requestHandler());
 app.use(Sentry.Handlers.tracingHandler());
 app.use(express.json());
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 app.use('/avatar', express.static(`${multerConfig.tmpFolder}/avatar`));
 app.use('/car', express.static(`${multerConfig.tmpFolder}/cars`));
-app.use(cors());
+app.use(cors({ origin: '*' }));
 app.use(router);
 app.use(errors());
 app.use(Sentry.Handlers.errorHandler());
