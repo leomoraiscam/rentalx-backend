@@ -167,7 +167,7 @@ describe('ListRentalsUseCase', () => {
       page: 1,
       perPage: 10,
       order: OrdenationProps.DESC,
-      status: [RentalStatus.PICKED_UP, RentalStatus.CONFIRMED],
+      status: [RentalStatus.PICKED_UP, RentalStatus.CONFIRMED].toString(),
     });
 
     expect(data).toHaveLength(3);
