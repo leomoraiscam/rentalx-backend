@@ -30,7 +30,8 @@ export class ListRentalsUseCase {
     const parsedCategoryIds = convertQueryStringToFilterArray(
       categoryIds as string
     );
-    const parsedStatus = convertQueryStringToFilterArray(status as string[]);
+    const parsedStatus = convertQueryStringToFilterArray(status);
+
     const rentals = await this.rentalRepository.list({
       page,
       perPage,
