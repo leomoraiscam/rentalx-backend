@@ -1,6 +1,7 @@
+import { IPaginationQueryResponseDTO } from '@shared/common/dtos/IPaginationResponseDTO';
+import { IQueryListOptionsDTO } from '@shared/common/dtos/IQueryListOptionsDTO';
+
 import { ICreateSpecificationDTO } from '../dtos/ICreateSpecificationDTO';
-import { IPaginationQueryResponseDTO } from '../dtos/IPaginationResponseDTO';
-import { IQueryListOptionsDTO } from '../dtos/IQueryListOptionsDTO';
 import { Specification } from '../infra/typeorm/entities/Specification';
 
 export interface ISpecificationRepository {

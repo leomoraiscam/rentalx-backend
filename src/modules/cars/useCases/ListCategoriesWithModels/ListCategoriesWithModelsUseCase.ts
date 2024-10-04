@@ -5,12 +5,12 @@ import {
   ICarModelsDTO,
 } from '@modules/cars/dtos/IListCategoriesWithModelsResponseDTO';
 import { IQueryListCarsDTO } from '@modules/cars/dtos/IQueryListCarsDTO';
-import { OrdenationProps } from '@modules/cars/dtos/IQueryListOptionsDTO';
 import { CarStatus } from '@modules/cars/enums/CarStatus';
 import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
 import { ICategoryRepository } from '@modules/cars/repositories/ICategoryRepository';
 import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
+import { OrdenationProps } from '@shared/common/dtos/IQueryListOptionsDTO';
 import { ILoggerProvider } from '@shared/container/providers/LoggerProvider/models/ILoggerProvider';
 import { AppError } from '@shared/errors/AppError';
 

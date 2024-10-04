@@ -1,10 +1,10 @@
 import { getRepository, Repository } from 'typeorm';
 
 import { ICreateCategoryDTO } from '@modules/cars/dtos/ICreateCategoryDTO';
-import { IPaginationQueryResponseDTO } from '@modules/cars/dtos/IPaginationResponseDTO';
-import { IQueryListOptionsDTO } from '@modules/cars/dtos/IQueryListOptionsDTO';
 import { Category } from '@modules/cars/infra/typeorm/entities/Category';
 import { ICategoryRepository } from '@modules/cars/repositories/ICategoryRepository';
+import { IPaginationQueryResponseDTO } from '@shared/common/dtos/IPaginationResponseDTO';
+import { IQueryListOptionsDTO } from '@shared/common/dtos/IQueryListOptionsDTO';
 
 export class CategoryRepository implements ICategoryRepository {
   private repository: Repository<Category>;

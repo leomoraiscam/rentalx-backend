@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
-import { OrdenationProps } from '@modules/cars/dtos/IQueryListOptionsDTO';
+import { OrdenationProps } from '@shared/common/dtos/IQueryListOptionsDTO';
 
 import { ListSpecificationsUseCase } from './ListSpecificationsUseCase';
 

@@ -1,9 +1,9 @@
 import { getRepository, Repository } from 'typeorm';
 
 import { ICreateSpecificationDTO } from '@modules/cars/dtos/ICreateSpecificationDTO';
-import { IPaginationQueryResponseDTO } from '@modules/cars/dtos/IPaginationResponseDTO';
-import { IQueryListOptionsDTO } from '@modules/cars/dtos/IQueryListOptionsDTO';
 import { ISpecificationRepository } from '@modules/cars/repositories/ISpecificationRepository';
+import { IPaginationQueryResponseDTO } from '@shared/common/dtos/IPaginationResponseDTO';
+import { IQueryListOptionsDTO } from '@shared/common/dtos/IQueryListOptionsDTO';
 
 import { Specification } from '../entities/Specification';
 

@@ -1,11 +1,11 @@
 import { injectable, inject } from 'tsyringe';
 
-import { OrdenationProps } from '@modules/rentals/dtos/IQueryListOptionsDTO';
 import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
+import { IPaginationResponseDTO } from '@shared/common/dtos/IPaginationResponseDTO';
+import { OrdenationProps } from '@shared/common/dtos/IQueryListOptionsDTO';
 
 import { IListRentalsDTO } from '../../dtos/IListRentalsDTO';
-import { IPaginationResponseDTO } from '../../dtos/IPaginationResponseDTO';
 import { convertQueryStringToFilterArray } from '../../utils/convertQueryStringToFilterArray';
 
 @injectable()

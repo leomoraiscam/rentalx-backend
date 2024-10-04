@@ -1,6 +1,7 @@
+import { IPaginationQueryResponseDTO } from '@shared/common/dtos/IPaginationResponseDTO';
+import { IQueryListOptionsDTO } from '@shared/common/dtos/IQueryListOptionsDTO';
+
 import { ICreateCategoryDTO } from '../dtos/ICreateCategoryDTO';
-import { IPaginationQueryResponseDTO } from '../dtos/IPaginationResponseDTO';
-import { IQueryListOptionsDTO } from '../dtos/IQueryListOptionsDTO';
 import { Category } from '../infra/typeorm/entities/Category';
 
 export interface ICategoryRepository {

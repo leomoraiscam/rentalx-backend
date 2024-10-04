@@ -3,8 +3,8 @@ import { Car } from '@modules/cars/infra/typeorm/entities/Car';
 import { InMemoryCarRepository } from '@modules/cars/repositories/in-memory/InMemoryCarRepository';
 import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
 import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
+import { OrdenationProps } from '@shared/common/dtos/IQueryListOptionsDTO';
 
-import { OrdenationProps } from '../../dtos/IQueryListOptionsDTO';
 import { InMemoryRentalRepository } from '../../repositories/in-memory/InMemoryRentalRepository';
 import { ListRentalsUseCase } from './ListRentalsUseCase';
 

@@ -1,9 +1,9 @@
 import { injectable, inject } from 'tsyringe';
 
-import { IPaginationResponseDTO } from '@modules/cars/dtos/IPaginationResponseDTO';
-import { IQueryListOptionsDTO } from '@modules/cars/dtos/IQueryListOptionsDTO';
 import { Specification } from '@modules/cars/infra/typeorm/entities/Specification';
 import { ISpecificationRepository } from '@modules/cars/repositories/ISpecificationRepository';
+import { IPaginationResponseDTO } from '@shared/common/dtos/IPaginationResponseDTO';
+import { IQueryListOptionsDTO } from '@shared/common/dtos/IQueryListOptionsDTO';
 
 @injectable()
 export class ListSpecificationsUseCase {

@@ -1,5 +1,5 @@
-import { OrdenationProps } from '@modules/cars/dtos/IQueryListOptionsDTO';
 import { InMemorySpecificationRepository } from '@modules/cars/repositories/in-memory/InMemorySpecificationRepository';
+import { OrdenationProps } from '@shared/common/dtos/IQueryListOptionsDTO';
 
 import { ListSpecificationsUseCase } from './ListSpecificationsUseCase';
 

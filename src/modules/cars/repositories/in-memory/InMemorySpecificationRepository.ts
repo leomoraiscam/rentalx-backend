@@ -1,6 +1,6 @@
 import { ICreateSpecificationDTO } from '@modules/cars/dtos/ICreateSpecificationDTO';
-import { IPaginationQueryResponseDTO } from '@modules/cars/dtos/IPaginationResponseDTO';
-import { IQueryListOptionsDTO } from '@modules/cars/dtos/IQueryListOptionsDTO';
+import { IPaginationQueryResponseDTO } from '@shared/common/dtos/IPaginationResponseDTO';
+import { IQueryListOptionsDTO } from '@shared/common/dtos/IQueryListOptionsDTO';
 
 import { Specification } from '../../infra/typeorm/entities/Specification';
 import { ISpecificationRepository } from '../ISpecificationRepository';

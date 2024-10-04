@@ -1,6 +1,6 @@
 import { ICreateCategoryDTO } from '@modules/cars/dtos/ICreateCategoryDTO';
-import { IPaginationQueryResponseDTO } from '@modules/cars/dtos/IPaginationResponseDTO';
-import { IQueryListOptionsDTO } from '@modules/cars/dtos/IQueryListOptionsDTO';
+import { IPaginationQueryResponseDTO } from '@shared/common/dtos/IPaginationResponseDTO';
+import { IQueryListOptionsDTO } from '@shared/common/dtos/IQueryListOptionsDTO';
 
 import { Category } from '../../infra/typeorm/entities/Category';
 import { ICategoryRepository } from '../ICategoryRepository';

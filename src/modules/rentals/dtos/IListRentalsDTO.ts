@@ -1,4 +1,4 @@
-import { IQueryListOptionsDTO } from './IQueryListOptionsDTO';
+import { IQueryListOptionsDTO } from '@shared/common/dtos/IQueryListOptionsDTO';
 
 export interface IListRentalsDTO extends IQueryListOptionsDTO {
   startDate?: Date;

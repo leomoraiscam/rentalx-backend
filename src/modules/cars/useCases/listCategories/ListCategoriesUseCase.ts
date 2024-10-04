@@ -1,8 +1,8 @@
 import { injectable, inject } from 'tsyringe';
 
-import { IPaginationResponseDTO } from '@modules/cars/dtos/IPaginationResponseDTO';
-import { IQueryListOptionsDTO } from '@modules/cars/dtos/IQueryListOptionsDTO';
 import { ICategoryRepository } from '@modules/cars/repositories/ICategoryRepository';
+import { IPaginationResponseDTO } from '@shared/common/dtos/IPaginationResponseDTO';
+import { IQueryListOptionsDTO } from '@shared/common/dtos/IQueryListOptionsDTO';
 
 import { Category } from '../../infra/typeorm/entities/Category';
 
