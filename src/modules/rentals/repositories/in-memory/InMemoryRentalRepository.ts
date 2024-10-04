@@ -1,8 +1,8 @@
 import { IQueryListCarsDTO } from '@modules/cars/dtos/IQueryListCarsDTO';
+import { IPaginationQueryResponseDTO } from '@shared/common/dtos/IPaginationResponseDTO';
 
 import { ICreateRentalDTO } from '../../dtos/ICreateRentalDTO';
 import { IListRentalsDTO } from '../../dtos/IListRentalsDTO';
-import { IPaginationQueryResponseDTO } from '../../dtos/IPaginationResponseDTO';
 import { Rental } from '../../infra/typeorm/entities/Rental';
 import { IRentalRepository } from '../IRentalRepository';
 
