@@ -44,8 +44,12 @@ export class InMemoryUserTokenRepository implements IUserTokenRepository {
   }
 
   async delete(id: string): Promise<void> {
-    const userToken = this.userTokens.find((userToken) => userToken.id === id);
+    const userTokenIndex = this.userTokens.findIndex(
+      (userToken) => userToken.id === id
+    );
 
-    this.userTokens.splice(this.userTokens.indexOf(userToken));
+    Object.assign(this.userTokens[userTokenIndex], {
+      deletedAt: new Date(),
+    });
   }
 }

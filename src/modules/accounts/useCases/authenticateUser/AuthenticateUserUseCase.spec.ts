@@ -101,6 +101,31 @@ describe('AuthenticateUserUseCase', () => {
     ).rejects.toBeInstanceOf(AppError);
   });
 
+  it('should be able to added deletedAt flag when the user has valid token bus make a new authenticate with success', async () => {
+    jest.spyOn(Date, 'now').mockImplementationOnce(() => {
+      return new Date(2024, 2, 27).getTime();
+    });
+    const { id: userId } = await inMemoryUserRepository.create({
+      name: 'Sophia Bowers',
+      email: 'nus@ju.mx',
+      password: 'pass@123',
+      driverLicense: '8587317685',
+    });
+    const refreshToken = await inMemoryUserTokenRepository.create({
+      userId,
+      expiresDate: new Date(2024, 2, 28),
+      refreshToken: 'refresh-token-1',
+    });
+    const response = await authenticateUserUseCase.execute({
+      email: 'nus@ju.mx',
+      password: 'pass@123',
+    });
+
+    expect(response).toHaveProperty('token');
+    expect(response).toHaveProperty('refreshToken');
+    expect(refreshToken).toHaveProperty('deletedAt');
+  });
+
   it('should be able to logging an error when JWT configuration variables are missing', async () => {
     const loggerSpied = jest.spyOn(inMemoryLoggerProvider, 'log');
     auth.secretToken = '';
@@ -125,30 +150,5 @@ describe('AuthenticateUserUseCase', () => {
         secretToken: expect.any(String),
       }),
     });
-  });
-
-  it.skip('should be able to added deletedAt flag when the user has valid token bus make a new authenticate with success', async () => {
-    jest.spyOn(Date, 'now').mockImplementationOnce(() => {
-      return new Date(2024, 2, 27).getTime();
-    });
-    const { id: userId } = await inMemoryUserRepository.create({
-      name: 'Sophia Bowers',
-      email: 'nus@ju.mx',
-      password: 'pass@123',
-      driverLicense: '8587317685',
-    });
-    const refreshToken = await inMemoryUserTokenRepository.create({
-      userId,
-      expiresDate: new Date(2024, 2, 28),
-      refreshToken: 'refresh-token-1',
-    });
-    const response = await authenticateUserUseCase.execute({
-      email: 'nus@ju.mx',
-      password: 'pass@123',
-    });
-
-    expect(response).toHaveProperty('token');
-    expect(response).toHaveProperty('refreshToken');
-    expect(refreshToken).toHaveProperty('deletedAt');
   });
 });
