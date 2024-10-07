@@ -1,4 +1,4 @@
-import { CategoryType } from '../enums/CategoryType';
+import { CategoryType } from '../enums/categoryType';
 
 export interface ICreateCategoryDTO {
   name: string;

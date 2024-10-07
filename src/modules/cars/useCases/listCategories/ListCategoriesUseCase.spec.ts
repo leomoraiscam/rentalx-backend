@@ -1,4 +1,4 @@
-import { CategoryType } from '@modules/cars/enums/CategoryType';
+import { CategoryType } from '@modules/cars/enums/categoryType';
 import { InMemoryCategoryRepository } from '@modules/cars/repositories/in-memory/InMemoryCategoryRepository';
 import { OrdenationProps } from '@shared/common/dtos/IQueryListOptionsDTO';
 

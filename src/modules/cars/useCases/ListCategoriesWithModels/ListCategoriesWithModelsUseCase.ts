@@ -5,7 +5,7 @@ import {
   ICarModelsDTO,
 } from '@modules/cars/dtos/IListCategoriesWithModelsResponseDTO';
 import { IQueryListCarsDTO } from '@modules/cars/dtos/IQueryListCarsDTO';
-import { CarStatus } from '@modules/cars/enums/CarStatus';
+import { CarStatus } from '@modules/cars/enums/carStatus';
 import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
 import { ICategoryRepository } from '@modules/cars/repositories/ICategoryRepository';
 import { RentalStatus } from '@modules/rentals/enums/RentatStatus';

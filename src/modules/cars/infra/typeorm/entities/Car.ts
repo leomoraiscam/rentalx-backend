@@ -11,7 +11,7 @@ import {
 } from 'typeorm';
 import { v4 as uuidV4 } from 'uuid';
 
-import { CarStatus } from '@modules/cars/enums/CarStatus';
+import { CarStatus } from '@modules/cars/enums/carStatus';
 
 import { CarImage } from './CarImage';
 import { Category } from './Category';

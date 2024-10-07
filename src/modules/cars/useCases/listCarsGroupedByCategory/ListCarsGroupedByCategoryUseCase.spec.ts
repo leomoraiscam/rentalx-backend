@@ -1,5 +1,5 @@
-import { CarStatus } from '@modules/cars/enums/CarStatus';
-import { CategoryType } from '@modules/cars/enums/CategoryType';
+import { CarStatus } from '@modules/cars/enums/carStatus';
+import { CategoryType } from '@modules/cars/enums/categoryType';
 import { Category } from '@modules/cars/infra/typeorm/entities/Category';
 import { Specification } from '@modules/cars/infra/typeorm/entities/Specification';
 import { InMemoryCarRepository } from '@modules/cars/repositories/in-memory/InMemoryCarRepository';

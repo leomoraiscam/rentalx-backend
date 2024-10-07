@@ -1,4 +1,4 @@
-import { CarStatus } from '../enums/CarStatus';
+import { CarStatus } from '../enums/carStatus';
 import { CarImage } from '../infra/typeorm/entities/CarImage';
 import { Specification } from '../infra/typeorm/entities/Specification';
 import { IGroupedCarsModelsDTO } from './IGroupedCarsModelsDTO';

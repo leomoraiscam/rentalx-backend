@@ -30,6 +30,11 @@ rentalRouter.get(
       endDate: Joi.date(),
       status: Joi.string(),
       categoryIds: Joi.string(),
+      page: Joi.string(),
+      perPage: Joi.string(),
+      order: Joi.string()
+        .valid(...Object.values(['ASC', 'DESC']))
+        .optional(),
     },
   }),
   ensureAuthenticated,

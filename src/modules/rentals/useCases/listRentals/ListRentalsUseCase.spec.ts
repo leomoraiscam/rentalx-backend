@@ -1,4 +1,4 @@
-import { CarStatus } from '@modules/cars/enums/CarStatus';
+import { CarStatus } from '@modules/cars/enums/carStatus';
 import { Car } from '@modules/cars/infra/typeorm/entities/Car';
 import { InMemoryCarRepository } from '@modules/cars/repositories/in-memory/InMemoryCarRepository';
 import { RentalStatus } from '@modules/rentals/enums/RentatStatus';

@@ -9,9 +9,9 @@ import { IQueryListCarsDTO } from '@modules/cars/dtos/IQueryListCarsDTO';
 import { ICreateRentalDTO } from '@modules/rentals/dtos/ICreateRentalDTO';
 import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
+import { IPaginationQueryResponseDTO } from '@shared/common/dtos/IPaginationResponseDTO';
 
 import { IListRentalsDTO } from '../../../dtos/IListRentalsDTO';
-import { IPaginationQueryResponseDTO } from '../../../dtos/IPaginationResponseDTO';
 
 export class RentalRepository implements IRentalRepository {
   private repository: Repository<Rental>;

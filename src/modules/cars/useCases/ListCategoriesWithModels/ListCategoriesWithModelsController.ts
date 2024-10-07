@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
-import { CategoryType } from '@modules/cars/enums/CategoryType';
+import { CategoryType } from '@modules/cars/enums/categoryType';
 
 import { ListCategoriesWithModelsUseCase } from './ListCategoriesWithModelsUseCase';
 

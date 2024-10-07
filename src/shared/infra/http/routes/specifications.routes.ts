@@ -4,7 +4,7 @@ import multer from 'multer';
 
 import { multerConfig } from '@config/upload';
 import { CreateSpecificationController } from '@modules/cars/useCases/createSpecification/CreateSpecificationController';
-import { ImportSpecificationsController } from '@modules/cars/useCases/importSpecifications/ImportSpecificationsController';
+import { ImportSpecificationsController } from '@modules/cars/useCases/importSpecifications/importSpecificationsController';
 import { ListSpecificationsController } from '@modules/cars/useCases/listSpecifications/ListSpecificationsController';
 
 import ensureAdmin from '../middlewares/ensureAdmin';

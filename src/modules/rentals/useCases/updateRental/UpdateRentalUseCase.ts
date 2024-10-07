@@ -1,6 +1,6 @@
 import { inject, injectable } from 'tsyringe';
 
-import { CarStatus } from '@modules/cars/enums/CarStatus';
+import { CarStatus } from '@modules/cars/enums/carStatus';
 import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
 import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
 import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';

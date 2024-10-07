@@ -3,7 +3,7 @@ import { Router } from 'express';
 import multer from 'multer';
 
 import { multerConfig } from '@config/upload';
-import { CarStatus } from '@modules/cars/enums/CarStatus';
+import { CarStatus } from '@modules/cars/enums/carStatus';
 import { CreateCarController } from '@modules/cars/useCases/createCar/CreateCarController';
 import { ListCarsGroupedByCategoryController } from '@modules/cars/useCases/listCarsGroupedByCategory/ListCarsGroupedByCategoryController';
 import { ListCategoriesWithModelsController } from '@modules/cars/useCases/ListCategoriesWithModels/ListCategoriesWithModelsController';
@@ -49,7 +49,7 @@ carsRouter.get(
       expectedReturnDate: Joi.date().iso().required(),
       brand: Joi.string(),
       type: Joi.string(),
-      categoryId: Joi.string().uuid(),
+      categoryId: Joi.string(),
     },
   }),
   listCategoriesWithModelsController.handle
