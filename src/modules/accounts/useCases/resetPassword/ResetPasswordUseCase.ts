@@ -35,9 +35,10 @@ export class ResetPasswordUseCase {
       throw new AppError('User not found', 404);
     }
 
+    const currentDate = this.dateProvider.dateNow();
     const isExpiredToken = this.dateProvider.compareIfBefore(
       expiresDate,
-      this.dateProvider.dateNow()
+      currentDate
     );
 
     if (isExpiredToken) {
@@ -46,10 +47,11 @@ export class ResetPasswordUseCase {
 
     const hashedPassword = await this.hashProvider.generateHash(password);
 
-    Object.assign(user, {
-      password: hashedPassword,
-    });
-    await this.userRepository.create(user);
-    await this.userTokenRepository.delete(id);
+    user.password = hashedPassword;
+
+    await Promise.all([
+      this.userRepository.create(user),
+      this.userTokenRepository.delete(id),
+    ]);
   }
 }

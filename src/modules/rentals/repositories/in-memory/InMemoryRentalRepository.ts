@@ -23,11 +23,9 @@ export class InMemoryRentalRepository implements IRentalRepository {
     );
   }
 
-  async findByCarAndDateRange({
-    startDate,
-    expectedReturnDate,
-    carId,
-  }: IQueryListCarsDTO): Promise<Rental | null> {
+  async findByCarAndDateRange(data: IQueryListCarsDTO): Promise<Rental | null> {
+    const { startDate, expectedReturnDate, carId } = data;
+
     return this.rentals.find((rental) => {
       return (
         rental.carId === carId &&
@@ -97,7 +95,6 @@ export class InMemoryRentalRepository implements IRentalRepository {
 
   async create(data: ICreateRentalDTO): Promise<Rental> {
     const { carId, userId, expectedReturnDate, startDate, status, car } = data;
-
     const rental = new Rental();
 
     Object.assign(rental, {

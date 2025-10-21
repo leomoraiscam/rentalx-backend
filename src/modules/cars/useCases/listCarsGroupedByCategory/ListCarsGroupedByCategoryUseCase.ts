@@ -10,7 +10,6 @@ import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
 import { ICategoryRepository } from '@modules/cars/repositories/ICategoryRepository';
 import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
-import { ILoggerProvider } from '@shared/container/providers/LoggerProvider/models/ILoggerProvider';
 
 @injectable()
 export class ListCarsGroupedByCategoryUseCase {
@@ -20,9 +19,7 @@ export class ListCarsGroupedByCategoryUseCase {
     @inject('CategoryRepository')
     private categoryRepository: ICategoryRepository,
     @inject('RentalRepository')
-    private rentalRepository: IRentalRepository,
-    @inject('LoggerProvider')
-    private loggerProvider: ILoggerProvider
+    private rentalRepository: IRentalRepository
   ) {}
 
   async execute(

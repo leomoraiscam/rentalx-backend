@@ -12,7 +12,8 @@ export class RentalDateService {
   ) {}
 
   validateRentalHours(date: Date): void {
-    const hour = Number(this.dateProvider.getHours(date).slice(0, 2));
+    const hoursInDate = this.dateProvider.getHours(date);
+    const hour = Number(hoursInDate.slice(0, 2));
 
     if (hour < 8 || hour > 18) {
       throw new AppError(

@@ -6,7 +6,9 @@ import { ILoggerProvider } from '../models/ILoggerProvider';
 export class WinstonLoggerProvider implements ILoggerProvider {
   private logger: Logger;
 
-  log({ level, message, metadata }: ICreateLoggerDTO): void {
+  log(data: ICreateLoggerDTO): void {
+    const { level, message, metadata } = data;
+
     this.logger = createLogger({
       level,
       format: winston.format.json(),

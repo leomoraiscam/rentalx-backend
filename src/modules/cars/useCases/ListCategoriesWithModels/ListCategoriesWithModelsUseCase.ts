@@ -28,7 +28,7 @@ export class ListCategoriesWithModelsUseCase {
   ) {}
 
   async execute(
-    data?: IQueryListCarsDTO
+    data: IQueryListCarsDTO
   ): Promise<IListCategoriesWithModelsResponseDTO[]> {
     try {
       const { startDate, expectedReturnDate } = data;

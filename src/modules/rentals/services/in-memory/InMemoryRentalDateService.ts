@@ -7,7 +7,7 @@ export class InMemoryRentalDateService implements IRentalDateService {
     const now = new Date();
 
     if (startDate < now) {
-      throw new AppError('Cannot start a rental in the past');
+      throw new AppError('Cannot start a rental in the past', 422);
     }
   }
 
@@ -15,7 +15,7 @@ export class InMemoryRentalDateService implements IRentalDateService {
     const hour = date.getUTCHours();
 
     if (hour < 8 || hour > 18) {
-      throw new AppError('Rental hours must be between 8am and 6pm');
+      throw new AppError('Rental hours must be between 8am and 6pm', 422);
     }
   }
 

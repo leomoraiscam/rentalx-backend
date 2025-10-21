@@ -13,7 +13,7 @@ import { IRentalRepository } from '../../repositories/IRentalRepository';
 
 @injectable()
 export class CreateRentalUseCase {
-  private MINIMUM_HOURS = 24;
+  private readonly MINIMUM_HOURS = 24;
 
   constructor(
     @inject('RentalRepository')
@@ -77,9 +77,7 @@ export class CreateRentalUseCase {
       expectedReturnDate
     );
 
-    Object.assign(car, {
-      status: CarStatus.RESERVED,
-    });
+    car.status = CarStatus.RESERVED;
 
     const [rental] = await Promise.all([
       await this.rentalRepository.create({

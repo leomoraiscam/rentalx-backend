@@ -8,7 +8,7 @@ export interface ISpecificationRepository {
   findByName(name: string): Promise<Specification | null>;
   findByIds(ids: string[]): Promise<Specification[] | null>;
   list(
-    options?: IQueryListOptionsDTO
+    options: IQueryListOptionsDTO
   ): Promise<IPaginationQueryResponseDTO<Specification>>;
   create(data: ICreateSpecificationDTO): Promise<Specification>;
 }

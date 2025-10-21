@@ -32,18 +32,14 @@ export class EtherealMailProvider implements IMailProvider {
       });
   }
 
-  async sendMail<T>({
-    path,
-    subject,
-    to,
-    variables,
-  }: ISendMailDTO<T>): Promise<void> {
+  async sendMail<T>(data: ISendMailDTO<T>): Promise<void> {
+    const { path, subject, to, variables } = data;
     const templateFileContent = fs.readFileSync(path).toString('utf-8');
     const templateParse = handlebars.compile(templateFileContent);
     const templateHTML = templateParse(variables);
     const message = await this.client.sendMail({
       to,
-      from: 'Rentx <noreplay@rentx.com.br>',
+      from: 'RentalX <noreply@rentx.com.br>',
       subject,
       html: templateHTML,
     });

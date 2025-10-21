@@ -11,7 +11,6 @@ import ensureAdmin from '../middlewares/ensureAdmin';
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 const uploadSpecifications = multer(multerConfig);
-
 const specificationRouter = Router();
 const createSpecificationController = new CreateSpecificationController();
 const listSpecificationsController = new ListSpecificationsController();
@@ -21,8 +20,8 @@ specificationRouter.get(
   '/',
   celebrate({
     [Segments.QUERY]: {
-      page: Joi.string().min(1).max(4).optional(),
-      perPage: Joi.string().min(1).max(4).optional(),
+      page: Joi.string().min(1).optional(),
+      perPage: Joi.string().min(1).optional(),
       order: Joi.string()
         .valid(...Object.values(['ASC', 'DESC']))
         .optional(),

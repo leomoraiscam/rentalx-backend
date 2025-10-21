@@ -52,15 +52,13 @@ export class RentalRepository implements IRentalRepository {
   ): Promise<Rental | undefined> {
     const { carId, startDate, expectedReturnDate } = data;
 
-    const rental = await this.repository.findOne({
+    return this.repository.findOne({
       where: {
         carId,
         startDate: LessThanOrEqual(expectedReturnDate),
         expectedReturnDate: MoreThanOrEqual(startDate),
       },
     });
-
-    return rental;
   }
 
   async findActiveRentalByUser(userId: string): Promise<Rental> {
@@ -84,8 +82,8 @@ export class RentalRepository implements IRentalRepository {
       endDate,
       categoryIds,
     } = options;
-
     const skip = (page - 1) * take;
+
     const queryBuilder = this.repository
       .createQueryBuilder('rental')
       .select([

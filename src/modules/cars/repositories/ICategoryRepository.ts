@@ -8,7 +8,7 @@ export interface ICategoryRepository {
   findById(id: string): Promise<Category | null>;
   findByName(name: string): Promise<Category | null>;
   list(
-    options?: IQueryListOptionsDTO
+    options: IQueryListOptionsDTO
   ): Promise<IPaginationQueryResponseDTO<Category>>;
   create(data: ICreateCategoryDTO): Promise<Category>;
 }

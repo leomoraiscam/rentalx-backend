@@ -13,7 +13,6 @@ import ensureAdmin from '../middlewares/ensureAdmin';
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 const uploadImages = multer(multerConfig);
-
 const carsRouter = Router();
 const createCarController = new CreateCarController();
 const listCategoriesWithModelsController = new ListCategoriesWithModelsController();
@@ -24,14 +23,14 @@ carsRouter.post(
   '/',
   celebrate({
     [Segments.BODY]: {
-      name: Joi.string().min(2).max(15).required(),
+      name: Joi.string().min(2).max(25).required(),
       brand: Joi.string().min(2).max(15).required(),
-      description: Joi.string().min(5).max(40).required(),
-      dailyRate: Joi.number().integer().min(0).max(1000).required(),
-      fineAmount: Joi.number().integer().min(0).max(1000).required(),
-      licensePlate: Joi.string().min(7).max(8).required(),
+      description: Joi.string().min(5).max(90).required(),
+      dailyRate: Joi.number().integer().min(80).max(1000).required(),
+      fineAmount: Joi.number().integer().min(60).max(1000).required(),
+      licensePlate: Joi.string().min(7).max(7).required(),
       categoryId: Joi.string().uuid().required(),
-      specifications: Joi.array().min(1).max(10).required(),
+      specifications: Joi.array().min(1).required(),
       status: Joi.string()
         .valid(...Object.values(CarStatus))
         .required(),
@@ -67,6 +66,11 @@ carsRouter.get(
 );
 carsRouter.post(
   '/:id/images',
+  celebrate({
+    [Segments.PARAMS]: {
+      id: Joi.string().uuid().required(),
+    },
+  }),
   ensureAuthenticated,
   ensureAdmin,
   uploadImages.array('images'),

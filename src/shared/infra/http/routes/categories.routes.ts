@@ -13,7 +13,6 @@ import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 const upload = multer({
   dest: './tmp',
 });
-
 const categoriesRouter = Router();
 const createCategoryController = new CreateCategoryController();
 const importCategoriesController = new ImportCategoriesController();
@@ -39,7 +38,7 @@ categoriesRouter.post(
   celebrate({
     [Segments.BODY]: {
       name: Joi.string().min(3).max(20).required(),
-      description: Joi.string().min(5).max(55).required(),
+      description: Joi.string().min(5).max(90).required(),
       type: Joi.string()
         .valid(...Object.values(CategoryType))
         .required(),

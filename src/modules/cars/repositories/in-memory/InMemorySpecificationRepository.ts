@@ -53,7 +53,6 @@ export class InMemorySpecificationRepository
 
   async create(data: ICreateSpecificationDTO): Promise<Specification> {
     const { name, description } = data;
-
     const specification = new Specification();
 
     Object.assign(specification, {

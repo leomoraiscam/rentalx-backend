@@ -47,8 +47,9 @@ export class InMemoryUserTokenRepository implements IUserTokenRepository {
     const userTokenIndex = this.userTokens.findIndex(
       (userToken) => userToken.id === id
     );
+    const userTokenToDeleted = this.userTokens[userTokenIndex];
 
-    Object.assign(this.userTokens[userTokenIndex], {
+    Object.assign(userTokenToDeleted, {
       deletedAt: new Date(),
     });
   }

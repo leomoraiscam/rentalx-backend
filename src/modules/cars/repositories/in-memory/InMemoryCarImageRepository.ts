@@ -8,7 +8,6 @@ export class InMemoryCarImageRepository implements ICarImageRepository {
 
   async create(data: IUploadCarImageDTO): Promise<CarImage> {
     const { carId, image } = data;
-
     const carImage = new CarImage();
 
     Object.assign(carImage, {

@@ -31,9 +31,10 @@ export class UpdateUserAvatarUseCase {
 
     user.avatar = avatar;
 
-    await this.storageProvider.save(avatar, UploadFolder.AVATAR);
-
-    const updatedUser = await this.userRepository.save(user);
+    const [, updatedUser] = await Promise.all([
+      this.storageProvider.save(avatar, UploadFolder.AVATAR),
+      this.userRepository.save(user),
+    ]);
 
     return UserMap.toDTO(updatedUser) as User;
   }

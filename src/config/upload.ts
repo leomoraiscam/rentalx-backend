@@ -9,12 +9,11 @@ export enum UploadFolder {
 }
 
 const tmpFolder = resolve(__dirname, '..', '..', UploadFolder.TMP);
-
 export const multerConfig = {
   tmpFolder,
   storage: multer.diskStorage({
     destination: tmpFolder,
-    filename: (request, file, callback) => {
+    filename: (_, file, callback) => {
       const fileHash = crypto.randomBytes(8).toString('hex');
       const fileName = `${fileHash}-${file.originalname}`;
 

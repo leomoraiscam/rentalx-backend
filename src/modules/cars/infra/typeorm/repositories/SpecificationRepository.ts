@@ -44,10 +44,8 @@ export class SpecificationRepository implements ISpecificationRepository {
     };
   }
 
-  async create({
-    name,
-    description,
-  }: ICreateSpecificationDTO): Promise<Specification> {
+  async create(data: ICreateSpecificationDTO): Promise<Specification> {
+    const { name, description } = data;
     const specification = this.repository.create({
       name,
       description,

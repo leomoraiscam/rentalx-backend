@@ -14,6 +14,6 @@ export class ResetPasswordController {
       password,
     });
 
-    return response.status(200).send();
+    return response.status(204).send();
   }
 }

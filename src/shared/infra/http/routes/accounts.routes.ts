@@ -10,7 +10,6 @@ import { UpdateUserAvatarController } from '@modules/accounts/useCases/updateUse
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 const uploadAvatar = multer(multerConfig);
-
 const accountsRouter = Router();
 const createUserController = new CreateUserController();
 const updateUserAvatarController = new UpdateUserAvatarController();
@@ -23,7 +22,7 @@ accountsRouter.post(
       name: Joi.string().min(3).max(20).required(),
       email: Joi.string().email().required(),
       password: Joi.string().min(5).max(15).required(),
-      driverLicense: Joi.string().min(9).max(9).required(),
+      driverLicense: Joi.string().min(9).max(11).required(),
     },
   }),
   createUserController.handle

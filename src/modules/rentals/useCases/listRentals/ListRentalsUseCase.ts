@@ -26,7 +26,6 @@ export class ListRentalsUseCase {
       status,
       ...rest
     } = options;
-
     const parsedCategoryIds = convertQueryStringToFilterArray(
       categoryIds as string
     );
@@ -40,8 +39,7 @@ export class ListRentalsUseCase {
       status: parsedStatus,
       ...rest,
     });
-    const { total } = rentals;
-    const { result: data } = rentals;
+    const { total, result: data } = rentals;
     const totalPages = Math.ceil(total / perPage);
 
     return {

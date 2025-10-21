@@ -54,19 +54,18 @@ export class SendForgotPasswordMailUseCase {
       process.env.APP_URL && process.env.APP_PORT
         ? `${process.env.APP_URL}:${process.env.APP_PORT}/password/reset?token=${token}`
         : `http://localhost:3333/password/reset?token=${token}`;
-    const variables = {
-      name,
-      resetPasswordUrl,
-    };
 
     await this.mailProvider.sendMail<{
       name: string;
       resetPasswordUrl: string;
     }>({
       path: templatePath,
-      subject: 'Recuperação de senha',
+      subject: '[RentalX] Recuperação de senha',
       to: email,
-      variables,
+      variables: {
+        name,
+        resetPasswordUrl,
+      },
     });
   }
 }

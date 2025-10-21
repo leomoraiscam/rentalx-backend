@@ -25,7 +25,8 @@ export class UpdateRentalUseCase {
   ) {}
 
   async execute(data: Partial<Rental>): Promise<Rental> {
-    const rental = await this.rentalRepository.findById(data.id);
+    const { id, startDate, expectedReturnDate, carId } = data;
+    const rental = await this.rentalRepository.findById(id);
 
     if (!rental) {
       throw new AppError('Rental not found', 404);
@@ -38,14 +39,14 @@ export class UpdateRentalUseCase {
       );
     }
 
-    if (data.startDate || data.expectedReturnDate) {
-      this.rentalDateService.validateStartDate(data.startDate);
-      this.rentalDateService.validateRentalHours(data.startDate);
-      this.rentalDateService.validateRentalHours(data.expectedReturnDate);
+    if (startDate || expectedReturnDate) {
+      this.rentalDateService.validateStartDate(startDate);
+      this.rentalDateService.validateRentalHours(startDate);
+      this.rentalDateService.validateRentalHours(expectedReturnDate);
 
       const rentalDurationInHours = this.dateProvider.compareInHours(
-        data.startDate,
-        data.expectedReturnDate
+        startDate,
+        expectedReturnDate
       );
 
       if (rentalDurationInHours < this.MINIMUM_HOURS) {
@@ -54,13 +55,13 @@ export class UpdateRentalUseCase {
 
       rental.total = this.rentalDateService.calculateTotal(
         rental.car,
-        data.startDate,
-        data.expectedReturnDate
+        startDate,
+        expectedReturnDate
       );
     }
 
-    if (data.carId && rental.carId !== data.carId) {
-      const car = await this.carRepository.findById(data.carId);
+    if (carId && rental.carId !== carId) {
+      const car = await this.carRepository.findById(carId);
 
       if (!car) {
         throw new AppError('Car not found', 404);
