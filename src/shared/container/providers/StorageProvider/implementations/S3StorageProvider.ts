@@ -3,7 +3,7 @@ import fs from 'fs';
 import mime from 'mime';
 import path from 'path';
 
-import { multerConfig as upload } from '@config/upload';
+import { multerConfig } from '@config/upload';
 
 import { IStorageProvider } from '../models/IStorageProvider';
 
@@ -17,7 +17,7 @@ export class S3StorageProvider implements IStorageProvider {
   }
 
   async save(file: string, folder: string): Promise<string> {
-    const originalName = path.resolve(upload.tmpFolder, file);
+    const originalName = path.resolve(multerConfig.tmpFolder, file);
     const fileContent = await fs.promises.readFile(originalName);
     const ContentType = mime.getType(originalName);
 

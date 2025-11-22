@@ -2,7 +2,7 @@ import { Joi, Segments, celebrate } from 'celebrate';
 import { Router } from 'express';
 import multer from 'multer';
 
-import { multerConfig } from '@config/upload';
+import { uploadCSVFile } from '@config/upload';
 import { CreateSpecificationController } from '@modules/cars/useCases/createSpecification/CreateSpecificationController';
 import { ImportSpecificationsController } from '@modules/cars/useCases/importSpecifications/importSpecificationsController';
 import { ListSpecificationsController } from '@modules/cars/useCases/listSpecifications/ListSpecificationsController';
@@ -10,7 +10,7 @@ import { ListSpecificationsController } from '@modules/cars/useCases/listSpecifi
 import ensureAdmin from '../middlewares/ensureAdmin';
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
-const uploadSpecifications = multer(multerConfig);
+const uploadSpecifications = multer(uploadCSVFile);
 const specificationRouter = Router();
 const createSpecificationController = new CreateSpecificationController();
 const listSpecificationsController = new ListSpecificationsController();

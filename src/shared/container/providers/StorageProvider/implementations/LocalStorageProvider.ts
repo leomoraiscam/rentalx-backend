@@ -1,22 +1,22 @@
 import fs from 'fs';
 import path from 'path';
 
-import { multerConfig as upload } from '@config/upload';
+import { multerConfig } from '@config/upload';
 
 import { IStorageProvider } from '../models/IStorageProvider';
 
 export class LocalStorageProvider implements IStorageProvider {
   async save(file: string, folder: string): Promise<string> {
     await fs.promises.rename(
-      path.resolve(upload.tmpFolder, file),
-      path.resolve(`${upload.tmpFolder}/${folder}`, file)
+      path.resolve(multerConfig.tmpFolder, file),
+      path.resolve(`${multerConfig.tmpFolder}/${folder}`, file)
     );
 
     return file;
   }
 
   async delete(file: string, folder: string): Promise<void> {
-    const filename = path.resolve(`${upload.tmpFolder}/${folder}`, file);
+    const filename = path.resolve(`${multerConfig.tmpFolder}/${folder}`, file);
 
     try {
       await fs.promises.stat(filename);

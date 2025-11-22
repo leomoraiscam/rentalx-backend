@@ -13,7 +13,7 @@ import { Car } from './Car';
 @Entity('cars_image')
 export class CarImage {
   @PrimaryColumn('uuid')
-  id: string;
+  id?: string;
 
   @Column({ name: 'image_name' })
   imageName: string;

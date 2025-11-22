@@ -9,7 +9,7 @@ import { IStorageProvider } from '@shared/container/providers/StorageProvider/mo
 import { AppError } from '@shared/errors/AppError';
 
 @injectable()
-export class UploadCarImagesUseCase {
+export class UpdateCarImagesUseCase {
   constructor(
     @inject('CarImageRepository')
     private carsImageRepository: ICarImageRepository,
@@ -23,30 +23,46 @@ export class UploadCarImagesUseCase {
 
   async execute(data: IUploadCarImagesDTO): Promise<void> {
     const { carId, fileNames } = data;
+
     const car = await this.carRepository.findById(carId);
 
     if (!car) {
       throw new AppError('Car not found', 404);
     }
 
+    const oldFileNamesToDelete =
+      car.images && car.images.length > 0
+        ? car.images.map((carImage) => carImage.imageName)
+        : [];
+
     const savedFileNames: string[] = [];
 
     try {
-      const storagePromises = fileNames.map(async (fileName) => {
+      const uploadFilePromises = fileNames.map(async (fileName) => {
         await this.storageProvider.save(fileName, UploadFolder.CARS);
         savedFileNames.push(fileName);
       });
 
-      await Promise.all(storagePromises);
-      await this.carsImageRepository.createMany({
+      await Promise.all(uploadFilePromises);
+
+      await this.carsImageRepository.replaceImages({
         carId,
         fileNames: savedFileNames,
       });
-    } catch (error) {
+
+      if (oldFileNamesToDelete.length > 0) {
+        const deleteStoragePromises = oldFileNamesToDelete.map(
+          async (imageName) => {
+            await this.storageProvider.delete(imageName, UploadFolder.CARS);
+          }
+        );
+        await Promise.all(deleteStoragePromises);
+      }
+    } catch (err) {
       this.loggerProvider.log({
         level: 'error',
-        message: `Failed to upload image: ${error?.message}`,
-        metadata: { error },
+        message: `Failed to upload image: ${err?.message}`,
+        metadata: { err },
       });
 
       try {

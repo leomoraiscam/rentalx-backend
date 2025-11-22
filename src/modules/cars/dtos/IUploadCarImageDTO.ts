@@ -1,4 +1,4 @@
 export interface IUploadCarImageDTO {
   carId: string;
-  image: string;
+  imageName: string;
 }

@@ -100,6 +100,7 @@ rentalRouter.put(
       id: Joi.string().uuid().required(),
     },
   }),
+  ensureAuthenticated,
   cancelRentalController.handle
 );
 

@@ -2,22 +2,34 @@ import { Joi, Segments, celebrate } from 'celebrate';
 import { Router } from 'express';
 import multer from 'multer';
 
-import { multerConfig } from '@config/upload';
+import { uploadImage } from '@config/upload';
 import { CarStatus } from '@modules/cars/enums/carStatus';
 import { CreateCarController } from '@modules/cars/useCases/createCar/CreateCarController';
 import { ListCarsGroupedByCategoryController } from '@modules/cars/useCases/listCarsGroupedByCategory/ListCarsGroupedByCategoryController';
 import { ListCategoriesWithModelsController } from '@modules/cars/useCases/ListCategoriesWithModels/ListCategoriesWithModelsController';
+import { UpdateCarImageController } from '@modules/cars/useCases/updateCarImage/UpdateCarImageController';
+import { UpdateCarImagesController } from '@modules/cars/useCases/updateCarImages/UpdateCarImagesController';
 import { UploadCarImagesController } from '@modules/cars/useCases/uploadCarImages/UploadCarImagesController';
 
 import ensureAdmin from '../middlewares/ensureAdmin';
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
+import {
+  ensureArrayUpload,
+  ensureSingleUpload,
+} from '../middlewares/ensureUploadFields';
+import { transformFilesToImageNames } from '../middlewares/transformFilesToFileNames';
+import { ensureFileExists } from '../middlewares/ensureFileExists';
+import { ensureFileSizeLimit } from '../middlewares/ensureFileSizeLimit';
+import { ensureInvalidFileFormat } from '../middlewares/ensureInvalidFileFormat';
 
-const uploadImages = multer(multerConfig);
+const uploadImages = multer(uploadImage);
 const carsRouter = Router();
 const createCarController = new CreateCarController();
 const listCategoriesWithModelsController = new ListCategoriesWithModelsController();
 const listCarsGroupedByCategoryController = new ListCarsGroupedByCategoryController();
 const uploadCarImagesController = new UploadCarImagesController();
+const updateCarImagesController = new UpdateCarImagesController();
+const updateCarImageController = new UpdateCarImageController();
 
 carsRouter.post(
   '/',
@@ -73,8 +85,44 @@ carsRouter.post(
   }),
   ensureAuthenticated,
   ensureAdmin,
-  uploadImages.array('images'),
+  ensureArrayUpload(uploadImages, { fieldName: 'car', maxCount: 4 }),
+  ensureFileExists,
+  ensureFileSizeLimit,
+  ensureInvalidFileFormat,
+  transformFilesToImageNames,
   uploadCarImagesController.handle
+);
+carsRouter.put(
+  '/:id/images',
+  celebrate({
+    [Segments.PARAMS]: {
+      id: Joi.string().uuid().required(),
+    },
+  }),
+  ensureAuthenticated,
+  ensureAdmin,
+  ensureArrayUpload(uploadImages, { fieldName: 'car', maxCount: 4 }),
+  ensureFileExists,
+  ensureFileSizeLimit,
+  ensureInvalidFileFormat,
+  transformFilesToImageNames,
+  updateCarImagesController.handle
+);
+carsRouter.patch(
+  '/:id/images/:imageId',
+  celebrate({
+    [Segments.PARAMS]: {
+      id: Joi.string().uuid().required(),
+      imageId: Joi.string().uuid().required(),
+    },
+  }),
+  ensureAuthenticated,
+  ensureAdmin,
+  ensureSingleUpload(uploadImages, { fieldName: 'car' }),
+  ensureFileExists,
+  ensureFileSizeLimit,
+  ensureInvalidFileFormat,
+  updateCarImageController.handle
 );
 
 export { carsRouter };

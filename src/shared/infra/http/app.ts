@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import 'reflect-metadata';
 import { errors } from 'celebrate';
 import cors from 'cors';
@@ -12,7 +13,7 @@ import 'express-async-errors';
 
 import '../../container';
 
-import { multerConfig } from '@config/upload';
+import { TMP_FOLDER, setupUploadFolders } from '@config/upload';
 import { AppError } from '@shared/errors/AppError';
 
 import swaggerFile from '../../../swagger.json';
@@ -22,11 +23,12 @@ import { router } from './routes';
 
 createConnection();
 const app = express();
+setupUploadFolders();
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 app.use(rateLimiter);
 Sentry.init({
-  dsn: process.env.SENTRY_DSN,
+  dsn: process.env.SENTRY_eDSN,
   integrations: [
     new Sentry.Integrations.Http({ tracing: true }),
     new Tracing.Integrations.Express({ app }),
@@ -36,8 +38,8 @@ Sentry.init({
 app.use(Sentry.Handlers.requestHandler());
 app.use(Sentry.Handlers.tracingHandler());
 app.use(express.json());
-app.use('/avatar', express.static(`${multerConfig.tmpFolder}/avatar`));
-app.use('/car', express.static(`${multerConfig.tmpFolder}/cars`));
+app.use('/avatar', express.static(`${TMP_FOLDER}/avatar`));
+app.use('/car', express.static(`${TMP_FOLDER}/cars`));
 app.use(cors({ origin: '*' }));
 app.use(router);
 app.use(errors());

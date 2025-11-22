@@ -25,17 +25,45 @@ export class UpdateUserAvatarUseCase {
       throw new AppError('Only authenticated users can change avatar.', 401);
     }
 
-    if (user.avatar) {
-      await this.storageProvider.delete(user.avatar, UploadFolder.AVATAR);
+    try {
+      const oldAvatarFile = user.avatar;
+
+      try {
+        await this.storageProvider.save(avatar, UploadFolder.AVATAR);
+      } catch (error) {
+        throw new AppError('Failed to save new avatar file.', 500);
+      }
+
+      user.avatar = avatar;
+      let updatedUser: User;
+
+      try {
+        updatedUser = await this.userRepository.save(user);
+      } catch (dbError) {
+        await this.storageProvider.delete(avatar, UploadFolder.AVATAR);
+
+        throw new AppError('Failed to update user avatar in database.', 500);
+      }
+
+      if (oldAvatarFile) {
+        try {
+          await this.storageProvider.delete(oldAvatarFile, UploadFolder.AVATAR);
+        } catch (error) {
+          // this.loggerProvider.log({
+          //   level: 'error',
+          //   message: `Rollback failed`,
+          //   metadata: { error },
+          // });
+          // throw new AppError('Rollback failed', 500);
+        }
+      }
+
+      return UserMap.toDTO(updatedUser) as User;
+    } catch (err) {
+      throw new AppError(`Failed to upload image`, 500);
     }
-
-    user.avatar = avatar;
-
-    const [, updatedUser] = await Promise.all([
-      this.storageProvider.save(avatar, UploadFolder.AVATAR),
-      this.userRepository.save(user),
-    ]);
-
-    return UserMap.toDTO(updatedUser) as User;
   }
 }
+
+// DB -> 975cd30158c5d45f-4b86f175-a24d-4b80-86ec-0265e3feadc8.png
+// S3 -> 309b058eeb0823ac-4b86f175-a24d-4b80-86ec-0265e3feadc8

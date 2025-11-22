@@ -6,14 +6,14 @@ import { UploadCarImagesUseCase } from './UploadCarImagesUseCase';
 export class UploadCarImagesController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { id: carId } = request.params;
-    const images = request.files as Express.Multer.File[];
+    const { fileNames } = request;
     const uploadCarImageUseCase = container.resolve(UploadCarImagesUseCase);
 
     await uploadCarImageUseCase.execute({
       carId,
-      images,
+      fileNames,
     });
 
-    return response.status(201).send();
+    return response.status(200).send();
   }
 }
