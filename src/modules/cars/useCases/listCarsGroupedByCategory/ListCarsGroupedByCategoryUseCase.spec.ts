@@ -26,12 +26,10 @@ describe('ListCarsGroupedByCategoryUseCase', () => {
     inMemoryCategoryRepository = new InMemoryCategoryRepository();
     inMemoryRentalRepository = new InMemoryRentalRepository();
     inMemorySpecificationRepository = new InMemorySpecificationRepository();
-    inMemoryLoggerProvider = new InMemoryLoggerProvider();
     listCarsGroupedByCategoryUseCase = new ListCarsGroupedByCategoryUseCase(
       inMemoryCarRepository,
       inMemoryCategoryRepository,
-      inMemoryRentalRepository,
-      inMemoryLoggerProvider
+      inMemoryRentalRepository
     );
 
     jest.spyOn(Date, 'now').mockImplementationOnce(() => {

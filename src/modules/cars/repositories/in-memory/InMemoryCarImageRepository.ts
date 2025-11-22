@@ -59,4 +59,23 @@ export class InMemoryCarImageRepository implements ICarImageRepository {
 
     this.carImages.splice(carIndex, 1);
   }
+
+  async replaceImages(data: IUploadCarImagesDTO): Promise<void> {
+    const { carId, fileNames } = data;
+
+    await this.deleteByCarId(carId);
+
+    const newImages = fileNames.map((fileName) => {
+      const carImage = new CarImage();
+
+      Object.assign(carImage, {
+        carId,
+        imageName: fileName,
+      });
+
+      return carImage;
+    });
+
+    this.carImages.push(...newImages);
+  }
 }

@@ -33,7 +33,10 @@ describe('UpdateCarImagesUseCase', () => {
       'delete'
     );
 
-    const spiedCreate = jest.spyOn(inMemoryCarImageRepository, 'createMany');
+    const spiedReplace = jest.spyOn(
+      inMemoryCarImageRepository,
+      'replaceImages'
+    );
     const { id: carId } = await inMemoryCarRepository.create({
       name: 'Mustang',
       brand: 'Ford',
@@ -77,7 +80,7 @@ describe('UpdateCarImagesUseCase', () => {
     );
     expect(spiedDeletedUploadFile).toHaveBeenNthCalledWith(1, 'img-1', 'cars');
     expect(spiedDeletedUploadFile).toHaveBeenNthCalledWith(2, 'img-2', 'cars');
-    expect(spiedCreate).toHaveBeenNthCalledWith(1, {
+    expect(spiedReplace).toHaveBeenNthCalledWith(1, {
       carId,
       fileNames: ['update-fake-hashed-filename'],
     });
@@ -90,7 +93,10 @@ describe('UpdateCarImagesUseCase', () => {
       'delete'
     );
 
-    const spiedCreate = jest.spyOn(inMemoryCarImageRepository, 'createMany');
+    const spiedReplace = jest.spyOn(
+      inMemoryCarImageRepository,
+      'replaceImages'
+    );
     const { id: carId } = await inMemoryCarRepository.create({
       name: 'Mustang',
       brand: 'Ford',
@@ -120,7 +126,7 @@ describe('UpdateCarImagesUseCase', () => {
       'cars'
     );
     expect(spiedDeletedUploadFile).toHaveBeenCalledTimes(0);
-    expect(spiedCreate).toHaveBeenNthCalledWith(1, {
+    expect(spiedReplace).toHaveBeenNthCalledWith(1, {
       carId,
       fileNames: ['update-fake-hashed-filename'],
     });
@@ -137,7 +143,7 @@ describe('UpdateCarImagesUseCase', () => {
 
   it('should not be able to upload images to the car when carImage repository fails', async () => {
     jest
-      .spyOn(inMemoryCarImageRepository, 'createMany')
+      .spyOn(inMemoryCarImageRepository, 'replaceImages')
       .mockRejectedValueOnce(new Error());
     const loggerSpied = jest.spyOn(inMemoryLoggerProvider, 'log');
     const { id: carId } = await inMemoryCarRepository.create({
