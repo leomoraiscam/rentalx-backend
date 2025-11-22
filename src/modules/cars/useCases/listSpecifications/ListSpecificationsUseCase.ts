@@ -16,7 +16,7 @@ export class ListSpecificationsUseCase {
     query: IQueryListOptionsDTO
   ): Promise<IPaginationResponseDTO<Specification>> {
     const { page, perPage, order } = query;
-    const { result, total } = await this.specificationRepository.list({
+    const { result: data, total } = await this.specificationRepository.list({
       page,
       perPage,
       order,
@@ -24,7 +24,7 @@ export class ListSpecificationsUseCase {
     const totalPages = Math.ceil(total / perPage);
 
     return {
-      data: result,
+      data,
       total,
       totalPages,
     };

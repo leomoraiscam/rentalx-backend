@@ -28,7 +28,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 app.use(rateLimiter);
 Sentry.init({
-  dsn: process.env.SENTRY_eDSN,
+  dsn: process.env.SENTRY_DSN,
   integrations: [
     new Sentry.Integrations.Http({ tracing: true }),
     new Tracing.Integrations.Express({ app }),

@@ -27,9 +27,6 @@ export class UpdateCarImageUseCase {
       throw new AppError('Image not found', 404);
     }
 
-    console.log(imageToUpdate);
-    console.log(carId);
-
     if (imageToUpdate.carId !== carId) {
       throw new AppError('Image does not belong to this car', 403);
     }

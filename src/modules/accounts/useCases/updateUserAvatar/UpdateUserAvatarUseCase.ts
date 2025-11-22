@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 import { inject, injectable } from 'tsyringe';
 
 import { UploadFolder } from '@config/upload';
@@ -48,14 +49,7 @@ export class UpdateUserAvatarUseCase {
       if (oldAvatarFile) {
         try {
           await this.storageProvider.delete(oldAvatarFile, UploadFolder.AVATAR);
-        } catch (error) {
-          // this.loggerProvider.log({
-          //   level: 'error',
-          //   message: `Rollback failed`,
-          //   metadata: { error },
-          // });
-          // throw new AppError('Rollback failed', 500);
-        }
+        } catch (error) {}
       }
 
       return UserMap.toDTO(updatedUser) as User;
@@ -64,6 +58,3 @@ export class UpdateUserAvatarUseCase {
     }
   }
 }
-
-// DB -> 975cd30158c5d45f-4b86f175-a24d-4b80-86ec-0265e3feadc8.png
-// S3 -> 309b058eeb0823ac-4b86f175-a24d-4b80-86ec-0265e3feadc8

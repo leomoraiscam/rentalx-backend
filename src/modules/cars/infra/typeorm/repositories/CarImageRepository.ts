@@ -70,8 +70,4 @@ export class CarImageRepository implements ICarImageRepository {
 
     await this.repository.update(imageId, { imageName: fileName });
   }
-
-  async deleteByCarId(carId: string): Promise<void> {
-    await this.repository.delete({ carId });
-  }
 }

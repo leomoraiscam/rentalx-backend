@@ -15,12 +15,7 @@ export class CarRepository implements ICarRepository {
   }
 
   async findById(id: string): Promise<Car | null> {
-    return this.repository.findOne({
-      where: {
-        id,
-      },
-      relations: ['images'],
-    });
+    return this.repository.findOne(id);
   }
 
   async findByLicensePlate(licensePlate: string): Promise<Car | null> {

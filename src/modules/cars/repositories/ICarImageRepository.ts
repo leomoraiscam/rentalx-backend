@@ -9,6 +9,5 @@ export interface ICarImageRepository {
   create(data: IUploadCarImageDTO): Promise<CarImage>;
   createMany(data: IUploadCarImagesDTO): Promise<CarImage[]>;
   update(data: IUpdateCarImageDTO): Promise<void>;
-  deleteByCarId(carId: string): Promise<void>;
   replaceImages(data: IUploadCarImagesDTO): Promise<void>;
 }

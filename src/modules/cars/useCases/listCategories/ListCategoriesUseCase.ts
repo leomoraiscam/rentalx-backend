@@ -17,7 +17,7 @@ export class ListCategoriesUseCase {
     query: IQueryListOptionsDTO
   ): Promise<IPaginationResponseDTO<Category>> {
     const { page, perPage, order } = query;
-    const { result, total } = await this.categoryRepository.list({
+    const { result: data, total } = await this.categoryRepository.list({
       page,
       perPage,
       order,
@@ -25,7 +25,7 @@ export class ListCategoriesUseCase {
     const totalPages = Math.ceil(total / perPage);
 
     return {
-      data: result,
+      data,
       total,
       totalPages,
     };
