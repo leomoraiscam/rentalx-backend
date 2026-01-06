@@ -55,4 +55,8 @@ export class UserTokenRepository implements IUserTokenRepository {
   async delete(id: string): Promise<void> {
     await this.repository.softDelete(id);
   }
+
+  async deleteByUserId(userId: string): Promise<void> {
+    await this.repository.softDelete({ userId });
+  }
 }

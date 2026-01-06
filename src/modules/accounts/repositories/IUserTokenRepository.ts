@@ -10,4 +10,5 @@ export interface IUserTokenRepository {
   findByUserId(userId: string): Promise<UserToken | null>;
   create(data: ICreateUserTokenDTO): Promise<UserToken>;
   delete(id: string): Promise<void>;
+  deleteByUserId(userId: string): Promise<void>;
 }

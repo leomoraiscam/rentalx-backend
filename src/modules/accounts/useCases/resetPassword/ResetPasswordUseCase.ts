@@ -28,7 +28,7 @@ export class ResetPasswordUseCase {
       throw new AppError('Invalid or expired token', 401);
     }
 
-    const { id, userId, expiresDate } = userToken;
+    const { userId, expiresDate } = userToken;
     const user = await this.userRepository.findById(userId);
 
     if (!user) {
@@ -51,7 +51,7 @@ export class ResetPasswordUseCase {
 
     await Promise.all([
       this.userRepository.create(user),
-      this.userTokenRepository.delete(id),
+      this.userTokenRepository.deleteByUserId(userId),
     ]);
   }
 }
