@@ -13,14 +13,9 @@ import { UploadCarImagesController } from '@modules/cars/useCases/uploadCarImage
 
 import ensureAdmin from '../middlewares/ensureAdmin';
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
-import {
-  ensureArrayUpload,
-  ensureSingleUpload,
-} from '../middlewares/ensureUploadFields';
-import { transformFilesToImageNames } from '../middlewares/transformFilesToFileNames';
-import { ensureFileExists } from '../middlewares/ensureFileExists';
-import { ensureFileSizeLimit } from '../middlewares/ensureFileSizeLimit';
-import { ensureInvalidFileFormat } from '../middlewares/ensureInvalidFileFormat';
+import { extractFileNames } from '../middlewares/extractFileNames';
+import { handleUploadErrors } from '../middlewares/handleUploadErrors';
+import { requireFile } from '../middlewares/requireFile';
 
 const uploadImages = multer(uploadImage);
 const carsRouter = Router();
@@ -85,11 +80,10 @@ carsRouter.post(
   }),
   ensureAuthenticated,
   ensureAdmin,
-  ensureArrayUpload(uploadImages, { fieldName: 'car', maxCount: 4 }),
-  ensureFileExists,
-  ensureFileSizeLimit,
-  ensureInvalidFileFormat,
-  transformFilesToImageNames,
+  uploadImages.array('car'),
+  requireFile,
+  extractFileNames,
+  handleUploadErrors,
   uploadCarImagesController.handle
 );
 carsRouter.put(
@@ -101,11 +95,10 @@ carsRouter.put(
   }),
   ensureAuthenticated,
   ensureAdmin,
-  ensureArrayUpload(uploadImages, { fieldName: 'car', maxCount: 4 }),
-  ensureFileExists,
-  ensureFileSizeLimit,
-  ensureInvalidFileFormat,
-  transformFilesToImageNames,
+  uploadImages.array('car'),
+  requireFile,
+  extractFileNames,
+  handleUploadErrors,
   updateCarImagesController.handle
 );
 carsRouter.patch(
@@ -118,10 +111,10 @@ carsRouter.patch(
   }),
   ensureAuthenticated,
   ensureAdmin,
-  ensureSingleUpload(uploadImages, { fieldName: 'car' }),
-  ensureFileExists,
-  ensureFileSizeLimit,
-  ensureInvalidFileFormat,
+  uploadImages.single('car'),
+  requireFile,
+  extractFileNames,
+  handleUploadErrors,
   updateCarImageController.handle
 );
 

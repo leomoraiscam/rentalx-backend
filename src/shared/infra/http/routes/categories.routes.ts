@@ -2,6 +2,7 @@ import { Joi, Segments, celebrate } from 'celebrate';
 import { Router } from 'express';
 import multer from 'multer';
 
+import { uploadCSVFile } from '@config/upload';
 import { CategoryType } from '@modules/cars/enums/categoryType';
 import { CreateCategoryController } from '@modules/cars/useCases/createCategory/CreateCategoryController';
 import { ImportCategoriesController } from '@modules/cars/useCases/importCategories/ImportCategoriesController';
@@ -9,10 +10,10 @@ import { ListCategoriesController } from '@modules/cars/useCases/listCategories/
 
 import ensureAdmin from '../middlewares/ensureAdmin';
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
+import { handleUploadErrors } from '../middlewares/handleUploadErrors';
+import { requireFile } from '../middlewares/requireFile';
 
-const upload = multer({
-  dest: './tmp',
-});
+const uploadCategories = multer(uploadCSVFile);
 const categoriesRouter = Router();
 const createCategoryController = new CreateCategoryController();
 const importCategoriesController = new ImportCategoriesController();
@@ -52,7 +53,9 @@ categoriesRouter.post(
   '/import',
   ensureAuthenticated,
   ensureAdmin,
-  upload.single('file'),
+  uploadCategories.single('file'),
+  requireFile,
+  handleUploadErrors,
   importCategoriesController.handle
 );
 

@@ -9,6 +9,8 @@ import { ListSpecificationsController } from '@modules/cars/useCases/listSpecifi
 
 import ensureAdmin from '../middlewares/ensureAdmin';
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
+import { handleUploadErrors } from '../middlewares/handleUploadErrors';
+import { requireFile } from '../middlewares/requireFile';
 
 const uploadSpecifications = multer(uploadCSVFile);
 const specificationRouter = Router();
@@ -48,6 +50,8 @@ specificationRouter.post(
   ensureAuthenticated,
   ensureAdmin,
   uploadSpecifications.single('file'),
+  requireFile,
+  handleUploadErrors,
   importSpecificationsController.handle
 );
 

@@ -8,10 +8,9 @@ import { ProfileUserController } from '@modules/accounts/useCases/profileUser/Pr
 import { UpdateUserAvatarController } from '@modules/accounts/useCases/updateUserAvatar/UpdateUserAvatarController';
 
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
-import { ensureFileExists } from '../middlewares/ensureFileExists';
-import { ensureFileSizeLimit } from '../middlewares/ensureFileSizeLimit';
-import { ensureInvalidFileFormat } from '../middlewares/ensureInvalidFileFormat';
-import { ensureSingleUpload } from '../middlewares/ensureUploadFields';
+import { extractFileNames } from '../middlewares/extractFileNames';
+import { handleUploadErrors } from '../middlewares/handleUploadErrors';
+import { requireFile } from '../middlewares/requireFile';
 
 const uploadAvatar = multer(uploadImage);
 const accountsRouter = Router();
@@ -34,10 +33,10 @@ accountsRouter.post(
 accountsRouter.patch(
   '/avatar',
   ensureAuthenticated,
-  ensureSingleUpload(uploadAvatar, { fieldName: 'avatar' }),
-  ensureFileExists,
-  ensureFileSizeLimit,
-  ensureInvalidFileFormat,
+  uploadAvatar.single('avatar'),
+  requireFile,
+  extractFileNames,
+  handleUploadErrors,
   updateUserAvatarController.handle
 );
 accountsRouter.get('/me', ensureAuthenticated, profileUserController.handle);
