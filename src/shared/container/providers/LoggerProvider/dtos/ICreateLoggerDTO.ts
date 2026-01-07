@@ -1,5 +1,5 @@
 export interface ICreateLoggerDTO {
   level: string;
   message: string;
-  metadata?: object;
+  metadata?: Record<string, unknown>;
 }

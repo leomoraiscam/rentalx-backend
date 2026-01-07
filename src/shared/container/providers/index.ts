@@ -11,6 +11,8 @@ import { WinstonLoggerProvider } from './LoggerProvider/implementations/WintsonL
 import { ILoggerProvider } from './LoggerProvider/models/ILoggerProvider';
 import { EtherealMailProvider } from './MailProvider/implementations/EtherealMailProvider';
 import { IMailProvider } from './MailProvider/models/IMailProvider';
+import { HandlebarsMailTemplateProvider } from './MailTemplateProvider/implementations/HandlebarsMailTemplateProvider';
+import { IMailTemplateProvider } from './MailTemplateProvider/models/IMailTemplateProvider';
 import { LocalStorageProvider } from './StorageProvider/implementations/LocalStorageProvider';
 import { S3StorageProvider } from './StorageProvider/implementations/S3StorageProvider';
 import { IStorageProvider } from './StorageProvider/models/IStorageProvider';
@@ -22,11 +24,19 @@ const diskStorage = {
   s3: S3StorageProvider,
 };
 
+container.registerSingleton<ILoggerProvider>(
+  'LoggerProvider',
+  WinstonLoggerProvider
+);
 container.registerSingleton<IHashProvider>('HashProvider', BCryptHashProvider);
 container.registerSingleton<IDateProvider>('DateProvider', DayjsDateProvider);
+container.registerSingleton<IMailTemplateProvider>(
+  'MailTemplateProvider',
+  HandlebarsMailTemplateProvider
+);
 container.registerInstance<IMailProvider>(
   'MailProvider',
-  new EtherealMailProvider()
+  container.resolve(EtherealMailProvider)
 );
 container.registerSingleton<ICSVStreamParserProvider>(
   'CSVStreamParserProvider',
@@ -35,8 +45,4 @@ container.registerSingleton<ICSVStreamParserProvider>(
 container.registerSingleton<IStorageProvider>(
   'StorageProvider',
   diskStorage[process.env.DISK]
-);
-container.registerSingleton<ILoggerProvider>(
-  'LoggerProvider',
-  WinstonLoggerProvider
 );
