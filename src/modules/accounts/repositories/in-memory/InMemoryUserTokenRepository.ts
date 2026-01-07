@@ -1,5 +1,6 @@
 import { ICreateUserTokenDTO } from '@modules/accounts/dtos/ICreateUserTokenDTO';
 import { IFindTokenByUserIdDTO } from '@modules/accounts/dtos/IFindTokenByUserIdDTO';
+import { TokenTypeEnum } from '@modules/accounts/enums/TokenTypeEnum';
 import { UserToken } from '@modules/accounts/infra/typeorm/entities/UserToken';
 
 import { IUserTokenRepository } from '../IUserTokenRepository';
@@ -18,9 +19,13 @@ export class InMemoryUserTokenRepository implements IUserTokenRepository {
     );
   }
 
-  async findByRefreshToken(refreshToken: string): Promise<UserToken | null> {
+  async findByRefreshToken(
+    refreshToken: string,
+    type: TokenTypeEnum
+  ): Promise<UserToken | null> {
     return this.userTokens.find(
-      (userToken) => userToken.refreshToken === refreshToken
+      (userToken) =>
+        userToken.refreshToken === refreshToken && userToken.type === type
     );
   }
 
@@ -29,13 +34,14 @@ export class InMemoryUserTokenRepository implements IUserTokenRepository {
   }
 
   async create(data: ICreateUserTokenDTO): Promise<UserToken> {
-    const { userId, refreshToken, expiresDate } = data;
+    const { userId, refreshToken, expiresDate, type } = data;
     const userToken = new UserToken();
 
     Object.assign(userToken, {
       userId,
       refreshToken,
       expiresDate,
+      type,
     });
 
     this.userTokens.push(userToken);
@@ -57,6 +63,18 @@ export class InMemoryUserTokenRepository implements IUserTokenRepository {
   async deleteByUserId(userId: string): Promise<void> {
     const userTokenIndex = this.userTokens.findIndex(
       (userToken) => userToken.userId === userId
+    );
+    const userTokenToDeleted = this.userTokens[userTokenIndex];
+
+    Object.assign(userTokenToDeleted, {
+      deletedAt: new Date(),
+    });
+  }
+
+  async deleteByUserIdAndToken(userId: string, token: string): Promise<void> {
+    const userTokenIndex = this.userTokens.findIndex(
+      (userToken) =>
+        userToken.userId === userId && userToken.refreshToken === token
     );
     const userTokenToDeleted = this.userTokens[userTokenIndex];
 

@@ -2,8 +2,11 @@ import path from 'path';
 import { inject, injectable } from 'tsyringe';
 import { v4 as uuidV4 } from 'uuid';
 
+import { IForgotPasswordMailDTO } from '@modules/accounts/dtos/IForgotPasswordMailDTO';
+import { TokenTypeEnum } from '@modules/accounts/enums/TokenTypeEnum';
 import { IUserRepository } from '@modules/accounts/repositories/IUserRepository';
 import { IUserTokenRepository } from '@modules/accounts/repositories/IUserTokenRepository';
+import { buildResetPasswordUrl } from '@modules/accounts/util/buildResetPasswordUrl';
 import { IDateProvider } from '@shared/container/providers/DateProvider/models/IDateProvider';
 import { IMailProvider } from '@shared/container/providers/MailProvider/models/IMailProvider';
 import { AppError } from '@shared/errors/AppError';
@@ -30,6 +33,18 @@ export class SendForgotPasswordMailUseCase {
       throw new AppError('User not found', 404);
     }
 
+    const existingUserTokenAvailable = await this.userTokenRepository.findByUserId(
+      user.id,
+      TokenTypeEnum.RESET_PASSWORD
+    );
+
+    if (existingUserTokenAvailable) {
+      await this.userTokenRepository.deleteByUserIdAndToken(
+        user.id,
+        existingUserTokenAvailable.refreshToken
+      );
+    }
+
     const token = uuidV4();
     const { id: userId, name } = user;
     const expiresDateLimitToken = this.dateProvider.addHours(
@@ -40,6 +55,7 @@ export class SendForgotPasswordMailUseCase {
       refreshToken: token,
       userId,
       expiresDate: expiresDateLimitToken,
+      type: TokenTypeEnum.RESET_PASSWORD,
     });
 
     const templatePath = path.resolve(
@@ -50,15 +66,9 @@ export class SendForgotPasswordMailUseCase {
       'emails',
       'forgotPassword.hbs'
     );
-    const resetPasswordUrl =
-      process.env.APP_URL && process.env.APP_PORT
-        ? `${process.env.APP_URL}:${process.env.APP_PORT}/password/reset?token=${token}`
-        : `http://localhost:3333/password/reset?token=${token}`;
+    const resetPasswordUrl = buildResetPasswordUrl(token);
 
-    await this.mailProvider.sendMail<{
-      name: string;
-      resetPasswordUrl: string;
-    }>({
+    await this.mailProvider.sendMail<IForgotPasswordMailDTO>({
       path: templatePath,
       subject: '[RentalX] Recuperação de senha',
       to: email,

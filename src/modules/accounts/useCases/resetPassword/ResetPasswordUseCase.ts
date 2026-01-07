@@ -1,6 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 
 import { IResetPasswordDTO } from '@modules/accounts/dtos/IResetPasswordDTO';
+import { TokenTypeEnum } from '@modules/accounts/enums/TokenTypeEnum';
 import { IUserRepository } from '@modules/accounts/repositories/IUserRepository';
 import { IUserTokenRepository } from '@modules/accounts/repositories/IUserTokenRepository';
 import { IDateProvider } from '@shared/container/providers/DateProvider/models/IDateProvider';
@@ -22,7 +23,10 @@ export class ResetPasswordUseCase {
 
   async execute(data: IResetPasswordDTO): Promise<void> {
     const { token, password } = data;
-    const userToken = await this.userTokenRepository.findByRefreshToken(token);
+    const userToken = await this.userTokenRepository.findByRefreshToken(
+      token,
+      TokenTypeEnum.RESET_PASSWORD
+    );
 
     if (!userToken) {
       throw new AppError('Invalid or expired token', 401);

@@ -29,6 +29,9 @@ export class UserToken {
   @Column({ name: 'expires_date' })
   expiresDate: Date;
 
+  @Column({ name: 'type' })
+  type: string;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 

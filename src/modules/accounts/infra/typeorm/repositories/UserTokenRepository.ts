@@ -2,6 +2,7 @@ import { getRepository, Repository } from 'typeorm';
 
 import { ICreateUserTokenDTO } from '@modules/accounts/dtos/ICreateUserTokenDTO';
 import { IFindTokenByUserIdDTO } from '@modules/accounts/dtos/IFindTokenByUserIdDTO';
+import { TokenTypeEnum } from '@modules/accounts/enums/TokenTypeEnum';
 import { IUserTokenRepository } from '@modules/accounts/repositories/IUserTokenRepository';
 
 import { UserToken } from '../entities/UserToken';
@@ -30,21 +31,26 @@ export class UserTokenRepository implements IUserTokenRepository {
     });
   }
 
-  async findByUserId(userId: string): Promise<UserToken | null> {
+  async findByUserId(
+    userId: string,
+    type: TokenTypeEnum
+  ): Promise<UserToken | null> {
     return this.repository.findOne({
       where: {
         userId,
         deletedAt: null,
+        type,
       },
     });
   }
 
   async create(data: ICreateUserTokenDTO): Promise<UserToken> {
-    const { userId, refreshToken, expiresDate } = data;
+    const { userId, refreshToken, expiresDate, type } = data;
     const userToken = this.repository.create({
       userId,
       refreshToken,
       expiresDate,
+      type,
     });
 
     await this.repository.save(userToken);
@@ -58,5 +64,9 @@ export class UserTokenRepository implements IUserTokenRepository {
 
   async deleteByUserId(userId: string): Promise<void> {
     await this.repository.softDelete({ userId });
+  }
+
+  async deleteByUserIdAndToken(userId: string, token: string): Promise<void> {
+    await this.repository.softDelete({ userId, refreshToken: token });
   }
 }
