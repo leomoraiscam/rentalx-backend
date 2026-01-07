@@ -1,4 +1,5 @@
 import { auth } from '@config/auth';
+import { TokenTypeEnum } from '@modules/accounts/enums/TokenTypeEnum';
 import { InMemoryUserRepository } from '@modules/accounts/repositories/in-memory/InMemoryUserRepository';
 import { InMemoryUserTokenRepository } from '@modules/accounts/repositories/in-memory/InMemoryUserTokenRepository';
 import { InMemoryDateProvider } from '@shared/container/providers/DateProvider/in-memory/InMemoryDateProvider';
@@ -115,6 +116,7 @@ describe('AuthenticateUserUseCase', () => {
       userId,
       expiresDate: new Date(2024, 2, 28),
       refreshToken: 'refresh-token-1',
+      type: TokenTypeEnum.REFRESH_TOKEN,
     });
     const response = await authenticateUserUseCase.execute({
       email: 'nus@ju.mx',

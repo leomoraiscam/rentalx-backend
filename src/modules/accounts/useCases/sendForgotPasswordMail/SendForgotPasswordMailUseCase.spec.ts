@@ -1,10 +1,13 @@
 import { InMemoryUserRepository } from '@modules/accounts/repositories/in-memory/InMemoryUserRepository';
 import { InMemoryUserTokenRepository } from '@modules/accounts/repositories/in-memory/InMemoryUserTokenRepository';
+import { buildResetPasswordUrl } from '@modules/accounts/util/buildResetPasswordUrl';
 import { InMemoryDateProvider } from '@shared/container/providers/DateProvider/in-memory/InMemoryDateProvider';
 import { InMemoryMailProvider } from '@shared/container/providers/MailProvider/in-memory/InMemoryMailProvider';
 import { AppError } from '@shared/errors/AppError';
 
 import { SendForgotPasswordMailUseCase } from './SendForgotPasswordMailUseCase';
+
+jest.mock('@modules/accounts/util/buildResetPasswordUrl');
 
 describe('SendForgotPasswordMailUseCase', () => {
   let inMemoryUserRepository: InMemoryUserRepository;
@@ -29,6 +32,9 @@ describe('SendForgotPasswordMailUseCase', () => {
   });
 
   it('should be able to send recover the password when received correct data', async () => {
+    (buildResetPasswordUrl as jest.Mock).mockReturnValue(
+      'http://mock-url.com/reset?token=123'
+    );
     const { email } = await inMemoryUserRepository.create({
       name: 'Todd Fisher',
       email: 'ogimcak@zad.fj',
