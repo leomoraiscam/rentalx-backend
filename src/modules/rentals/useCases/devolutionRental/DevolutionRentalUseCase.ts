@@ -2,7 +2,6 @@ import { inject, injectable } from 'tsyringe';
 
 import { CarStatus } from '@modules/cars/enums/carStatus';
 import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
-import { ICreateDevolutionCarDTO } from '@modules/rentals/dtos/ICreateDevolutionCarDTO';
 import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
 import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
@@ -22,8 +21,7 @@ export class DevolutionRentalUseCase {
     private dateProvider: IDateProvider
   ) {}
 
-  async execute(data: ICreateDevolutionCarDTO): Promise<Rental> {
-    const { id } = data;
+  async execute(id: string): Promise<Rental> {
     const rental = await this.rentalRepository.findById(id);
 
     if (!rental) {
