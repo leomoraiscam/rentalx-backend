@@ -3,6 +3,10 @@ import { IRentalDateService } from '@modules/rentals/services/IRentalDateService
 import { AppError } from '@shared/errors/AppError';
 
 export class InMemoryRentalDateService implements IRentalDateService {
+  private MIN_APPOINTMENT_HOUR = 8;
+  private MAX_APPOINTMENT_HOUR = 18;
+  private ONE_DAY_IN_MILLISECONDS = 86_400_000;
+
   validateStartDate(startDate: Date): void {
     const now = new Date();
 
@@ -14,7 +18,7 @@ export class InMemoryRentalDateService implements IRentalDateService {
   validateRentalHours(date: Date): void {
     const hour = date.getUTCHours();
 
-    if (hour < 8 || hour > 18) {
+    if (hour < this.MIN_APPOINTMENT_HOUR || hour > this.MAX_APPOINTMENT_HOUR) {
       throw new AppError('Rental hours must be between 8am and 6pm', 422);
     }
   }
@@ -22,7 +26,7 @@ export class InMemoryRentalDateService implements IRentalDateService {
   calculateTotal(car: Car, startDate: Date, expectedReturnDate: Date): number {
     const rentalDays = Math.ceil(
       (expectedReturnDate.getTime() - startDate.getTime()) /
-        (1000 * 60 * 60 * 24)
+        this.ONE_DAY_IN_MILLISECONDS
     );
     return rentalDays * car.dailyRate;
   }

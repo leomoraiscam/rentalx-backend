@@ -6,6 +6,9 @@ import { AppError } from '@shared/errors/AppError';
 
 @injectable()
 export class RentalDateService {
+  private MIN_APPOINTMENT_HOUR = 8;
+  private MAX_APPOINTMENT_HOUR = 18;
+
   constructor(
     @inject('DateProvider')
     private dateProvider: IDateProvider
@@ -15,7 +18,7 @@ export class RentalDateService {
     const hoursInDate = this.dateProvider.getHours(date);
     const hour = Number(hoursInDate.slice(0, 2));
 
-    if (hour < 8 || hour > 18) {
+    if (hour < this.MIN_APPOINTMENT_HOUR || hour > this.MAX_APPOINTMENT_HOUR) {
       throw new AppError(
         'Rentals can only be scheduled between 8am and 6pm',
         422
