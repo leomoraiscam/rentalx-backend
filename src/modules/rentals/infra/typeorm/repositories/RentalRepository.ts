@@ -1,4 +1,5 @@
 import {
+  Brackets,
   getRepository,
   LessThanOrEqual,
   MoreThanOrEqual,
@@ -7,6 +8,8 @@ import {
 
 import { IQueryListCarsDTO } from '@modules/cars/dtos/IQueryListCarsDTO';
 import { ICreateRentalDTO } from '@modules/rentals/dtos/ICreateRentalDTO';
+import { IFindRentalsByCarsDTO } from '@modules/rentals/dtos/IFindRentalsByCarsDTO';
+import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
 import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
 import { IPaginationQueryResponseDTO } from '@shared/common/dtos/IPaginationResponseDTO';
@@ -162,5 +165,32 @@ export class RentalRepository implements IRentalRepository {
 
   async save(data: Rental): Promise<Rental> {
     return this.repository.save(data);
+  }
+
+  async findOpenRentalsByCars({
+    carIds,
+    startDate,
+    expectedReturnDate,
+  }: IFindRentalsByCarsDTO): Promise<Rental[]> {
+    if (!carIds.length) {
+      return [];
+    }
+
+    return this.repository
+      .createQueryBuilder('rental')
+      .where('rental.car_id IN (:...carIds)', { carIds })
+      .andWhere('rental.status NOT IN (:...statuses)', {
+        statuses: [RentalStatus.CLOSED, RentalStatus.CANCELLED],
+      })
+      .andWhere(
+        new Brackets((qb) => {
+          qb.where('rental.start_date < :expectedReturnDate', {
+            expectedReturnDate,
+          }).andWhere('rental.expected_return_date > :startDate', {
+            startDate,
+          });
+        })
+      )
+      .getMany();
   }
 }

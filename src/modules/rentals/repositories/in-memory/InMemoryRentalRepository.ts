@@ -1,4 +1,6 @@
 import { IQueryListCarsDTO } from '@modules/cars/dtos/IQueryListCarsDTO';
+import { IFindRentalsByCarsDTO } from '@modules/rentals/dtos/IFindRentalsByCarsDTO';
+import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
 import { IPaginationQueryResponseDTO } from '@shared/common/dtos/IPaginationResponseDTO';
 
 import { ICreateRentalDTO } from '../../dtos/ICreateRentalDTO';
@@ -39,6 +41,26 @@ export class InMemoryRentalRepository implements IRentalRepository {
     return this.rentals.find(
       (rental) => rental.userId === userId && !rental.endDate
     );
+  }
+
+  async findOpenRentalsByCars({
+    carIds,
+    startDate,
+    expectedReturnDate,
+  }: IFindRentalsByCarsDTO): Promise<Rental[]> {
+    return this.rentals.filter((rental) => {
+      const isCarInList = carIds.includes(rental.carId);
+
+      const isStatusActive =
+        rental.status !== RentalStatus.CLOSED &&
+        rental.status !== RentalStatus.CANCELLED;
+
+      const hasDateConflict =
+        rental.startDate < expectedReturnDate &&
+        rental.expectedReturnDate > startDate;
+
+      return isCarInList && isStatusActive && hasDateConflict;
+    });
   }
 
   async list(

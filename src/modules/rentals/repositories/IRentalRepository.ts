@@ -2,6 +2,7 @@ import { IQueryListCarsDTO } from '@modules/cars/dtos/IQueryListCarsDTO';
 import { IPaginationQueryResponseDTO } from '@shared/common/dtos/IPaginationResponseDTO';
 
 import { ICreateRentalDTO } from '../dtos/ICreateRentalDTO';
+import { IFindRentalsByCarsDTO } from '../dtos/IFindRentalsByCarsDTO';
 import { IListRentalsDTO } from '../dtos/IListRentalsDTO';
 import { Rental } from '../infra/typeorm/entities/Rental';
 
@@ -10,6 +11,7 @@ export interface IRentalRepository {
   findByUser(userId: string): Promise<Rental[]>;
   findActiveRentalByUser(userId: string): Promise<Rental>;
   findByCarAndDateRange(data: IQueryListCarsDTO): Promise<Rental | null>;
+  findOpenRentalsByCars(data: IFindRentalsByCarsDTO): Promise<Rental[]>;
   list(data: IListRentalsDTO): Promise<IPaginationQueryResponseDTO<Rental>>;
   create(data: ICreateRentalDTO): Promise<Rental>;
   save(data: Rental): Promise<Rental>;

@@ -1,3 +1,5 @@
+/* eslint-disable no-continue */
+/* eslint-disable no-restricted-syntax */
 import { injectable, inject } from 'tsyringe';
 
 import {
@@ -8,7 +10,6 @@ import { IQueryListCarsDTO } from '@modules/cars/dtos/IQueryListCarsDTO';
 import { CarStatus } from '@modules/cars/enums/carStatus';
 import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
 import { ICategoryRepository } from '@modules/cars/repositories/ICategoryRepository';
-import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
 import { OrdenationProps } from '@shared/common/dtos/IQueryListOptionsDTO';
 import { ILoggerProvider } from '@shared/container/providers/LoggerProvider/models/ILoggerProvider';
@@ -32,7 +33,7 @@ export class ListCategoriesWithModelsUseCase {
   ): Promise<IListCategoriesWithModelsResponseDTO[]> {
     try {
       const { startDate, expectedReturnDate } = data;
-      const [categories, cars] = await Promise.all([
+      const [categoriesResponse, cars] = await Promise.all([
         this.categoryRepository.list({
           order: OrdenationProps.DESC,
           page: 1,
@@ -40,94 +41,81 @@ export class ListCategoriesWithModelsUseCase {
         }),
         this.carRepository.list(data),
       ]);
-      const transformedCategories = categories.result.map(async (category) => {
-        const carsByCategory = cars.filter(
+
+      const carIds = cars.map((car) => car.id);
+      const busyRentals = await this.rentalRepository.findOpenRentalsByCars({
+        carIds,
+        startDate,
+        expectedReturnDate,
+      });
+
+      const busyCarIds = new Set(busyRentals.map((rental) => rental.carId));
+      const formattedResponse: IListCategoriesWithModelsResponseDTO[] = [];
+
+      for (const category of categoriesResponse.result) {
+        const categoryCars = cars.filter(
           (car) => car.categoryId === category.id
         );
-        const models = await carsByCategory.reduce(async (accPromise, car) => {
-          const acc = await accPromise;
-          const {
-            id,
-            name,
-            description,
-            brand,
-            dailyRate,
-            fineAmount,
-            specifications,
-            images,
-            status,
-          } = car;
-          let available = true;
 
-          if (
-            status === CarStatus.OUT_OF_SERVICE ||
-            status === CarStatus.UNDER_MAINTENANCE
-          ) {
-            available = false;
-          } else {
-            const rental = await this.rentalRepository.findByCarAndDateRange({
-              startDate,
-              expectedReturnDate,
-              carId: id,
-            });
+        if (categoryCars.length === 0) {
+          continue;
+        }
 
-            available =
-              !rental ||
-              rental.status === RentalStatus.CLOSED ||
-              rental.status === RentalStatus.CANCELLED;
-          }
+        const modelsMap: Record<string, ICarModelsDTO> = {};
 
-          if (!acc[name]) {
-            acc[name] = {
-              name,
-              brand,
-              description,
-              specifications,
-              images,
-              dailyRate: Number(dailyRate),
-              fineAmount: Number(fineAmount),
+        for (const car of categoryCars) {
+          const isBroken =
+            car.status === CarStatus.OUT_OF_SERVICE ||
+            car.status === CarStatus.UNDER_MAINTENANCE;
+          const isRented = busyCarIds.has(car.id);
+          const isAvailable = !isBroken && !isRented;
+
+          if (!modelsMap[car.name]) {
+            modelsMap[car.name] = {
+              name: car.name,
+              brand: car.brand,
+              description: car.description,
+              specifications: car.specifications,
+              images: car.images,
+              dailyRate: Number(car.dailyRate),
+              fineAmount: Number(car.fineAmount),
               total: 0,
               totalAvailable: 0,
             };
           }
 
-          acc[name].total += 1;
+          modelsMap[car.name].total += 1;
 
-          if (available) {
-            acc[name].totalAvailable += 1;
+          if (isAvailable) {
+            modelsMap[car.name].totalAvailable += 1;
           }
+        }
 
-          return acc;
-        }, Promise.resolve({} as Record<string, ICarModelsDTO>));
-        const modelsWithEachProperties = Object.values(models);
-        const isAvailableCategory = modelsWithEachProperties.some(
-          (car) => car.totalAvailable >= 1
-        );
+        const modelsList = Object.values(modelsMap);
 
-        return {
-          id: category.id,
-          name: category.name,
-          type: category.type,
-          models: modelsWithEachProperties,
-          available: isAvailableCategory,
-        };
-      });
-      const processedTransformedCategories = await Promise.all(
-        transformedCategories
-      );
-      const categoriesAndModels = processedTransformedCategories.filter(
-        (values) => values.models.length
-      );
+        if (modelsList.length > 0) {
+          const isAvailableCategory = modelsList.some(
+            (model) => model.totalAvailable >= 1
+          );
 
-      return categoriesAndModels;
+          formattedResponse.push({
+            id: category.id,
+            name: category.name,
+            type: category.type,
+            models: modelsList,
+            available: isAvailableCategory,
+          });
+        }
+      }
+
+      return formattedResponse;
     } catch (error) {
       this.loggerProvider.log({
         level: 'error',
-        message: `Failed to list categories and cars: ${
-          error.message || error
-        }`,
-        metadata: { error },
+        message: 'Failed to list categories and cars',
+        metadata: { error: error.message },
       });
+
       throw new AppError('Failed to list categories and cars', 500);
     }
   }
