@@ -54,9 +54,7 @@ describe('DevolutionRentalUseCase', () => {
       expectedReturnDate: new Date(2024, 3, 11, 12),
       startDate: new Date(2024, 3, 10, 12),
     });
-    const rental = await devolutionRentalUseCase.execute({
-      id,
-    });
+    const rental = await devolutionRentalUseCase.execute(id);
 
     expect(rental).toHaveProperty('endDate');
     expect(rental.endDate).toEqual(new Date(2024, 3, 8));
@@ -74,9 +72,7 @@ describe('DevolutionRentalUseCase', () => {
       expectedReturnDate: new Date(2024, 3, 3, 12),
       status: RentalStatus.PICKED_UP,
     });
-    const devolutionRental = await devolutionRentalUseCase.execute({
-      id,
-    });
+    const devolutionRental = await devolutionRentalUseCase.execute(id);
 
     expect(devolutionRental.total).toEqual(100);
   });
@@ -93,17 +89,17 @@ describe('DevolutionRentalUseCase', () => {
       startDate: new Date(2024, 3, 3, 11),
       status: RentalStatus.PICKED_UP,
     });
-    const devolutionRental = await devolutionRentalUseCase.execute({
-      id,
-    });
+    const devolutionRental = await devolutionRentalUseCase.execute(id);
 
     expect(devolutionRental.total).toEqual(180);
   });
 
   it('should not be able to return an devolution rental when the same a non-exist', async () => {
-    await expect(
-      devolutionRentalUseCase.execute({ id: 'a-non-exist-rental' })
-    ).rejects.toBeInstanceOf(AppError);
+    const id = 'a-non-exist-rental';
+
+    await expect(devolutionRentalUseCase.execute(id)).rejects.toBeInstanceOf(
+      AppError
+    );
   });
 
   it('should not be able to return an devolution rental when status is different of picked up', async () => {
@@ -118,9 +114,9 @@ describe('DevolutionRentalUseCase', () => {
       startDate: new Date(2024, 3, 10, 12),
       status: RentalStatus.CONFIRMED,
     });
-    await expect(
-      devolutionRentalUseCase.execute({ id })
-    ).rejects.toBeInstanceOf(AppError);
+    await expect(devolutionRentalUseCase.execute(id)).rejects.toBeInstanceOf(
+      AppError
+    );
   });
 
   it('should not be able to return an devolution rental when status is different of overdue', async () => {
@@ -135,9 +131,9 @@ describe('DevolutionRentalUseCase', () => {
       startDate: new Date(2024, 3, 10, 12),
       status: RentalStatus.CLOSED,
     });
-    await expect(
-      devolutionRentalUseCase.execute({ id })
-    ).rejects.toBeInstanceOf(AppError);
+    await expect(devolutionRentalUseCase.execute(id)).rejects.toBeInstanceOf(
+      AppError
+    );
   });
 
   it('should not be able to return an devolution rental when car a non-exist', async () => {
@@ -149,8 +145,8 @@ describe('DevolutionRentalUseCase', () => {
       status: RentalStatus.PICKED_UP,
     });
 
-    await expect(
-      devolutionRentalUseCase.execute({ id })
-    ).rejects.toBeInstanceOf(AppError);
+    await expect(devolutionRentalUseCase.execute(id)).rejects.toBeInstanceOf(
+      AppError
+    );
   });
 });
