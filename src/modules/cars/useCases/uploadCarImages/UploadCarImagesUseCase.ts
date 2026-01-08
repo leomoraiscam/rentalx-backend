@@ -1,9 +1,9 @@
 import { inject, injectable } from 'tsyringe';
 
-import { UploadFolder } from '@config/upload';
 import { IUploadCarImagesDTO } from '@modules/cars/dtos/IUploadCarImagesDTO';
 import { ICarImageRepository } from '@modules/cars/repositories/ICarImageRepository';
 import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
+import { UploadFolder } from '@shared/common/enums/uploadFolder';
 import { ILoggerProvider } from '@shared/container/providers/LoggerProvider/models/ILoggerProvider';
 import { IStorageProvider } from '@shared/container/providers/StorageProvider/models/IStorageProvider';
 import { AppError } from '@shared/errors/AppError';

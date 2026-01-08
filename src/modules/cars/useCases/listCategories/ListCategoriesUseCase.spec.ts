@@ -1,6 +1,6 @@
 import { CategoryType } from '@modules/cars/enums/categoryType';
 import { InMemoryCategoryRepository } from '@modules/cars/repositories/in-memory/InMemoryCategoryRepository';
-import { OrdenationProps } from '@shared/common/dtos/IQueryListOptionsDTO';
+import { FindOptionsOrdernation } from '@shared/common/enums/findOptionsOrder';
 
 import { ListCategoriesUseCase } from './ListCategoriesUseCase';
 
@@ -37,7 +37,7 @@ describe('ListCategoriesUseCase', () => {
     const { data: categories } = await listCategoriesUseCase.execute({
       page: 1,
       perPage: 10,
-      order: OrdenationProps.ASC,
+      order: FindOptionsOrdernation.ASC,
     });
 
     expect(categories).toHaveLength(3);
@@ -72,7 +72,7 @@ describe('ListCategoriesUseCase', () => {
     const { data: categories } = await listCategoriesUseCase.execute({
       page: 1,
       perPage: 10,
-      order: OrdenationProps.ASC,
+      order: FindOptionsOrdernation.ASC,
     });
 
     expect(categories[0].name).toBe('Hatch');
@@ -84,7 +84,7 @@ describe('ListCategoriesUseCase', () => {
     const { data: categories } = await listCategoriesUseCase.execute({
       page: 1,
       perPage: 10,
-      order: OrdenationProps.ASC,
+      order: FindOptionsOrdernation.ASC,
     });
 
     expect(categories).toEqual([]);

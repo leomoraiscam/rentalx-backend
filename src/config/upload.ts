@@ -4,6 +4,8 @@ import * as fs from 'fs';
 import multer, { MulterError } from 'multer';
 import { resolve, extname } from 'path';
 
+import { UploadFolder } from '@shared/common/enums/uploadFolder';
+
 import {
   FILE_SIZE_MULTIPLICATION,
   FILE_SIZE_CONFIG,
@@ -14,11 +16,6 @@ import {
 } from './constants/upload';
 import { ILimitMulterConfig, IMulterConfig } from './dtos/multerConfigDTO';
 
-export enum UploadFolder {
-  AVATAR = 'avatar',
-  CARS = 'cars',
-  TMP = 'tmp',
-}
 export const TMP_FOLDER = resolve(__dirname, '..', '..', UploadFolder.TMP);
 
 export const setupUploadFolders = (): void => {

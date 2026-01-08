@@ -1,10 +1,7 @@
-export enum OrdenationProps {
-  ASC = 'ASC',
-  DESC = 'DESC',
-}
+import { FindOptionsOrdernation } from '../enums/findOptionsOrder';
 
 export interface IQueryListOptionsDTO {
   page?: number;
   perPage?: number;
-  order?: OrdenationProps;
+  order?: FindOptionsOrdernation;
 }

@@ -3,7 +3,7 @@ import { Car } from '@modules/cars/infra/typeorm/entities/Car';
 import { InMemoryCarRepository } from '@modules/cars/repositories/in-memory/InMemoryCarRepository';
 import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
 import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
-import { OrdenationProps } from '@shared/common/dtos/IQueryListOptionsDTO';
+import { FindOptionsOrdernation } from '@shared/common/enums/findOptionsOrder';
 
 import { InMemoryRentalRepository } from '../../repositories/in-memory/InMemoryRentalRepository';
 import { ListRentalsUseCase } from './ListRentalsUseCase';
@@ -149,7 +149,7 @@ describe('ListRentalsUseCase', () => {
     const { data } = await listRentalsUseCase.execute({
       page: 1,
       perPage: 10,
-      order: OrdenationProps.DESC,
+      order: FindOptionsOrdernation.DESC,
     });
 
     expect(data).toHaveLength(5);
@@ -166,7 +166,7 @@ describe('ListRentalsUseCase', () => {
     const { data } = await listRentalsUseCase.execute({
       page: 1,
       perPage: 10,
-      order: OrdenationProps.DESC,
+      order: FindOptionsOrdernation.DESC,
       status: [RentalStatus.PICKED_UP, RentalStatus.CONFIRMED].toString(),
     });
 
@@ -177,7 +177,7 @@ describe('ListRentalsUseCase', () => {
     const { data } = await listRentalsUseCase.execute({
       page: 1,
       perPage: 10,
-      order: OrdenationProps.DESC,
+      order: FindOptionsOrdernation.DESC,
       startDate: new Date(2024, 2, 21, 8),
       endDate: new Date(2024, 2, 22, 18),
     });
@@ -189,7 +189,7 @@ describe('ListRentalsUseCase', () => {
     const { data } = await listRentalsUseCase.execute({
       page: 1,
       perPage: 10,
-      order: OrdenationProps.DESC,
+      order: FindOptionsOrdernation.DESC,
       categoryIds: 'faked-sport-category',
     });
 
@@ -200,7 +200,7 @@ describe('ListRentalsUseCase', () => {
     const { data } = await listRentalsUseCase.execute({
       page: 1,
       perPage: 10,
-      order: OrdenationProps.DESC,
+      order: FindOptionsOrdernation.DESC,
       categoryIds: 'faked-sport-category,faked-suv-category',
     });
 

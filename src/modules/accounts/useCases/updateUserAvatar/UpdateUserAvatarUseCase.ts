@@ -1,11 +1,11 @@
 /* eslint-disable no-empty */
 import { inject, injectable } from 'tsyringe';
 
-import { UploadFolder } from '@config/upload';
 import { IUpdateUserAvatarDTO } from '@modules/accounts/dtos/IUpdateUserAvatarDTO';
 import { User } from '@modules/accounts/infra/typeorm/entities/User';
 import { UserMap } from '@modules/accounts/mapper/UserMap';
 import { IUserRepository } from '@modules/accounts/repositories/IUserRepository';
+import { UploadFolder } from '@shared/common/enums/uploadFolder';
 import { IStorageProvider } from '@shared/container/providers/StorageProvider/models/IStorageProvider';
 import { AppError } from '@shared/errors/AppError';
 

@@ -1,5 +1,5 @@
 import { InMemorySpecificationRepository } from '@modules/cars/repositories/in-memory/InMemorySpecificationRepository';
-import { OrdenationProps } from '@shared/common/dtos/IQueryListOptionsDTO';
+import { FindOptionsOrdernation } from '@shared/common/enums/findOptionsOrder';
 
 import { ListSpecificationsUseCase } from './ListSpecificationsUseCase';
 
@@ -33,7 +33,7 @@ describe('ListSpecificationsUseCase', () => {
     const { data: specifications } = await listSpecificationsUseCase.execute({
       page: 1,
       perPage: 10,
-      order: OrdenationProps.ASC,
+      order: FindOptionsOrdernation.ASC,
     });
 
     expect(specifications).toHaveLength(3);
@@ -65,7 +65,7 @@ describe('ListSpecificationsUseCase', () => {
     const { data: specifications } = await listSpecificationsUseCase.execute({
       page: 1,
       perPage: 10,
-      order: OrdenationProps.ASC,
+      order: FindOptionsOrdernation.ASC,
     });
 
     expect(specifications[0].name).toBe('1.0');
@@ -77,7 +77,7 @@ describe('ListSpecificationsUseCase', () => {
     const { data: specifications } = await listSpecificationsUseCase.execute({
       page: 1,
       perPage: 10,
-      order: OrdenationProps.ASC,
+      order: FindOptionsOrdernation.ASC,
     });
 
     expect(specifications).toEqual([]);

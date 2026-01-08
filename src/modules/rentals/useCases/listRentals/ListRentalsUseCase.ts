@@ -3,7 +3,7 @@ import { injectable, inject } from 'tsyringe';
 import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
 import { IPaginationResponseDTO } from '@shared/common/dtos/IPaginationResponseDTO';
-import { OrdenationProps } from '@shared/common/dtos/IQueryListOptionsDTO';
+import { FindOptionsOrdernation } from '@shared/common/enums/findOptionsOrder';
 
 import { IListRentalsDTO } from '../../dtos/IListRentalsDTO';
 import { convertQueryStringToFilterArray } from '../../utils/convertQueryStringToFilterArray';
@@ -21,7 +21,7 @@ export class ListRentalsUseCase {
     const {
       page = 1,
       perPage = 10,
-      order = OrdenationProps.DESC,
+      order = FindOptionsOrdernation.DESC,
       categoryIds,
       status,
       ...rest

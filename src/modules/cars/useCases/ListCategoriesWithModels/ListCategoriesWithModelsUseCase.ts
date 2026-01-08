@@ -11,7 +11,7 @@ import { CarStatus } from '@modules/cars/enums/carStatus';
 import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
 import { ICategoryRepository } from '@modules/cars/repositories/ICategoryRepository';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
-import { OrdenationProps } from '@shared/common/dtos/IQueryListOptionsDTO';
+import { FindOptionsOrdernation } from '@shared/common/enums/findOptionsOrder';
 import { ILoggerProvider } from '@shared/container/providers/LoggerProvider/models/ILoggerProvider';
 import { AppError } from '@shared/errors/AppError';
 
@@ -35,7 +35,7 @@ export class ListCategoriesWithModelsUseCase {
       const { startDate, expectedReturnDate } = data;
       const [categoriesResponse, cars] = await Promise.all([
         this.categoryRepository.list({
-          order: OrdenationProps.DESC,
+          order: FindOptionsOrdernation.DESC,
           page: 1,
           perPage: 15,
         }),
