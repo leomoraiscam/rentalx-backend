@@ -43,13 +43,11 @@ export class EtherealMailProvider implements IMailProvider {
       });
   }
 
-  async sendMail<T extends IMailTemplateVariablesDTO>(
-    data: ISendMailDTO<T>
-  ): Promise<void> {
+  async sendMail<T>(data: ISendMailDTO<T>): Promise<void> {
     const { path, subject, to, variables } = data;
     const mailTemplate = await this.mailTemplateProvider.parse({
       file: path,
-      variables,
+      variables: variables as IMailTemplateVariablesDTO,
     });
 
     const message = await this.client.sendMail({
