@@ -23,8 +23,8 @@ categoriesRouter.get(
   '/',
   celebrate({
     [Segments.QUERY]: {
-      page: Joi.string().min(1).max(4).optional(),
-      perPage: Joi.string().min(1).max(4).optional(),
+      page: Joi.string().min(1).optional(),
+      perPage: Joi.string().min(1).optional(),
       order: Joi.string()
         .valid(...Object.values(['ASC', 'DESC']))
         .optional(),

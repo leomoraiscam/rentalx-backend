@@ -11,8 +11,8 @@ export class ListCategoriesController {
     const listCategoriesUseCase = container.resolve(ListCategoriesUseCase);
     const categories = await listCategoriesUseCase.execute({
       order: order as FindOptionsOrdernation,
-      page: Number(page),
-      perPage: Number(perPage),
+      page: (page as unknown) as number,
+      perPage: (perPage as unknown) as number,
     });
 
     return response.status(200).json(categories);

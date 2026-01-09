@@ -13,8 +13,8 @@ export class ListSpecificationsController {
     );
     const specifications = await listSpecificationsUseCase.execute({
       order: order as FindOptionsOrdernation,
-      page: Number(page),
-      perPage: Number(perPage),
+      page: (page as unknown) as number,
+      perPage: (perPage as unknown) as number,
     });
 
     return response.status(200).json(specifications);

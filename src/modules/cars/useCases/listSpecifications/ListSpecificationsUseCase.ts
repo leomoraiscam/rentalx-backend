@@ -4,6 +4,7 @@ import { Specification } from '@modules/cars/infra/typeorm/entities/Specificatio
 import { ISpecificationRepository } from '@modules/cars/repositories/ISpecificationRepository';
 import { IPaginationResponseDTO } from '@shared/common/dtos/IPaginationResponseDTO';
 import { IQueryListOptionsDTO } from '@shared/common/dtos/IQueryListOptionsDTO';
+import { FindOptionsOrdernation } from '@shared/common/enums/findOptionsOrder';
 
 @injectable()
 export class ListSpecificationsUseCase {
@@ -15,7 +16,10 @@ export class ListSpecificationsUseCase {
   async execute(
     query: IQueryListOptionsDTO
   ): Promise<IPaginationResponseDTO<Specification>> {
-    const { page, perPage, order } = query;
+    const page = Number(query.page ?? 1);
+    const perPage = Number(query.perPage ?? 10);
+    const order = query.order ?? ('DESC' as FindOptionsOrdernation);
+
     const { result: data, total } = await this.specificationRepository.list({
       page,
       perPage,

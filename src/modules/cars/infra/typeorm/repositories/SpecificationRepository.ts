@@ -25,14 +25,10 @@ export class SpecificationRepository implements ISpecificationRepository {
   async list(
     options?: IQueryListOptionsDTO
   ): Promise<IPaginationQueryResponseDTO<Specification>> {
-    const take = options.perPage || 10;
-    const page = options.page || 1;
-    const skip = (page - 1) * take;
-    const order = options.order || 'DESC';
-
+    const { perPage, page, order } = options;
     const [result, total] = await this.repository.findAndCount({
-      take,
-      skip,
+      take: perPage,
+      skip: (page - 1) * perPage,
       order: {
         name: order,
       },
