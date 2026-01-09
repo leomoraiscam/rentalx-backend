@@ -1,3 +1,5 @@
+/* eslint-disable no-await-in-loop */
+/* eslint-disable no-restricted-syntax */
 import { injectable, inject } from 'tsyringe';
 
 import { ICreateCategoryDTO } from '@modules/cars/dtos/ICreateCategoryDTO';
@@ -19,7 +21,8 @@ export class ImportCategoriesUseCase {
       file.path,
       keys
     );
-    const categoriesPromises = categories.map(async (data) => {
+
+    for (const data of categories) {
       const { name, description, type } = data;
       const category = await this.categoryRepository.findByName(name);
 
@@ -30,8 +33,6 @@ export class ImportCategoriesUseCase {
           type,
         });
       }
-    });
-
-    await Promise.all(categoriesPromises);
+    }
   }
 }

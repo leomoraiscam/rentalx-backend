@@ -1,3 +1,5 @@
+/* eslint-disable no-await-in-loop */
+/* eslint-disable no-restricted-syntax */
 import { injectable, inject } from 'tsyringe';
 
 import { ICreateSpecificationDTO } from '@modules/cars/dtos/ICreateSpecificationDTO';
@@ -19,7 +21,8 @@ export class ImportSpecificationsUseCase {
       file.path,
       keys
     );
-    const specificationsPromises = specifications.map(async (data) => {
+
+    for (const data of specifications) {
       const { name, description } = data;
       const specification = await this.specificationRepository.findByName(name);
 
@@ -29,8 +32,6 @@ export class ImportSpecificationsUseCase {
           description,
         });
       }
-    });
-
-    await Promise.all(specificationsPromises);
+    }
   }
 }
