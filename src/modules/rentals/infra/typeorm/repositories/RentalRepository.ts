@@ -1,8 +1,10 @@
 import {
   Brackets,
   getRepository,
+  In,
   LessThanOrEqual,
   MoreThanOrEqual,
+  Not,
   Repository,
 } from 'typeorm';
 
@@ -60,6 +62,7 @@ export class RentalRepository implements IRentalRepository {
         carId,
         startDate: LessThanOrEqual(expectedReturnDate),
         expectedReturnDate: MoreThanOrEqual(startDate),
+        status: Not(In([RentalStatus.CLOSED, RentalStatus.CANCELLED])),
       },
     });
   }

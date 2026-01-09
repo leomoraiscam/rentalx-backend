@@ -7,9 +7,7 @@ export class DevolutionRentalController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { id } = request.params;
     const devolutionRentalUseCase = container.resolve(DevolutionRentalUseCase);
-    const rental = await devolutionRentalUseCase.execute({
-      id,
-    });
+    const rental = await devolutionRentalUseCase.execute(id);
 
     return response.status(201).json(rental);
   }

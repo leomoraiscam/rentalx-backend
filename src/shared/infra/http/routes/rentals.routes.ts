@@ -22,6 +22,8 @@ const cancelRentalController = new CancelRentalController();
 const listRentalsController = new ListRentalsController();
 const listRentalsByUserController = new ListRentalsByUserController();
 
+const dateTimeRegex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
+
 rentalRouter.get(
   '/',
   celebrate({
@@ -50,8 +52,16 @@ rentalRouter.post(
   '/',
   celebrate({
     [Segments.BODY]: {
-      startDate: Joi.date().required(),
-      expectedReturnDate: Joi.date().required(),
+      startDate: Joi.string()
+        .required()
+        .pattern(dateTimeRegex)
+        .message('"startDate" must be in the format YYYY-MM-DD HH:mm:ss'),
+      expectedReturnDate: Joi.string()
+        .required()
+        .pattern(dateTimeRegex)
+        .message(
+          '"expectedReturnDate" must be in the format YYYY-MM-DD HH:mm:ss'
+        ),
       carId: Joi.string().uuid().required(),
     },
   }),
