@@ -47,6 +47,10 @@ export class CreateCarUseCase {
       specifications as string[]
     );
 
+    if (specificationsInstancies.length !== specifications.length) {
+      throw new AppError('One or more specifications not found', 422);
+    }
+
     return this.carRepository.create({
       name,
       description,
