@@ -6,7 +6,7 @@ import { uploadImage } from '@config/upload';
 import { CarStatus } from '@modules/cars/enums/carStatus';
 import { CreateCarController } from '@modules/cars/useCases/createCar/CreateCarController';
 import { ListCarsGroupedByCategoryController } from '@modules/cars/useCases/listCarsGroupedByCategory/ListCarsGroupedByCategoryController';
-import { ListCategoriesWithModelsController } from '@modules/cars/useCases/ListCategoriesWithModels/ListCategoriesWithModelsController';
+import { ListCategoriesWithModelsController } from '@modules/cars/useCases/listCategoriesWithModels/ListCategoriesWithModelsController';
 import { UpdateCarImageController } from '@modules/cars/useCases/updateCarImage/UpdateCarImageController';
 import { UpdateCarImagesController } from '@modules/cars/useCases/updateCarImages/UpdateCarImagesController';
 import { UploadCarImagesController } from '@modules/cars/useCases/uploadCarImages/UploadCarImagesController';
