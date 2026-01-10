@@ -3,19 +3,20 @@ import { Router } from 'express';
 
 import { CancelRentalController } from '@modules/rentals/useCases/cancelRental/CancelRentalController';
 import { CreateRentalController } from '@modules/rentals/useCases/createRental/CreateRentalController';
+import { DetailRentalController } from '@modules/rentals/useCases/detailRental/DetailRentalController';
 import { DevolutionRentalController } from '@modules/rentals/useCases/devolutionRental/DevolutionRentalController';
 import { ListRentalsController } from '@modules/rentals/useCases/listRentals/ListRentalsController';
 import { ListRentalsByUserController } from '@modules/rentals/useCases/listRentalsByUser/ListRentalsByUserController';
 import { PickupRentalController } from '@modules/rentals/useCases/pickupRental/PickupRentalController';
-import { ShowRentalController } from '@modules/rentals/useCases/showRental/ShowRentalController';
 import { UpdateRentalController } from '@modules/rentals/useCases/updateRental/UpdateRentalController';
 
+import ensureAdmin from '../middlewares/ensureAdmin';
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 const rentalRouter = Router();
 const createRentalController = new CreateRentalController();
 const devolutionRentalController = new DevolutionRentalController();
-const showRentalController = new ShowRentalController();
+const detailRentalController = new DetailRentalController();
 const updateRentalController = new UpdateRentalController();
 const pickupRentalController = new PickupRentalController();
 const cancelRentalController = new CancelRentalController();
@@ -40,14 +41,27 @@ rentalRouter.get(
     },
   }),
   ensureAuthenticated,
+  ensureAdmin,
   listRentalsController.handle
 );
 rentalRouter.get(
   '/me',
+  celebrate({
+    [Segments.QUERY]: {
+      startDate: Joi.date(),
+      endDate: Joi.date(),
+      status: Joi.string(),
+      page: Joi.string(),
+      perPage: Joi.string(),
+      order: Joi.string()
+        .valid(...Object.values(['ASC', 'DESC']))
+        .optional(),
+    },
+  }),
   ensureAuthenticated,
   listRentalsByUserController.handle
 );
-rentalRouter.get('/:id', ensureAuthenticated, showRentalController.handle);
+rentalRouter.get('/:id', ensureAuthenticated, detailRentalController.handle);
 rentalRouter.post(
   '/',
   celebrate({
@@ -76,6 +90,7 @@ rentalRouter.put(
     },
   }),
   ensureAuthenticated,
+  ensureAdmin,
   devolutionRentalController.handle
 );
 rentalRouter.put(
@@ -101,6 +116,7 @@ rentalRouter.put(
     },
   }),
   ensureAuthenticated,
+  ensureAdmin,
   pickupRentalController.handle
 );
 rentalRouter.put(

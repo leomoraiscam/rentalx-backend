@@ -1,12 +1,14 @@
 import { injectable, inject } from 'tsyringe';
 
-import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
+import { IListRentalsResponseDTO } from '@modules/rentals/dtos/IListRentalsResponseDTO';
+import { RentalMap } from '@modules/rentals/mapper/RentalMap';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
 import { IPaginationResponseDTO } from '@shared/common/dtos/IPaginationResponseDTO';
 import { FindOptionsOrdernation } from '@shared/common/enums/findOptionsOrder';
+import { convertQueryStringToFilterArray } from '@shared/common/helpers/convertQueryStringToFilterArray';
+import { paginationResultQuery } from '@shared/common/helpers/paginationResult.helper';
 
 import { IListRentalsDTO } from '../../dtos/IListRentalsDTO';
-import { convertQueryStringToFilterArray } from '../../utils/convertQueryStringToFilterArray';
 
 @injectable()
 export class ListRentalsUseCase {
@@ -17,7 +19,7 @@ export class ListRentalsUseCase {
 
   async execute(
     options: IListRentalsDTO
-  ): Promise<IPaginationResponseDTO<Rental>> {
+  ): Promise<IPaginationResponseDTO<IListRentalsResponseDTO>> {
     const {
       page = 1,
       perPage = 10,
@@ -31,7 +33,7 @@ export class ListRentalsUseCase {
     );
     const parsedStatus = convertQueryStringToFilterArray(status);
 
-    const rentals = await this.rentalRepository.list({
+    const { total, result } = await this.rentalRepository.list({
       page,
       perPage,
       order,
@@ -39,13 +41,11 @@ export class ListRentalsUseCase {
       status: parsedStatus,
       ...rest,
     });
-    const { total, result: data } = rentals;
-    const totalPages = Math.ceil(total / perPage);
 
-    return {
-      data,
+    return paginationResultQuery(
       total,
-      totalPages,
-    };
+      perPage,
+      result.map((rental) => RentalMap.toList(rental))
+    );
   }
 }

@@ -5,4 +5,5 @@ export interface IListRentalsDTO extends IQueryListOptionsDTO {
   endDate?: Date;
   status?: string | string[];
   categoryIds?: string | string[];
+  userId?: string;
 }

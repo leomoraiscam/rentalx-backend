@@ -34,15 +34,6 @@ export class RentalRepository implements IRentalRepository {
     });
   }
 
-  async findByUser(userId: string): Promise<Rental[] | null> {
-    return this.repository.find({
-      where: {
-        userId,
-      },
-      relations: ['car'],
-    });
-  }
-
   async findOpenRentalByCar(carId: string): Promise<Rental | undefined> {
     return this.repository.findOne({
       where: {
@@ -87,6 +78,7 @@ export class RentalRepository implements IRentalRepository {
       startDate,
       endDate,
       categoryIds,
+      userId,
     } = options;
     const skip = (page - 1) * take;
 
@@ -104,7 +96,12 @@ export class RentalRepository implements IRentalRepository {
         'rental.updatedAt',
         'rental.status',
       ])
-      .leftJoinAndSelect('rental.car', 'car');
+      .leftJoinAndSelect('rental.car', 'car')
+      .leftJoinAndSelect('car.images', 'images');
+
+    if (userId) {
+      queryBuilder.andWhere('rental.userId = :userId', { userId });
+    }
 
     if (status && status.length > 0) {
       queryBuilder.andWhere('rental.status IN (:...status)', { status });

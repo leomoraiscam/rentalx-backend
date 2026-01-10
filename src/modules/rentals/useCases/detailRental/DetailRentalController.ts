@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
-import { ShowRentalUseCase } from './ShowRentalUseCase';
+import { DetailRentalUseCase } from './DetailRentalUseCase';
 
-export class ShowRentalController {
+export class DetailRentalController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { id } = request.params;
-    const showRentalUseCase = container.resolve(ShowRentalUseCase);
-    const rental = await showRentalUseCase.execute(id);
+    const detailRentalUseCase = container.resolve(DetailRentalUseCase);
+    const rental = await detailRentalUseCase.execute(id);
 
     return response.status(200).json(rental);
   }
