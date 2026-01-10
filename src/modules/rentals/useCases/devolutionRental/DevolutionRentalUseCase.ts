@@ -3,7 +3,7 @@ import { inject, injectable } from 'tsyringe';
 import { CarStatus } from '@modules/cars/enums/carStatus';
 import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
 import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
-import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
+import { RentalMap } from '@modules/rentals/mapper/RentalMap';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
 import { IDateProvider } from '@shared/container/providers/DateProvider/models/IDateProvider';
 import { AppError } from '@shared/errors/AppError';
@@ -21,7 +21,7 @@ export class DevolutionRentalUseCase {
     private dateProvider: IDateProvider
   ) {}
 
-  async execute(id: string): Promise<Rental> {
+  async execute(id: string): Promise<any> {
     const rental = await this.rentalRepository.findById(id);
 
     if (!rental) {
@@ -67,11 +67,17 @@ export class DevolutionRentalUseCase {
     });
     car.status = CarStatus.AVAILABLE;
 
-    const [devolutionRental] = await Promise.all([
+    await Promise.all([
       this.rentalRepository.save(rental),
       this.carRepository.save(car),
     ]);
 
-    return devolutionRental;
+    return RentalMap.toReceipt({
+      rental,
+      daysRented,
+      daysOverdue,
+      fine,
+      total,
+    });
   }
 }
