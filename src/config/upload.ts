@@ -13,6 +13,8 @@ import {
   ALLOWED_DEFAULT_IMAGES_EXTENSION_FILES,
   ALLOWED_CSV_MIMETYPES,
   ALLOWED_CSV_EXTENSION_FILE,
+  DEFAULT_RANDOM_BYTES,
+  DEFAULT_ENCRYPT_TYPE,
 } from './constants/upload';
 import { ILimitMulterConfig, IMulterConfig } from './dtos/multerConfigDTO';
 
@@ -32,8 +34,11 @@ export const multerConfig: IMulterConfig<multer.StorageEngine> = {
   storage: multer.diskStorage({
     destination: TMP_FOLDER,
     filename: (_, file, callback) => {
-      const fileHash = crypto.randomBytes(8).toString('hex');
-      const fileName = `${fileHash}-${file.originalname}`;
+      const fileHash = crypto
+        .randomBytes(DEFAULT_RANDOM_BYTES)
+        .toString(DEFAULT_ENCRYPT_TYPE);
+      const extension = extname(file.originalname);
+      const fileName = `${fileHash}${extension}`;
 
       return callback(null, fileName);
     },
@@ -63,7 +68,7 @@ const fileFilterConfig = (
     );
   }
 
-  const extension = extname(file.originalname);
+  const extension = extname(file.originalname).toLowerCase();
 
   if (!allowedExtensions.includes(extension)) {
     return cb(

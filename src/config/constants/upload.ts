@@ -12,3 +12,6 @@ export const FILE_SIZE_CONFIG = {
   DEFAULT_LIMIT_MB: 2,
   CSV_FILE_SIZE: 8,
 };
+
+export const DEFAULT_RANDOM_BYTES = 8;
+export const DEFAULT_ENCRYPT_TYPE = 'hex';
