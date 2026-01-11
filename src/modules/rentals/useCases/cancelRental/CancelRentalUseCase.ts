@@ -15,7 +15,7 @@ export class CancelRentalUseCase {
     private carRepository: ICarRepository
   ) {}
 
-  async execute(id: string): Promise<void> {
+  async execute(id: string, userId: string): Promise<void> {
     const rental = await this.rentalRepository.findById(id);
 
     if (!rental) {
@@ -26,6 +26,13 @@ export class CancelRentalUseCase {
       throw new AppError(
         'The rent cannot be cancelled as it has passed the period',
         422
+      );
+    }
+
+    if (rental.userId !== userId) {
+      throw new AppError(
+        'You cannot cancel a rental that belongs to another user.',
+        403
       );
     }
 
