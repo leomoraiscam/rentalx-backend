@@ -2,6 +2,7 @@ import { inject, injectable } from 'tsyringe';
 
 import { CarStatus } from '@modules/cars/enums/carStatus';
 import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
+import { IDevolutionResponseDTO } from '@modules/rentals/dtos/IDevolutionResponseDTO';
 import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
 import { RentalMap } from '@modules/rentals/mapper/RentalMap';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
@@ -21,7 +22,7 @@ export class DevolutionRentalUseCase {
     private dateProvider: IDateProvider
   ) {}
 
-  async execute(id: string): Promise<any> {
+  async execute(id: string): Promise<IDevolutionResponseDTO> {
     const rental = await this.rentalRepository.findById(id);
 
     if (!rental) {
