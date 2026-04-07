@@ -1,17 +1,15 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Car rentals API - Swagger Documentation",
-    "description": "This is API Car Rental",
+    "version": "1.0.0",
+    "title": "Car Rentals API",
+    "description": "A API for managing a car rental service. It handles user accounts, car fleet management (categories, specifications), and the complete rental lifecycle (booking, pickup, return, and cancellation).",
     "termsOfService": "http://swagger.io/terms/",
     "license": {
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-    },
-    "version": "1.0.0",
-    "host": "http://localhost:3333/api-docs"
+    }
   },
-  "schemes": ["http"],
   "servers": [
     {
       "url": "http://localhost:3333",
@@ -21,39 +19,39 @@
   "tags": [
     {
       "name": "accounts",
-      "description": "Endpoints related to accounts management"
+      "description": "User account management and profile operations."
     },
     {
       "name": "sessions",
-      "description": "Endpoints for user authentication"
+      "description": "Authentication and session management (login, refresh token)."
     },
     {
       "name": "password",
-      "description": "Endpoints for reset passwords and send password recovery emails"
+      "description": "Passwords recovery and send password recovery emails"
     },
     {
       "name": "categories",
-      "description": "Endpoints related to car categories management"
+      "description": "Car category management. (Admin-only)"
     },
     {
       "name": "specifications",
-      "description": "Endpoints related to car specifications management"
+      "description": "Car specification management. (Admin-only)"
     },
     {
       "name": "cars",
-      "description": "Endpoints related to cars management"
+      "description": "Car fleet management and public search"
     },
     {
       "name": "rentals",
-      "description": "Endpoints related to car rentals management"
+      "description": "Rental lifecycle management (booking, returns, etc.)."
     }
   ],
   "paths": {
     "/accounts": {
       "post": {
         "tags": ["accounts"],
-        "summary": "Create a new account",
-        "description": "This endpoint allows the creation of a new account",
+        "summary": "Register a new user account",
+        "description": "Allows any user to register a new account by providing their name, email, password, and driver's license.",
         "operationId": "addAccount",
         "requestBody": {
           "content": {
@@ -77,7 +75,7 @@
             }
           },
           "400": {
-            "description": "This response will be returned when has validation error",
+            "description": "This response will be returned when has validation error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -87,7 +85,7 @@
             }
           },
           "409": {
-            "description": "This response will be returned when the account resource already exist",
+            "description": "This response will be returned when the account resource already exist.",
             "content": {
               "application/json": {
                 "schema": {
@@ -112,8 +110,8 @@
     "/accounts/avatar": {
       "patch": {
         "tags": ["accounts"],
-        "summary": "Upload avatar image to account",
-        "description": "This endpoint allows you to upload image to a specific account",
+        "summary": "Upload user avatar",
+        "description": "Allows an authenticated user to upload or update their profile avatar.",
         "operationId": "uploadAvatar",
         "security": [{ "bearerAuth": [] }],
         "requestBody": {
@@ -138,7 +136,7 @@
             }
           },
           "400": {
-            "description": "This response will be returned when has validation error",
+            "description": "This response will be returned when there is a validation error.",
             "content": {
               "application/json": {
                 "schema": {
@@ -148,11 +146,21 @@
             }
           },
           "401": {
-            "description": "This response will be returned when the user is not authenticated",
+            "description": "This response will be returned when the the token is invalid or expired",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "This response is returned when some fields are not provided as required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntityError"
                 }
               }
             }
@@ -173,13 +181,13 @@
     "/accounts/me": {
       "get": {
         "tags": ["accounts"],
-        "summary": "show the profile of the logged in user",
-        "description": "This endpoint allows logged in to see your profile",
+        "summary": "Get current user's profile",
+        "description": "Retrieves the complete profile information for the currently authenticated user.",
         "operationId": "showProfile",
         "security": [{ "bearerAuth": [] }],
         "responses": {
           "200": {
-            "description": "This response will be returned when list of car categories with success",
+            "description": "This response will be returned when the user profile is successfully retrieved",
             "content": {
               "application/json": {
                 "schema": {
@@ -189,7 +197,7 @@
             }
           },
           "401": {
-            "description": "This response will be returned when the user is not authenticated",
+            "description": "This response will be returned when the the token is invalid or expired",
             "content": {
               "application/json": {
                 "schema": {
@@ -214,8 +222,8 @@
     "/sessions": {
       "post": {
         "tags": ["sessions"],
-        "summary": "Authenticate user",
-        "description": "This endpoint allows users to log with their credentials",
+        "summary": "Authenticate a user",
+        "description": "Logs in a user with their email and password, returning a JWT access token and a refresh token",
         "operationId": "authenticateUser",
         "requestBody": {
           "content": {
@@ -229,7 +237,7 @@
         },
         "responses": {
           "200": {
-            "description": "This response will be returned when the user was authenticated with success",
+            "description": "This response will be returned when the user is successfully authenticated",
             "content": {
               "application/json": {
                 "schema": {
@@ -258,16 +266,6 @@
               }
             }
           },
-          "424": {
-            "description": "This response will be returned when some dependencies or some secrets key is missing",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FailedDependencyError"
-                }
-              }
-            }
-          },
           "500": {
             "description": "This response will be returned when an unexpected error occurs",
             "content": {
@@ -284,8 +282,8 @@
     "/sessions/refresh-token": {
       "post": {
         "tags": ["sessions"],
-        "summary": "Crate a new refresh token",
-        "description": "This endpoint allows users to create a new refresh token",
+        "summary": "Refresh an access token",
+        "description": "Generates a new JWT access token using a valid refresh token",
         "operationId": "refreshToken",
         "requestBody": {
           "content": {
@@ -299,7 +297,7 @@
         },
         "responses": {
           "200": {
-            "description": "This response will be returned when the user was authenticated with success",
+            "description": "This response will be returned when the user is successfully authenticated",
             "content": {
               "application/json": {
                 "schema": {
@@ -328,16 +326,6 @@
               }
             }
           },
-          "424": {
-            "description": "This response will be returned when some dependencies or some secrets key is missing",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FailedDependencyError"
-                }
-              }
-            }
-          },
           "500": {
             "description": "This response will be returned when an unexpected error occurs",
             "content": {
@@ -354,8 +342,8 @@
     "/password/forgot": {
       "post": {
         "tags": ["password"],
-        "summary": "Send password recovery email",
-        "description": "This endpoint allows users to request a password recovery email",
+        "summary": "Request password recovery",
+        "description": "Sends a password recovery email with a unique token to the user's registered email address",
         "operationId": "sendForgotPassword",
         "requestBody": {
           "content": {
@@ -368,8 +356,8 @@
           "required": true
         },
         "responses": {
-          "200": {
-            "description": "This response will be returned when the email was send with success"
+          "204": {
+            "description": "This response will be returned when the email is sent successfully"
           },
           "400": {
             "description": "This response will be returned when has validation error",
@@ -408,18 +396,17 @@
       "post": {
         "tags": ["password"],
         "summary": "Reset user password",
-        "description": "This endpoint allows users to reset their passwords",
+        "description": "Allows a user to set a new password using the valid token (sent as a query parameter) received via email",
         "operationId": "resetPassword",
         "parameters": [
           {
             "name": "token",
             "in": "query",
-            "description": "token obtained via password reset email",
+            "description": "Token to reset password",
             "required": true,
             "schema": {
-              "type": "string",
-              "format": "uuid",
-              "default": "6ec808b3-13f0-4cb7-bf91-ac8609a3205c"
+              "type": "uuid",
+              "example": "4eddcedc-9a2d-4a65-a75a-77d526c351e3"
             }
           }
         ],
@@ -434,8 +421,8 @@
           "required": true
         },
         "responses": {
-          "200": {
-            "description": "This response will be returned when the password was reseted with success"
+          "204": {
+            "description": "This response will be returned when the password is successfully reset"
           },
           "400": {
             "description": "This response will be returned when has validation error",
@@ -448,7 +435,7 @@
             }
           },
           "401": {
-            "description": "This response will be returned when the user is not authorized",
+            "description": "This response will be returned when the the token is invalid or expired",
             "content": {
               "application/json": {
                 "schema": {
@@ -483,9 +470,10 @@
     "/categories": {
       "post": {
         "tags": ["categories"],
-        "summary": "Create a new category",
-        "description": "This endpoint allows admin users to create new categories",
+        "summary": "Create a new car category",
+        "description": "Creates a new car category (e.g., 'SUV', 'Sedan', 'Hatch'). **(Admin-only)**",
         "operationId": "addCategory",
+        "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "content": {
             "application/json": {
@@ -551,9 +539,10 @@
       },
       "get": {
         "tags": ["categories"],
-        "summary": "List of car categories",
-        "description": "This endpoint allows admin users to list of car categories",
+        "summary": "List all car categories",
+        "description": "Retrieves a paginated list of all available car categories. **(Admin-only endpoint)**",
         "operationId": "listCategories",
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "name": "page",
@@ -561,8 +550,8 @@
             "description": "Page values ​​to be considered for filter",
             "required": false,
             "schema": {
-              "type": "string",
-              "default": "1"
+              "type": "integer",
+              "default": 1
             }
           },
           {
@@ -571,8 +560,8 @@
             "description": "PerPage values to be considered for filter",
             "required": false,
             "schema": {
-              "type": "string",
-              "default": "10"
+              "type": "integer",
+              "default": 1
             }
           },
           {
@@ -582,7 +571,8 @@
             "required": false,
             "schema": {
               "type": "string",
-              "default": "DESC"
+              "default": "DESC",
+              "enum": ["ASC", "DESC"]
             }
           }
         ],
@@ -626,9 +616,10 @@
     "/categories/import": {
       "post": {
         "tags": ["categories"],
-        "summary": "Upload car categories from CSV",
-        "description": "Allows admin users to upload car categories in bulk from a CSV file",
+        "summary": "Import categories from CSV",
+        "description": "Allows an admin to batch-create categories by uploading a CSV file",
         "operationId": "uploadCategories",
+        "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -668,9 +659,10 @@
     "/specifications": {
       "post": {
         "tags": ["specifications"],
-        "summary": "Create a new specification",
-        "description": "This endpoint allows admin users to create new specifications",
+        "summary": "Create a new car specification",
+        "description": "Creates a new car specification (e.g., 'Air Conditioning', '4 Doors', 'Automatic Transmission'). **(Admin-only endpoint)**",
         "operationId": "addSpecification",
+        "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "content": {
             "application/json": {
@@ -735,9 +727,10 @@
       },
       "get": {
         "tags": ["specifications"],
-        "summary": "List of car specifications",
-        "description": "This endpoint allows admin users to list of car specifications",
+        "summary": "List all car specifications",
+        "description": "Retrieves a paginated list of all available car specifications. **(Admin-only endpoint)**",
         "operationId": "listSpecifications",
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "name": "page",
@@ -745,8 +738,8 @@
             "description": "Page values ​​to be considered for filter",
             "required": false,
             "schema": {
-              "type": "string",
-              "default": "1"
+              "type": "integer",
+              "default": 1
             }
           },
           {
@@ -755,8 +748,8 @@
             "description": "PerPage values to be considered for filter",
             "required": false,
             "schema": {
-              "type": "string",
-              "default": "10"
+              "type": "integer",
+              "default": 10
             }
           },
           {
@@ -766,7 +759,8 @@
             "required": false,
             "schema": {
               "type": "string",
-              "default": "DESC"
+              "default": "DESC",
+              "enum": ["ASC", "DESC"]
             }
           }
         ],
@@ -810,9 +804,10 @@
     "/specifications/import": {
       "post": {
         "tags": ["specifications"],
-        "summary": "Upload car specifications from CSV",
-        "description": "Allows admin users to upload car specifications in bulk from a CSV file",
+        "summary": "Import specifications from CSV",
+        "description": "Allows an admin to batch-create specifications by uploading a CSV file",
         "operationId": "uploadSpecifications",
+        "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -852,9 +847,10 @@
     "/cars": {
       "post": {
         "tags": ["cars"],
-        "summary": "Create a new car",
-        "description": "This endpoint allows admin users to create new car",
+        "summary": "Add a new car",
+        "description": "Registers a new car in the system, linking it to a category and a list of specification IDs. **(Admin-only endpoint)**",
         "operationId": "addCar",
+        "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "content": {
             "application/json": {
@@ -870,7 +866,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CarResponse"
+                  "$ref": "#/components/schemas/CarSummaryResponse"
                 }
               }
             }
@@ -919,8 +915,8 @@
       },
       "get": {
         "tags": ["cars"],
-        "summary": "List categories with car models",
-        "description": "This endpoint returns a list of categories with grouped models cars",
+        "summary": "List available and unavailable cars grouped by category",
+        "description": "Public endpoint to search for available cars. It returns a list of categories, each containing the car models available within the specified date range and filters",
         "operationId": "listCategoriesWithCarsModels",
         "parameters": [
           {
@@ -966,7 +962,7 @@
           {
             "name": "categoryId",
             "in": "query",
-            "description": "Categories values ​​to be considered for filter",
+            "description": "Filter by one or more category IDs (comma-separated)",
             "required": false,
             "schema": {
               "type": "string",
@@ -1007,8 +1003,8 @@
     "/cars/options": {
       "get": {
         "tags": ["cars"],
-        "summary": "List of car models according to specific category",
-        "description": "This endpoint returns a list of cars with models in the specified category",
+        "summary": "List available cars for a specific category",
+        "description": "Retrieves all available car models and their specific units (cars) for a single category, based on the specified date range",
         "operationId": "listCarsGroupedByCategory",
         "parameters": [
           {
@@ -1037,7 +1033,7 @@
             "description": "Categories values ​​to be considered for filter",
             "required": true,
             "schema": {
-              "type": "string",
+              "type": "uuid",
               "default": "7f9240a4-6669-4ca2-8d32-1aec40b0e00a"
             }
           }
@@ -1072,9 +1068,10 @@
     "/cars/{id}/images": {
       "post": {
         "tags": ["cars"],
-        "summary": "Upload images to a car",
-        "description": "This endpoint allows admin users upload images to a car",
+        "summary": "Upload car images",
+        "description": "Allows an admin to upload one or more images for a specific car",
         "operationId": "uploadImagesCar",
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "name": "id",
@@ -1082,7 +1079,7 @@
             "description": "Car ID",
             "required": true,
             "schema": {
-              "type": "string",
+              "type": "uuid",
               "example": "3c2d1188-ab65-41d3-b3b6-49adf24082d6"
             }
           }
@@ -1099,6 +1096,16 @@
         "responses": {
           "201": {
             "description": "This response will be returned when the created a image resource to the car"
+          },
+          "400": {
+            "description": "This response will be returned when has validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
           },
           "401": {
             "description": "This response will be returned when the user is not authorized",
@@ -1120,6 +1127,194 @@
               }
             }
           },
+          "422": {
+            "description": "This response will be returned when some fields did not came the way we needed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntityError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "This response will be returned when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["cars"],
+        "summary": "Update all car images uploaded",
+        "description": "Allows an admin to upload one or more new images for a specific car",
+        "operationId": "updateCarImages",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Car ID",
+            "required": true,
+            "schema": {
+              "type": "uuid",
+              "example": "3c2d1188-ab65-41d3-b3b6-49adf24082d6"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadImages"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "This response will be returned when one or more images for the car have been updated."
+          },
+          "400": {
+            "description": "This response will be returned when has validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response will be returned when the user is not authorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "This response will be returned when the car has been deleted or does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "This response will be returned when some fields did not came the way we needed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntityError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "This response will be returned when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cars/{id}/images/{imageId}": {
+      "patch": {
+        "tags": ["cars"],
+        "summary": "Update car image",
+        "description": "Allows an admin to upload and update a specific car image",
+        "operationId": "updateCarImage",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Car ID",
+            "required": true,
+            "schema": {
+              "type": "uuid",
+              "example": "3c2d1188-ab65-41d3-b3b6-49adf24082d6"
+            }
+          },
+          {
+            "name": "imageId",
+            "in": "path",
+            "description": "Image ID",
+            "required": true,
+            "schema": {
+              "type": "uuid",
+              "example": "abed162c-80ca-4424-a5ea-60b777d5fe62"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadImage"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "This response will be returned when car image for the car have been updated."
+          },
+          "400": {
+            "description": "This response will be returned when has validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This response will be returned when the user is not authorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "This response will be returned when the car has been deleted or does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "This response will be returned when some fields did not came the way we needed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntityError"
+                }
+              }
+            }
+          },
           "500": {
             "description": "This response will be returned when an unexpected error occurs",
             "content": {
@@ -1137,8 +1332,9 @@
       "post": {
         "tags": ["rentals"],
         "summary": "Create a new rental",
-        "description": "This endpoint allows users to creation of a rental",
+        "description": "Allows an authenticated user to create a new rental agreement for a specific car and date range. The car must be available for the entire period",
         "operationId": "addRental",
+        "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1224,8 +1420,9 @@
       "get": {
         "tags": ["rentals"],
         "summary": "List rentals",
-        "description": "This endpoint allows admin users to list the rentals",
+        "description": "Retrieves a paginated list of all rentals in the system. Can be filtered by status, date range, and category IDs. **(Admin-only endpoint)**",
         "operationId": "listRentals",
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "name": "page",
@@ -1233,8 +1430,8 @@
             "description": "Page values ​​to be considered for filter",
             "required": false,
             "schema": {
-              "type": "string",
-              "default": "1"
+              "type": "integer",
+              "default": 1
             }
           },
           {
@@ -1243,8 +1440,8 @@
             "description": "PerPage values to be considered for filter",
             "required": false,
             "schema": {
-              "type": "string",
-              "default": "10"
+              "type": "integer",
+              "default": 10
             }
           },
           {
@@ -1254,13 +1451,14 @@
             "required": false,
             "schema": {
               "type": "string",
-              "default": "DESC"
+              "default": "DESC",
+              "enum": ["ASC", "DESC"]
             }
           },
           {
             "name": "status",
             "in": "query",
-            "description": "status values ​​to be considered for filter",
+            "description": "status values ​​to be considered for filter (comma-separated)",
             "required": false,
             "schema": {
               "type": "string",
@@ -1270,7 +1468,7 @@
           {
             "name": "categoryIds",
             "in": "query",
-            "description": "categories values ​​to be considered for filter",
+            "description": "categories values ​​to be considered for filter (comma-separated)",
             "required": false,
             "schema": {
               "type": "string",
@@ -1328,9 +1526,10 @@
     "/rentals/me": {
       "get": {
         "tags": ["rentals"],
-        "summary": "List their rental history",
-        "description": "This endpoint allows users to list their rental history",
+        "summary": "List current user's rental history",
+        "description": "Retrieves a complete list of all past and present rentals for the currently authenticated user",
         "operationId": "listMeRentals",
+        "security": [{ "bearerAuth": [] }],
         "responses": {
           "200": {
             "description": "This response will be returned when list of rentals with success",
@@ -1364,9 +1563,22 @@
     "/rentals/{id}": {
       "get": {
         "tags": ["rentals"],
-        "summary": "list rental according to specific id",
-        "description": "This endpoint allows users to list an rental",
+        "summary": "Get rental details by ID",
+        "description": "Retrieves detailed information for a single rental. Users can only access their own rentals",
         "operationId": "listRentalById",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Rental ID",
+            "required": true,
+            "schema": {
+              "type": "uuid",
+              "example": "3c2d1188-ab65-41d3-b3b6-49adf24082d6"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "This response will be returned when the rental show with success",
@@ -1403,8 +1615,21 @@
       "put": {
         "tags": ["rentals"],
         "summary": "Update an rental",
-        "description": "This endpoint allows users to update information for an existing lease",
+        "description": "Allows a user to update the details of an existing rental (e.g., change car or dates) *before* it is picked up.",
         "operationId": "updateRental",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Rental ID",
+            "required": true,
+            "schema": {
+              "type": "uuid",
+              "example": "3c2d1188-ab65-41d3-b3b6-49adf24082d6"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1482,16 +1707,17 @@
       "put": {
         "tags": ["rentals"],
         "summary": "Devolution an rental car",
-        "description": "This endpoint allows users to devolution of a rental",
+        "description": "arks a rental as 'returned' (closed). This calculates any applicable fines for late returns and makes the car available again.",
         "operationId": "devolutionRental",
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "Car ID",
+            "description": "Rental ID",
             "required": true,
             "schema": {
-              "type": "string",
+              "type": "uuid",
               "example": "3c2d1188-ab65-41d3-b3b6-49adf24082d6"
             }
           }
@@ -1553,9 +1779,10 @@
     "/rentals/{id}/pickup": {
       "put": {
         "tags": ["rentals"],
-        "summary": "Start an rental",
-        "description": "This endpoint allows admin users to picked-up an rental to user",
+        "summary": "Mark a rental as 'picked-up' (Admin)",
+        "description": "Marks a 'confirmed' rental as 'picked-up', officially starting the rental period. **(Admin-only)**",
         "operationId": "pickedUpRental",
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "name": "id",
@@ -1563,7 +1790,7 @@
             "description": "Rental ID",
             "required": true,
             "schema": {
-              "type": "string",
+              "type": "uuid",
               "example": "3c2d1188-ab65-41d3-b3b6-49adf24082d6"
             }
           }
@@ -1619,8 +1846,9 @@
       "put": {
         "tags": ["rentals"],
         "summary": "Cancel an rental",
-        "description": "This endpoint allows users to cancel an rental",
+        "description": "Allows a user or an admin to cancel a 'confirmed' rental before the pickup time",
         "operationId": "cancelRental",
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "name": "id",
@@ -1628,7 +1856,7 @@
             "description": "Rental ID",
             "required": true,
             "schema": {
-              "type": "string",
+              "type": "uuid",
               "example": "3c2d1188-ab65-41d3-b3b6-49adf24082d6"
             }
           }
@@ -1765,6 +1993,10 @@
                 "type": "string",
                 "example": "http://localhost:3333/avatar/6aacae7a79539950-ts-2.png"
               },
+              "avatar": {
+                "type": "string",
+                "example": "6aacae7a79539950-ts-2.png"
+              },
               "isAdmin": {
                 "type": "boolean",
                 "example": false
@@ -1856,12 +2088,21 @@
       "UploadImages": {
         "type": "object",
         "properties": {
-          "files": {
+          "car": {
             "type": "array",
             "items": {
               "type": "string",
               "format": "binary"
             }
+          }
+        }
+      },
+      "UploadImage": {
+        "type": "object",
+        "properties": {
+          "car": {
+            "type": "string",
+            "format": "binary"
           }
         }
       },
@@ -2059,7 +2300,7 @@
           }
         }
       },
-      "CarResponse": {
+      "CarSummaryResponse": {
         "allOf": [
           {
             "$ref": "#/components/schemas/Car"
@@ -2080,10 +2321,10 @@
           }
         ]
       },
-      "CarEntity": {
+      "CarDetailedResponse": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/CarResponse"
+            "$ref": "#/components/schemas/CarSummaryResponse"
           },
           {
             "type": "object",
@@ -2277,7 +2518,7 @@
           }
         ]
       },
-      "ProcessableRentalEntityProprieties": {
+      "ProcessableRentalEntityProperties": {
         "type": "object",
         "properties": {
           "userId": {
@@ -2327,7 +2568,7 @@
             "$ref": "#/components/schemas/Rental"
           },
           {
-            "$ref": "#/components/schemas/ProcessableRentalEntityProprieties"
+            "$ref": "#/components/schemas/ProcessableRentalEntityProperties"
           },
           {
             "$ref": "#/components/schemas/EntityBase"
@@ -2348,7 +2589,7 @@
                   "$ref": "#/components/schemas/Rental"
                 },
                 {
-                  "$ref": "#/components/schemas/ProcessableRentalEntityProprieties"
+                  "$ref": "#/components/schemas/ProcessableRentalEntityProperties"
                 },
                 {
                   "$ref": "#/components/schemas/EntityBase"
@@ -2360,7 +2601,7 @@
                   "type": "object",
                   "properties": {
                     "car": {
-                      "$ref": "#/components/schemas/CarResponse"
+                      "$ref": "#/components/schemas/CarSummaryResponse"
                     },
                     "endDate": {
                       "type": "string",
@@ -2423,7 +2664,7 @@
             "properties": {
               "car": {
                 "type": "object",
-                "$ref": "#/components/schemas/CarEntity"
+                "$ref": "#/components/schemas/CarDetailedResponse"
               }
             }
           }
@@ -2435,7 +2676,7 @@
             "$ref": "#/components/schemas/Rental"
           },
           {
-            "$ref": "#/components/schemas/ProcessableRentalEntityProprieties"
+            "$ref": "#/components/schemas/ProcessableRentalEntityProperties"
           },
           {
             "$ref": "#/components/schemas/EntityBase"
@@ -2447,7 +2688,7 @@
             "type": "object",
             "properties": {
               "car": {
-                "$ref": "#/components/schemas/CarResponse"
+                "$ref": "#/components/schemas/CarSummaryResponse"
               },
               "endDate": {
                 "type": "string",
@@ -2464,7 +2705,7 @@
             "type": "string",
             "example": "2024-05-26 08:00:00"
           },
-          "expectReturnDate": {
+          "expectedReturnDate": {
             "type": "string",
             "example": "2024-05-29 10:00:00"
           },
@@ -2481,7 +2722,7 @@
             "$ref": "#/components/schemas/Rental"
           },
           {
-            "$ref": "#/components/schemas/ProcessableRentalEntityProprieties"
+            "$ref": "#/components/schemas/ProcessableRentalEntityProperties"
           },
           {
             "$ref": "#/components/schemas/EntityBase"
@@ -2494,7 +2735,7 @@
             "properties": {
               "car": {
                 "type": "object",
-                "$ref": "#/components/schemas/CarEntity"
+                "$ref": "#/components/schemas/CarDetailedResponse"
               },
               "endDate": {
                 "type": "string",
@@ -2510,7 +2751,7 @@
             "$ref": "#/components/schemas/Rental"
           },
           {
-            "$ref": "#/components/schemas/ProcessableRentalEntityProprieties"
+            "$ref": "#/components/schemas/ProcessableRentalEntityProperties"
           },
           {
             "$ref": "#/components/schemas/EntityBase"
@@ -2522,7 +2763,7 @@
             "type": "object",
             "properties": {
               "car": {
-                "$ref": "#/components/schemas/CarEntity"
+                "$ref": "#/components/schemas/CarDetailedResponse"
               },
               "endDate": {
                 "type": "string",
