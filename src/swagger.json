@@ -113,7 +113,11 @@
         "summary": "Upload user avatar",
         "description": "Allows an authenticated user to upload or update their profile avatar.",
         "operationId": "uploadAvatar",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -141,6 +145,14 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ValidationError"
+                },
+                "examples": {
+                  "invalidFile": {
+                    "value": {
+                      "status": "error",
+                      "message": "Incorrect upload field or unexpected file."
+                    }
+                  }
                 }
               }
             }
@@ -161,6 +173,14 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UnprocessableEntityError"
+                },
+                "examples": {
+                  "invalidFile": {
+                    "value": {
+                      "status": "error",
+                      "message": "File format not supported."
+                    }
+                  }
                 }
               }
             }
@@ -184,7 +204,11 @@
         "summary": "Get current user's profile",
         "description": "Retrieves the complete profile information for the currently authenticated user.",
         "operationId": "showProfile",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "This response will be returned when the user profile is successfully retrieved",
@@ -375,6 +399,14 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/NotFoundError"
+                },
+                "examples": {
+                  "userNotFound": {
+                    "value": {
+                      "status": "error",
+                      "message": "User not found."
+                    }
+                  }
                 }
               }
             }
@@ -405,7 +437,8 @@
             "description": "Token to reset password",
             "required": true,
             "schema": {
-              "type": "uuid",
+              "type": "string",
+              "format": "uuid",
               "example": "4eddcedc-9a2d-4a65-a75a-77d526c351e3"
             }
           }
@@ -440,6 +473,14 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UnauthorizedError"
+                },
+                "examples": {
+                  "invalidToken": {
+                    "value": {
+                      "status": "error",
+                      "message": "Invalid or expired token."
+                    }
+                  }
                 }
               }
             }
@@ -450,6 +491,14 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/NotFoundError"
+                },
+                "examples": {
+                  "userNotFound": {
+                    "value": {
+                      "status": "error",
+                      "message": "User not found."
+                    }
+                  }
                 }
               }
             }
@@ -473,7 +522,11 @@
         "summary": "Create a new car category",
         "description": "Creates a new car category (e.g., 'SUV', 'Sedan', 'Hatch'). **(Admin-only)**",
         "operationId": "addCategory",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -506,11 +559,21 @@
             }
           },
           "401": {
-            "description": "This response will be returned when the user is not authorized",
+            "description": "This response will be returned when the user is not authenticated",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "This response will be returned when the user does not have Admin privileges",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenError"
                 }
               }
             }
@@ -540,9 +603,13 @@
       "get": {
         "tags": ["categories"],
         "summary": "List all car categories",
-        "description": "Retrieves a paginated list of all available car categories. **(Admin-only endpoint)**",
+        "description": "Retrieves a paginated list of all available car categories.",
         "operationId": "listCategories",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "page",
@@ -587,9 +654,6 @@
               }
             }
           },
-          "204": {
-            "description": "This response will be returned when the empty data to this entity"
-          },
           "401": {
             "description": "This response will be returned when the user is not authorized",
             "content": {
@@ -619,7 +683,11 @@
         "summary": "Import categories from CSV",
         "description": "Allows an admin to batch-create categories by uploading a CSV file",
         "operationId": "uploadCategories",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -633,12 +701,58 @@
           "201": {
             "description": "This response will be returned when the created a category resource"
           },
+          "400": {
+            "description": "This response will be returned when the request is malformed or missing the file.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                },
+                "examples": {
+                  "invalidFile": {
+                    "value": {
+                      "status": "error",
+                      "message": "Incorrect upload field or unexpected file."
+                    }
+                  }
+                }
+              }
+            }
+          },
           "401": {
-            "description": "This response will be returned when the user is not authorized",
+            "description": "This response will be returned when the user is not authenticated",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "This response will be returned when the user does not have Admin privileges",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "This response will be returned when the file extension is not valid (e.g. not a CSV).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntityError"
+                },
+                "examples": {
+                  "invalidExtension": {
+                    "value": {
+                      "status": "error",
+                      "message": "File format not supported."
+                    }
+                  }
                 }
               }
             }
@@ -662,7 +776,11 @@
         "summary": "Create a new car specification",
         "description": "Creates a new car specification (e.g., 'Air Conditioning', '4 Doors', 'Automatic Transmission'). **(Admin-only endpoint)**",
         "operationId": "addSpecification",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -694,11 +812,21 @@
             }
           },
           "401": {
-            "description": "This response will be returned when the user is not authorized",
+            "description": "This response will be returned when the user is not authenticated",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "This response will be returned when the user does not have Admin privileges",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenError"
                 }
               }
             }
@@ -728,9 +856,13 @@
       "get": {
         "tags": ["specifications"],
         "summary": "List all car specifications",
-        "description": "Retrieves a paginated list of all available car specifications. **(Admin-only endpoint)**",
+        "description": "Retrieves a paginated list of all available car specifications.",
         "operationId": "listSpecifications",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "page",
@@ -775,9 +907,6 @@
               }
             }
           },
-          "204": {
-            "description": "This response will be returned when the empty data to this entity"
-          },
           "401": {
             "description": "This response will be returned when the user is not authorized",
             "content": {
@@ -807,7 +936,11 @@
         "summary": "Import specifications from CSV",
         "description": "Allows an admin to batch-create specifications by uploading a CSV file",
         "operationId": "uploadSpecifications",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -821,12 +954,58 @@
           "201": {
             "description": "This response will be returned when the created a specification resource"
           },
+          "400": {
+            "description": "This response will be returned when the request is malformed or missing the file.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                },
+                "examples": {
+                  "invalidFile": {
+                    "value": {
+                      "status": "error",
+                      "message": "Incorrect upload field or unexpected file."
+                    }
+                  }
+                }
+              }
+            }
+          },
           "401": {
-            "description": "This response will be returned when the user is not authorized",
+            "description": "This response will be returned when the user is not authenticated",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "This response will be returned when the user does not have Admin privileges",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "This response will be returned when the file extension is not valid (e.g. not a CSV).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntityError"
+                },
+                "examples": {
+                  "invalidExtension": {
+                    "value": {
+                      "status": "error",
+                      "message": "File format not supported."
+                    }
+                  }
                 }
               }
             }
@@ -850,7 +1029,11 @@
         "summary": "Add a new car",
         "description": "Registers a new car in the system, linking it to a category and a list of specification IDs. **(Admin-only endpoint)**",
         "operationId": "addCar",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -877,16 +1060,58 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ValidationError"
+                },
+                "examples": {
+                  "invalidUuids": {
+                    "value": {
+                      "status": "error",
+                      "message": "One or more specification IDs are not valid UUIDs."
+                    }
+                  }
                 }
               }
             }
           },
           "401": {
-            "description": "This response will be returned when the user is not authorized",
+            "description": "This response will be returned when the user is not authenticated",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "This response will be returned when the user does not have Admin privileges",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "This response will be returned when the category or one or more specifications are not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                },
+                "examples": {
+                  "categoryNotFound": {
+                    "value": {
+                      "status": "error",
+                      "message": "Category not found."
+                    }
+                  },
+                  "specsNotFound": {
+                    "value": {
+                      "status": "error",
+                      "message": "One or more specifications not found"
+                    }
+                  }
                 }
               }
             }
@@ -1033,7 +1258,8 @@
             "description": "Categories values ​​to be considered for filter",
             "required": true,
             "schema": {
-              "type": "uuid",
+              "type": "string",
+              "format": "uuid",
               "default": "7f9240a4-6669-4ca2-8d32-1aec40b0e00a"
             }
           }
@@ -1069,9 +1295,13 @@
       "post": {
         "tags": ["cars"],
         "summary": "Upload car images",
-        "description": "Allows an admin to upload one or more images for a specific car",
+        "description": "Allows an admin to upload one or more images for a specific car. Implementing idempotency is recommended to avoid duplicates.",
         "operationId": "uploadImagesCar",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -1079,7 +1309,8 @@
             "description": "Car ID",
             "required": true,
             "schema": {
-              "type": "uuid",
+              "type": "string",
+              "format": "uuid",
               "example": "3c2d1188-ab65-41d3-b3b6-49adf24082d6"
             }
           }
@@ -1103,16 +1334,40 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ValidationError"
+                },
+                "examples": {
+                  "invalidUuids": {
+                    "value": {
+                      "status": "error",
+                      "message": "Car ID must be a valid UUID."
+                    }
+                  },
+                  "invalidFile": {
+                    "value": {
+                      "status": "error",
+                      "message": "Incorrect upload field or unexpected file."
+                    }
+                  }
                 }
               }
             }
           },
           "401": {
-            "description": "This response will be returned when the user is not authorized",
+            "description": "This response will be returned when the user is not authenticated",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "This response will be returned when the user does not have Admin privileges",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenError"
                 }
               }
             }
@@ -1133,6 +1388,20 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UnprocessableEntityError"
+                },
+                "examples": {
+                  "invalidExtension": {
+                    "value": {
+                      "status": "error",
+                      "message": "File format not supported."
+                    }
+                  },
+                  "sizeLimitExceeded": {
+                    "value": {
+                      "status": "error",
+                      "message": "The file exceeds the allowed size limit."
+                    }
+                  }
                 }
               }
             }
@@ -1154,7 +1423,11 @@
         "summary": "Update all car images uploaded",
         "description": "Allows an admin to upload one or more new images for a specific car",
         "operationId": "updateCarImages",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -1162,7 +1435,8 @@
             "description": "Car ID",
             "required": true,
             "schema": {
-              "type": "uuid",
+              "type": "string",
+              "format": "uuid",
               "example": "3c2d1188-ab65-41d3-b3b6-49adf24082d6"
             }
           }
@@ -1186,16 +1460,40 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ValidationError"
+                },
+                "examples": {
+                  "invalidUuids": {
+                    "value": {
+                      "status": "error",
+                      "message": "Car ID must be a valid UUID."
+                    }
+                  },
+                  "invalidFiles": {
+                    "value": {
+                      "status": "error",
+                      "message": "Incorrect upload field or unexpected file."
+                    }
+                  }
                 }
               }
             }
           },
           "401": {
-            "description": "This response will be returned when the user is not authorized",
+            "description": "This response will be returned when the user is not authenticated",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "This response will be returned when the user does not have Admin privileges",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenError"
                 }
               }
             }
@@ -1216,6 +1514,20 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UnprocessableEntityError"
+                },
+                "examples": {
+                  "invalidExtension": {
+                    "value": {
+                      "status": "error",
+                      "message": "File format not supported."
+                    }
+                  },
+                  "sizeLimitExceeded": {
+                    "value": {
+                      "status": "error",
+                      "message": "The file exceeds the allowed size limit."
+                    }
+                  }
                 }
               }
             }
@@ -1239,7 +1551,11 @@
         "summary": "Update car image",
         "description": "Allows an admin to upload and update a specific car image",
         "operationId": "updateCarImage",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -1247,7 +1563,8 @@
             "description": "Car ID",
             "required": true,
             "schema": {
-              "type": "uuid",
+              "type": "string",
+              "format": "uuid",
               "example": "3c2d1188-ab65-41d3-b3b6-49adf24082d6"
             }
           },
@@ -1257,7 +1574,8 @@
             "description": "Image ID",
             "required": true,
             "schema": {
-              "type": "uuid",
+              "type": "string",
+              "format": "uuid",
               "example": "abed162c-80ca-4424-a5ea-60b777d5fe62"
             }
           }
@@ -1281,16 +1599,40 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ValidationError"
+                },
+                "examples": {
+                  "invalidUuids": {
+                    "value": {
+                      "status": "error",
+                      "message": "Car ID or Image ID must be a valid UUID."
+                    }
+                  },
+                  "invalidFiles": {
+                    "value": {
+                      "status": "error",
+                      "message": "Incorrect upload field or unexpected file."
+                    }
+                  }
                 }
               }
             }
           },
           "401": {
-            "description": "This response will be returned when the user is not authorized",
+            "description": "This response will be returned when the user is not authenticated",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "This response will be returned when the user does not have Admin privileges",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenError"
                 }
               }
             }
@@ -1311,6 +1653,20 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UnprocessableEntityError"
+                },
+                "examples": {
+                  "invalidExtension": {
+                    "value": {
+                      "status": "error",
+                      "message": "File format not supported."
+                    }
+                  },
+                  "sizeLimitExceeded": {
+                    "value": {
+                      "status": "error",
+                      "message": "The file exceeds the allowed size limit."
+                    }
+                  }
                 }
               }
             }
@@ -1334,7 +1690,11 @@
         "summary": "Create a new rental",
         "description": "Allows an authenticated user to create a new rental agreement for a specific car and date range. The car must be available for the entire period",
         "operationId": "addRental",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1422,7 +1782,11 @@
         "summary": "List rentals",
         "description": "Retrieves a paginated list of all rentals in the system. Can be filtered by status, date range, and category IDs. **(Admin-only endpoint)**",
         "operationId": "listRentals",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "page",
@@ -1529,7 +1893,11 @@
         "summary": "List current user's rental history",
         "description": "Retrieves a complete list of all past and present rentals for the currently authenticated user",
         "operationId": "listMeRentals",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "This response will be returned when list of rentals with success",
@@ -1566,7 +1934,11 @@
         "summary": "Get rental details by ID",
         "description": "Retrieves detailed information for a single rental. Users can only access their own rentals",
         "operationId": "listRentalById",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -1574,7 +1946,8 @@
             "description": "Rental ID",
             "required": true,
             "schema": {
-              "type": "uuid",
+              "type": "string",
+              "format": "uuid",
               "example": "3c2d1188-ab65-41d3-b3b6-49adf24082d6"
             }
           }
@@ -1617,7 +1990,11 @@
         "summary": "Update an rental",
         "description": "Allows a user to update the details of an existing rental (e.g., change car or dates) *before* it is picked up.",
         "operationId": "updateRental",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -1625,7 +2002,8 @@
             "description": "Rental ID",
             "required": true,
             "schema": {
-              "type": "uuid",
+              "type": "string",
+              "format": "uuid",
               "example": "3c2d1188-ab65-41d3-b3b6-49adf24082d6"
             }
           }
@@ -1707,9 +2085,13 @@
       "put": {
         "tags": ["rentals"],
         "summary": "Devolution an rental car",
-        "description": "arks a rental as 'returned' (closed). This calculates any applicable fines for late returns and makes the car available again.",
+        "description": "Marks a rental as 'returned' (closed). This calculates any applicable fines for late returns and makes the car available again.",
         "operationId": "devolutionRental",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -1717,7 +2099,8 @@
             "description": "Rental ID",
             "required": true,
             "schema": {
-              "type": "uuid",
+              "type": "string",
+              "format": "uuid",
               "example": "3c2d1188-ab65-41d3-b3b6-49adf24082d6"
             }
           }
@@ -1729,6 +2112,24 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/DevolutionRentalResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "This response will be returned when has validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                },
+                "examples": {
+                  "invalidUuid": {
+                    "value": {
+                      "status": "error",
+                      "message": "Rental ID must be a valid UUID."
+                    }
+                  }
                 }
               }
             }
@@ -1749,6 +2150,14 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/NotFoundError"
+                },
+                "examples": {
+                  "rentalNotFound": {
+                    "value": {
+                      "status": "error",
+                      "message": "Rental not found."
+                    }
+                  }
                 }
               }
             }
@@ -1759,6 +2168,14 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UnprocessableEntityError"
+                },
+                "examples": {
+                  "notEligible": {
+                    "value": {
+                      "status": "error",
+                      "message": "Rental is not eligible for devolution (e.g., already closed)."
+                    }
+                  }
                 }
               }
             }
@@ -1782,7 +2199,11 @@
         "summary": "Mark a rental as 'picked-up' (Admin)",
         "description": "Marks a 'confirmed' rental as 'picked-up', officially starting the rental period. **(Admin-only)**",
         "operationId": "pickedUpRental",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -1790,7 +2211,8 @@
             "description": "Rental ID",
             "required": true,
             "schema": {
-              "type": "uuid",
+              "type": "string",
+              "format": "uuid",
               "example": "3c2d1188-ab65-41d3-b3b6-49adf24082d6"
             }
           }
@@ -1799,12 +2221,40 @@
           "204": {
             "description": "This response will be returned when the updated a rental resource"
           },
+          "400": {
+            "description": "This response will be returned when has validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                },
+                "examples": {
+                  "invalidUuid": {
+                    "value": {
+                      "status": "error",
+                      "message": "Rental ID must be a valid UUID."
+                    }
+                  }
+                }
+              }
+            }
+          },
           "401": {
-            "description": "This response will be returned when the user is not authorized",
+            "description": "This response will be returned when the user is not authenticated",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "This response will be returned when the user does not have Admin privileges",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenError"
                 }
               }
             }
@@ -1815,6 +2265,14 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/NotFoundError"
+                },
+                "examples": {
+                  "rentalNotFound": {
+                    "value": {
+                      "status": "error",
+                      "message": "Rental not found."
+                    }
+                  }
                 }
               }
             }
@@ -1825,6 +2283,14 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UnprocessableEntityError"
+                },
+                "examples": {
+                  "notEligible": {
+                    "value": {
+                      "status": "error",
+                      "message": "This rental isn`t eligible for picked up."
+                    }
+                  }
                 }
               }
             }
@@ -1848,7 +2314,11 @@
         "summary": "Cancel an rental",
         "description": "Allows a user or an admin to cancel a 'confirmed' rental before the pickup time",
         "operationId": "cancelRental",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -1856,7 +2326,8 @@
             "description": "Rental ID",
             "required": true,
             "schema": {
-              "type": "uuid",
+              "type": "string",
+              "format": "uuid",
               "example": "3c2d1188-ab65-41d3-b3b6-49adf24082d6"
             }
           }
@@ -1865,12 +2336,54 @@
           "204": {
             "description": "This response will be returned when the updated a rental resource"
           },
+          "400": {
+            "description": "This response will be returned when has validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                },
+                "examples": {
+                  "invalidUuid": {
+                    "value": {
+                      "status": "error",
+                      "message": "Rental ID must be a valid UUID."
+                    }
+                  }
+                }
+              }
+            }
+          },
           "401": {
-            "description": "This response will be returned when the user is not authorized",
+            "description": "This response will be returned when the user is not authenticated",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "This response will be returned when the user does not have permission to cancel this rental.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenError"
+                },
+                "examples": {
+                  "notAdmin": {
+                    "value": {
+                      "status": "error",
+                      "message": "User is not an admin."
+                    }
+                  },
+                  "notOwner": {
+                    "value": {
+                      "status": "error",
+                      "message": "You cannot cancel a rental that belongs to another user."
+                    }
+                  }
                 }
               }
             }
@@ -1881,16 +2394,32 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/NotFoundError"
+                },
+                "examples": {
+                  "rentalNotFound": {
+                    "value": {
+                      "status": "error",
+                      "message": "Rental not found."
+                    }
+                  }
                 }
               }
             }
           },
           "422": {
-            "description": "This response will be returned when rental isn`t eligible for picked up",
+            "description": "This response will be returned when rental isn`t eligible for cancel",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UnprocessableEntityError"
+                },
+                "examples": {
+                  "notEligible": {
+                    "value": {
+                      "status": "error",
+                      "message": "The rent cannot be cancelled as it has passed the period"
+                    }
+                  }
                 }
               }
             }
@@ -1970,7 +2499,7 @@
               },
               "driverLicense": {
                 "type": "string",
-                "example": "5304286925"
+                "example": "*****251"
               },
               "avatarUrl": {
                 "type": "string",
@@ -1985,25 +2514,21 @@
       },
       "AccountWithAvatarResponse": {
         "allOf": [
-          { "$ref": "#/components/schemas/AccountResponse" },
+          {
+            "$ref": "#/components/schemas/AccountResponse"
+          },
           {
             "type": "object",
             "properties": {
               "avatarUrl": {
                 "type": "string",
                 "example": "http://localhost:3333/avatar/6aacae7a79539950-ts-2.png"
-              },
-              "avatar": {
-                "type": "string",
-                "example": "6aacae7a79539950-ts-2.png"
-              },
-              "isAdmin": {
-                "type": "boolean",
-                "example": false
               }
             }
           },
-          { "$ref": "#/components/schemas/EntityBase" }
+          {
+            "$ref": "#/components/schemas/EntityBase"
+          }
         ]
       },
       "Session": {
@@ -2047,18 +2572,7 @@
                 "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTUzNDM5MjQsImV4cCI6MTcxNTM0NTcyNCwic3ViIjoiNjVlMTcxODQtNDRlOC00MTAxLWFhMTMtMjZmMzQxMmYyZDc2In0.NlSLdGPuff8i1Clwq_n-o9jLl2N2c6Ot8iozFLWB37c"
               },
               "user": {
-                "allOf": [
-                  { "$ref": "#/components/schemas/AccountWithAvatarResponse" },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "isAdmin": {
-                        "type": "boolean",
-                        "example": true
-                      }
-                    }
-                  }
-                ]
+                "$ref": "#/components/schemas/AccountWithAvatarResponse"
               }
             }
           },
@@ -2331,7 +2845,9 @@
             "properties": {
               "images": {
                 "type": "array",
-                "items": { "$ref": "#/components/schemas/CarImages" }
+                "items": {
+                  "$ref": "#/components/schemas/CarImages"
+                }
               },
               "category": {
                 "type": "object",
@@ -2359,7 +2875,8 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "uuid",
+            "type": "string",
+            "format": "uuid",
             "example": "6102a9ee-e29c-45b5-bff5-b3cb2881a092"
           },
           "name": {
@@ -2376,7 +2893,8 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "uuid",
+            "type": "string",
+            "format": "uuid",
             "example": "a97806bc-e20e-4daf-a3f1-03061eb31072"
           },
           "licensePlate": {
@@ -2417,7 +2935,6 @@
             "type": "number",
             "example": 600
           },
-
           "fineAmount": {
             "type": "number",
             "example": 600
@@ -2810,6 +3327,19 @@
           }
         ]
       },
+      "ForbiddenError": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Error"
+          },
+          {
+            "example": {
+              "status": "error",
+              "message": "User is not an admin!"
+            }
+          }
+        ]
+      },
       "NotFoundError": {
         "allOf": [
           {
@@ -2818,7 +3348,7 @@
           {
             "example": {
               "status": "error",
-              "message": "Car not found"
+              "message": "Resource not found"
             }
           }
         ]
