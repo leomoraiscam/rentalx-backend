@@ -95,14 +95,7 @@
             }
           },
           "500": {
-            "description": "This response will be returned when an unexpected error occurs",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       }
@@ -158,14 +151,7 @@
             }
           },
           "401": {
-            "description": "This response will be returned when the the token is invalid or expired",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnauthorizedError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/UnauthorizedError"
           },
           "422": {
             "description": "This response is returned when some fields are not provided as required.",
@@ -186,14 +172,7 @@
             }
           },
           "500": {
-            "description": "This response will be returned when an unexpected error occurs",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       }
@@ -221,24 +200,10 @@
             }
           },
           "401": {
-            "description": "This response will be returned when the the token is invalid or expired",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnauthorizedError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/UnauthorizedError"
           },
           "500": {
-            "description": "This response will be returned when an unexpected error occurs",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       }
@@ -281,24 +246,10 @@
             }
           },
           "401": {
-            "description": "This response will be returned when email or password is incorrect",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnauthorizedError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/UnauthorizedError"
           },
           "500": {
-            "description": "This response will be returned when an unexpected error occurs",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       }
@@ -341,24 +292,10 @@
             }
           },
           "401": {
-            "description": "This response will be returned when email or password is incorrect",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnauthorizedError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/UnauthorizedError"
           },
           "500": {
-            "description": "This response will be returned when an unexpected error occurs",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       }
@@ -412,14 +349,7 @@
             }
           },
           "500": {
-            "description": "This response will be returned when an unexpected error occurs",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       }
@@ -468,22 +398,7 @@
             }
           },
           "401": {
-            "description": "This response will be returned when the the token is invalid or expired",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnauthorizedError"
-                },
-                "examples": {
-                  "invalidToken": {
-                    "value": {
-                      "status": "error",
-                      "message": "Invalid or expired token."
-                    }
-                  }
-                }
-              }
-            }
+            "$ref": "#/components/responses/UnauthorizedError"
           },
           "404": {
             "description": "This response will be returned when the user to be deleted or does not exist",
@@ -504,14 +419,7 @@
             }
           },
           "500": {
-            "description": "This response will be returned when an unexpected error occurs",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       }
@@ -559,14 +467,7 @@
             }
           },
           "401": {
-            "description": "This response will be returned when the user is not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnauthorizedError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/UnauthorizedError"
           },
           "403": {
             "description": "This response will be returned when the user does not have Admin privileges",
@@ -589,14 +490,7 @@
             }
           },
           "500": {
-            "description": "This response will be returned when an unexpected error occurs",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       },
@@ -655,24 +549,10 @@
             }
           },
           "401": {
-            "description": "This response will be returned when the user is not authorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnauthorizedError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/UnauthorizedError"
           },
           "500": {
-            "description": "This response will be returned when an unexpected error occurs",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       }
@@ -720,14 +600,7 @@
             }
           },
           "401": {
-            "description": "This response will be returned when the user is not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnauthorizedError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/UnauthorizedError"
           },
           "403": {
             "description": "This response will be returned when the user does not have Admin privileges",
@@ -758,14 +631,7 @@
             }
           },
           "500": {
-            "description": "This response will be returned when an unexpected error occurs",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       }
@@ -812,14 +678,7 @@
             }
           },
           "401": {
-            "description": "This response will be returned when the user is not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnauthorizedError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/UnauthorizedError"
           },
           "403": {
             "description": "This response will be returned when the user does not have Admin privileges",
@@ -842,14 +701,7 @@
             }
           },
           "500": {
-            "description": "This response will be returned when an unexpected error occurs",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       },
@@ -908,24 +760,10 @@
             }
           },
           "401": {
-            "description": "This response will be returned when the user is not authorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnauthorizedError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/UnauthorizedError"
           },
           "500": {
-            "description": "This response will be returned when an unexpected error occurs",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       }
@@ -973,14 +811,7 @@
             }
           },
           "401": {
-            "description": "This response will be returned when the user is not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnauthorizedError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/UnauthorizedError"
           },
           "403": {
             "description": "This response will be returned when the user does not have Admin privileges",
@@ -1011,14 +842,7 @@
             }
           },
           "500": {
-            "description": "This response will be returned when an unexpected error occurs",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       }
@@ -1073,14 +897,7 @@
             }
           },
           "401": {
-            "description": "This response will be returned when the user is not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnauthorizedError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/UnauthorizedError"
           },
           "403": {
             "description": "This response will be returned when the user does not have Admin privileges",
@@ -1127,14 +944,7 @@
             }
           },
           "500": {
-            "description": "This response will be returned when an unexpected error occurs",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       },
@@ -1213,14 +1023,7 @@
             "description": "This response will be returned when the empty data to this entity"
           },
           "500": {
-            "description": "This response will be returned when an unexpected error occurs",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       }
@@ -1279,14 +1082,7 @@
             "description": "This response will be returned when the empty data to this entity"
           },
           "500": {
-            "description": "This response will be returned when an unexpected error occurs",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       }
@@ -1353,14 +1149,7 @@
             }
           },
           "401": {
-            "description": "This response will be returned when the user is not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnauthorizedError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/UnauthorizedError"
           },
           "403": {
             "description": "This response will be returned when the user does not have Admin privileges",
@@ -1407,14 +1196,7 @@
             }
           },
           "500": {
-            "description": "This response will be returned when an unexpected error occurs",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       },
@@ -1479,14 +1261,7 @@
             }
           },
           "401": {
-            "description": "This response will be returned when the user is not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnauthorizedError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/UnauthorizedError"
           },
           "403": {
             "description": "This response will be returned when the user does not have Admin privileges",
@@ -1533,14 +1308,7 @@
             }
           },
           "500": {
-            "description": "This response will be returned when an unexpected error occurs",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       }
@@ -1618,14 +1386,7 @@
             }
           },
           "401": {
-            "description": "This response will be returned when the user is not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnauthorizedError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/UnauthorizedError"
           },
           "403": {
             "description": "This response will be returned when the user does not have Admin privileges",
@@ -1672,14 +1433,7 @@
             }
           },
           "500": {
-            "description": "This response will be returned when an unexpected error occurs",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       }
@@ -1726,14 +1480,7 @@
             }
           },
           "401": {
-            "description": "This response will be returned when the user is not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnauthorizedError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/UnauthorizedError"
           },
           "404": {
             "description": "This response will be returned when the car to be deleted or does not exist",
@@ -1766,14 +1513,7 @@
             }
           },
           "500": {
-            "description": "This will be returned when an unexpected error occurs",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       },
@@ -1875,14 +1615,7 @@
             "description": "This response will be returned when the empty data to this entity"
           },
           "500": {
-            "description": "This response will be returned when an unexpected error occurs",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       }
@@ -1916,14 +1649,7 @@
             "description": "This response will be returned when the empty data to this entity"
           },
           "500": {
-            "description": "This response will be returned when an unexpected error occurs",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       }
@@ -1974,14 +1700,7 @@
             }
           },
           "500": {
-            "description": "This response will be returned when an unexpected error occurs",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       },
@@ -2039,14 +1758,7 @@
             }
           },
           "401": {
-            "description": "This response will be returned when the user is not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnauthorizedError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/UnauthorizedError"
           },
           "404": {
             "description": "This response will be returned when the car to be deleted does not exist",
@@ -2069,14 +1781,7 @@
             }
           },
           "500": {
-            "description": "This response will be returned when an unexpected error occurs",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       }
@@ -2135,14 +1840,7 @@
             }
           },
           "401": {
-            "description": "This response will be returned when the user is not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnauthorizedError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/UnauthorizedError"
           },
           "404": {
             "description": "This response will be returned when the rental to be deleted or does not exist",
@@ -2181,14 +1879,7 @@
             }
           },
           "500": {
-            "description": "This response will be returned when an unexpected error occurs",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       }
@@ -2240,14 +1931,7 @@
             }
           },
           "401": {
-            "description": "This response will be returned when the user is not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnauthorizedError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/UnauthorizedError"
           },
           "403": {
             "description": "This response will be returned when the user does not have Admin privileges",
@@ -2296,14 +1980,7 @@
             }
           },
           "500": {
-            "description": "This response will be returned when an unexpected error occurs",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       }
@@ -2355,14 +2032,7 @@
             }
           },
           "401": {
-            "description": "This response will be returned when the user is not authenticated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnauthorizedError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/UnauthorizedError"
           },
           "403": {
             "description": "This response will be returned when the user does not have permission to cancel this rental.",
@@ -2425,14 +2095,7 @@
             }
           },
           "500": {
-            "description": "This response will be returned when an unexpected error occurs",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       }
@@ -2445,11 +2108,13 @@
         "properties": {
           "id": {
             "type": "string",
-            "example": "e1ecb723-6f8c-4ee6-86f6-64af13a77e8f"
+            "example": "e1ecb723-6f8c-4ee6-86f6-64af13a77e8f",
+            "format": "uuid"
           },
           "createdAt": {
             "type": "string",
-            "example": "2024-05-09 00:42:55.136515"
+            "example": "2024-05-09 00:42:55.136515",
+            "format": "date-time"
           }
         }
       },
@@ -2458,7 +2123,8 @@
         "properties": {
           "updatedAt": {
             "type": "string",
-            "example": "2024-05-09 13:42:55.136515"
+            "example": "2024-05-09 13:42:55.136515",
+            "format": "date-time"
           }
         }
       },
@@ -2472,7 +2138,8 @@
           },
           "email": {
             "type": "string",
-            "example": "email@email.com"
+            "example": "email@email.com",
+            "format": "email"
           },
           "password": {
             "type": "string",
@@ -2536,7 +2203,8 @@
         "properties": {
           "email": {
             "type": "string",
-            "example": "email+1@email.com"
+            "example": "email+1@email.com",
+            "format": "email"
           },
           "password": {
             "type": "string",
@@ -2586,7 +2254,8 @@
         "properties": {
           "email": {
             "type": "string",
-            "example": "email+1@email.com"
+            "example": "email+1@email.com",
+            "format": "email"
           }
         }
       },
@@ -3066,11 +2735,13 @@
         "properties": {
           "startDate": {
             "type": "string",
-            "example": "2024-05-26 08:00:00"
+            "example": "2024-05-26 08:00:00",
+            "format": "date-time"
           },
           "expectedReturnDate": {
             "type": "string",
-            "example": "2024-05-29 10:00:00"
+            "example": "2024-05-29 10:00:00",
+            "format": "date-time"
           },
           "carId": {
             "type": "string",
@@ -3220,11 +2891,13 @@
         "properties": {
           "startDate": {
             "type": "string",
-            "example": "2024-05-26 08:00:00"
+            "example": "2024-05-26 08:00:00",
+            "format": "date-time"
           },
           "expectedReturnDate": {
             "type": "string",
-            "example": "2024-05-29 10:00:00"
+            "example": "2024-05-29 10:00:00",
+            "format": "date-time"
           },
           "carId": {
             "type": "string",
@@ -3411,6 +3084,28 @@
         "type": "http",
         "scheme": "bearer",
         "bearerFormat": "JWT"
+      }
+    },
+    "responses": {
+      "UnauthorizedError": {
+        "description": "This response will be returned when the the token is invalid or expired",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedError"
+            }
+          }
+        }
+      },
+      "InternalServerError": {
+        "description": "This response will be returned when an unexpected error occurs",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerError"
+            }
+          }
+        }
       }
     }
   }

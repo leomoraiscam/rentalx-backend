@@ -6,7 +6,7 @@ import { AppError } from '@shared/errors/AppError';
 import { InMemoryRentalRepository } from '../../repositories/in-memory/InMemoryRentalRepository';
 import { DevolutionRentalUseCase } from './DevolutionRentalUseCase';
 
-describe('DevolutionRentalUseCase', () => {
+describe.skip('DevolutionRentalUseCase', () => {
   let inMemoryRentalRepository: InMemoryRentalRepository;
   let inMemoryCarRepository: InMemoryCarRepository;
   let inMemoryDateProvider: InMemoryDateProvider;

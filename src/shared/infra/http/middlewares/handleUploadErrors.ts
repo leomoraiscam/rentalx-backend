@@ -12,7 +12,7 @@ const uploadErrorsMap: Record<string, IErrorResponse> = {
     message: 'O arquivo excede o tamanho limite permitido.',
   },
   INVALID_FORMAT_FILE: {
-    status: 400,
+    status: 422,
     message: 'Formato de arquivo não suportado.',
   },
   LIMIT_UNEXPECTED_FILE: {

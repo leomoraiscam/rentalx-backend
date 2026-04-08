@@ -37,7 +37,7 @@ carsRouter.post(
       fineAmount: Joi.number().integer().min(60).max(1000).required(),
       licensePlate: Joi.string().min(7).max(7).required(),
       categoryId: Joi.string().uuid().required(),
-      specifications: Joi.array().min(1).required(),
+      specifications: Joi.array().items(Joi.string().uuid()).min(1).required(),
       status: Joi.string()
         .valid(...Object.values(CarStatus))
         .required(),

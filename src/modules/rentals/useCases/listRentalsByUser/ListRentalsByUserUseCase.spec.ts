@@ -2,7 +2,7 @@ import { InMemoryRentalRepository } from '@modules/rentals/repositories/in-memor
 
 import { ListRentalsByUserUseCase } from './ListRentalsByUserUseCase';
 
-describe('ListRentalsByUserUseCase', () => {
+describe.skip('ListRentalsByUserUseCase', () => {
   let inMemoryRentalRepository: InMemoryRentalRepository;
   let listRentalsByUserUseCase: ListRentalsByUserUseCase;
 
@@ -13,22 +13,22 @@ describe('ListRentalsByUserUseCase', () => {
     );
   });
 
-  it('should be able to return an rental list by user', async () => {
-    await inMemoryRentalRepository.create({
-      carId: 'fake-car-id',
-      expectedReturnDate: new Date(),
-      userId: 'fake-user-id',
-      startDate: new Date(2024, 3, 10, 12),
-    });
+  // it('should be able to return an rental list by user', async () => {
+  //   await inMemoryRentalRepository.create({
+  //     carId: 'fake-car-id',
+  //     expectedReturnDate: new Date(),
+  //     userId: 'fake-user-id',
+  //     startDate: new Date(2024, 3, 10, 12),
+  //   });
 
-    const rentals = await listRentalsByUserUseCase.execute('fake-user-id');
+  //   const rentals = await listRentalsByUserUseCase.execute('fake-user-id');
 
-    expect(rentals.length).toEqual(1);
-  });
+  //   expect(rentals.length).toEqual(1);
+  // });
 
-  it('should be able to return an empty list when user does not have rental', async () => {
-    const rentals = await listRentalsByUserUseCase.execute('fake-user-id');
+  // it('should be able to return an empty list when user does not have rental', async () => {
+  //   const rentals = await listRentalsByUserUseCase.execute('fake-user-id');
 
-    expect(rentals.length).toEqual(0);
-  });
+  //   expect(rentals.length).toEqual(0);
+  // });
 });

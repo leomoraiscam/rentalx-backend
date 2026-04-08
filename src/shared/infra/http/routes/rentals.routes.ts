@@ -61,7 +61,16 @@ rentalRouter.get(
   ensureAuthenticated,
   listRentalsByUserController.handle
 );
-rentalRouter.get('/:id', ensureAuthenticated, detailRentalController.handle);
+rentalRouter.get(
+  '/:id',
+  celebrate({
+    [Segments.PARAMS]: {
+      id: Joi.string().uuid().required(),
+    },
+  }),
+  ensureAuthenticated,
+  detailRentalController.handle
+);
 rentalRouter.post(
   '/',
   celebrate({

@@ -17,16 +17,16 @@ services:
     networks:
       - car_rentalls_env_nw
 
-  redis:
-    image: redis:alpine
-    container_name: car-rentalls-redis
-    restart: unless-stopped
-    ports:
-      - ${REDIS_PORT}:${REDIS_PORT}
-    volumes:
-      - redis_data:/data
-    networks:
-      - car_rentalls_env_nw
+  # redis:
+  #   image: redis:alpine
+  #   container_name: car-rentalls-redis
+  #   restart: unless-stopped
+  #   ports:
+  #     - ${REDIS_PORT}:${REDIS_PORT}
+  #   volumes:
+  #     - redis_data:/data
+  #   networks:
+  #     - car_rentalls_env_nw
 
 volumes:
   pg_data:

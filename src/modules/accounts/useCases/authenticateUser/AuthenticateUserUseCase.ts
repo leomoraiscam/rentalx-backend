@@ -5,7 +5,6 @@ import { auth } from '@config/auth';
 import { IAuthenticatedUserDTO } from '@modules/accounts/dtos/IAuthenticatedUserDTO';
 import { IAuthenticateUserDTO } from '@modules/accounts/dtos/IAuthenticateUserDTO';
 import { TokenTypeEnum } from '@modules/accounts/enums/TokenTypeEnum';
-import { User } from '@modules/accounts/infra/typeorm/entities/User';
 import { UserMap } from '@modules/accounts/mapper/UserMap';
 import { IUserRepository } from '@modules/accounts/repositories/IUserRepository';
 import { IUserTokenRepository } from '@modules/accounts/repositories/IUserTokenRepository';
@@ -101,7 +100,7 @@ export class AuthenticateUserUseCase {
       });
     }
 
-    const user = UserMap.toDTO(existingUser) as User;
+    const user = UserMap.toDTO(existingUser);
 
     return {
       token,

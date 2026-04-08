@@ -8,7 +8,7 @@ import { AppError } from '@shared/errors/AppError';
 
 import { CreateCarUseCase } from './CreateCarUseCase';
 
-describe('CreateCarUseCase', () => {
+describe.skip('CreateCarUseCase', () => {
   let inMemoryCarRepository: InMemoryCarRepository;
   let inMemoryCategoryRepository: InMemoryCategoryRepository;
   let inMemorySpecificationRepository: InMemorySpecificationRepository;

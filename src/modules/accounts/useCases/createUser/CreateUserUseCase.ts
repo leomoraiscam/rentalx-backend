@@ -1,7 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 
 import { ICreateUserDTO } from '@modules/accounts/dtos/ICreateUserDTO';
-import { User } from '@modules/accounts/infra/typeorm/entities/User';
+import { IProfileUserDTO } from '@modules/accounts/dtos/IProfileUserDTO';
 import { UserMap } from '@modules/accounts/mapper/UserMap';
 import { IUserRepository } from '@modules/accounts/repositories/IUserRepository';
 import { IHashProvider } from '@shared/container/providers/HashProvider/models/IHashProvider';
@@ -16,7 +16,7 @@ export class CreateUserUseCase {
     private hashProvider: IHashProvider
   ) {}
 
-  async execute(data: ICreateUserDTO): Promise<User> {
+  async execute(data: ICreateUserDTO): Promise<IProfileUserDTO> {
     const { name, email, password, driverLicense, isAdmin } = data;
     const user = await this.userRepository.findByEmail(email);
 
@@ -41,6 +41,6 @@ export class CreateUserUseCase {
       isAdmin,
     });
 
-    return UserMap.toDTO(createdUser) as User;
+    return UserMap.toDTO(createdUser);
   }
 }

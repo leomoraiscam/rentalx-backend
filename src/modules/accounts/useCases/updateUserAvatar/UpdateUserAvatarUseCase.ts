@@ -1,6 +1,7 @@
 /* eslint-disable no-empty */
 import { inject, injectable } from 'tsyringe';
 
+import { IProfileUserDTO } from '@modules/accounts/dtos/IProfileUserDTO';
 import { IUpdateUserAvatarDTO } from '@modules/accounts/dtos/IUpdateUserAvatarDTO';
 import { User } from '@modules/accounts/infra/typeorm/entities/User';
 import { UserMap } from '@modules/accounts/mapper/UserMap';
@@ -18,7 +19,7 @@ export class UpdateUserAvatarUseCase {
     private storageProvider: IStorageProvider
   ) {}
 
-  async execute(data: IUpdateUserAvatarDTO): Promise<User> {
+  async execute(data: IUpdateUserAvatarDTO): Promise<IProfileUserDTO> {
     const { userId, avatar } = data;
     const user = await this.userRepository.findById(userId);
 
@@ -52,7 +53,7 @@ export class UpdateUserAvatarUseCase {
         } catch (error) {}
       }
 
-      return UserMap.toDTO(updatedUser) as User;
+      return UserMap.toDTO(updatedUser);
     } catch (err) {
       throw new AppError(`Failed to upload image`, 500);
     }
