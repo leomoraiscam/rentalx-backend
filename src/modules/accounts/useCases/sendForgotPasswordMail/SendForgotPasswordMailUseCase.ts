@@ -75,6 +75,7 @@ export class SendForgotPasswordMailUseCase {
       variables: {
         name,
         resetPasswordUrl,
+        link: resetPasswordUrl,
       },
     });
   }

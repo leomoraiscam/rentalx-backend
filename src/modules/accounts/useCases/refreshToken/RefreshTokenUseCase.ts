@@ -49,7 +49,12 @@ export class RefreshTokenUseCase {
 
     await this.userTokenRepository.delete(userToken.id);
 
-    if (!secretRefreshToken || !expiresInRefreshToken) {
+    if (
+      !secretRefreshToken ||
+      !expiresInRefreshToken ||
+      !auth.secretToken ||
+      !auth.expiresIn
+    ) {
       this.loggerProvider.log({
         level: 'error',
         message: `${RefreshTokenUseCase.name} Missing environment variables for JWT configuration`,
@@ -63,6 +68,12 @@ export class RefreshTokenUseCase {
       subject: userId,
       expiresIn: expiresInRefreshToken,
     });
+
+    const accessToken = sign({}, auth.secretToken, {
+      subject: userId,
+      expiresIn: auth.expiresIn,
+    });
+
     const expiresDateLimitRefreshToken = this.dateProvider.addDays(
       Number(expiresRefreshTokenDays)
     );
@@ -76,6 +87,7 @@ export class RefreshTokenUseCase {
 
     return {
       refreshToken,
+      token: accessToken,
     };
   }
 }

@@ -1,6 +1,10 @@
 export const FILE_SIZE_MULTIPLICATION = 1024 * 1024;
-export const ALLOWED_DEFAULT_IMAGES_EXTENSION_FILES = ['.jpg', '.png'];
-export const ALLOWED_DEFAULT_IMAGES_MIMETYPES = ['image/jpeg', 'image/png'];
+export const ALLOWED_DEFAULT_IMAGES_EXTENSION_FILES = ['.jpg', '.png', '.jpeg'];
+export const ALLOWED_DEFAULT_IMAGES_MIMETYPES = [
+  'image/jpeg',
+  'image/png',
+  'image/jpg',
+];
 export const ALLOWED_CSV_MIMETYPES = [
   'text/csv',
   'application/vnd.ms-excel',

@@ -48,10 +48,11 @@ export class CarRepository implements ICarRepository {
         'specifications.description',
         'images.id',
         'images.imageName',
-      ]);
+      ])
+      .where('1 = 1');
 
     if (brand) {
-      carsQuery.where('c.brand = :brand', { brand });
+      carsQuery.andWhere('c.brand = :brand', { brand });
     }
 
     if (type) {

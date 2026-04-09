@@ -17,17 +17,24 @@ export class UserTokenRepository implements IUserTokenRepository {
   async findByUserIdAndRefreshToken(
     data: IFindTokenByUserIdDTO
   ): Promise<UserToken | null> {
-    const { refreshToken, userId } = data;
+    const { refreshToken, userId, type } = data;
 
     return this.repository.findOne({
-      refreshToken,
-      userId,
+      where: {
+        refreshToken,
+        userId,
+        type,
+        deletedAt: null,
+      },
     });
   }
 
   async findByRefreshToken(refreshToken: string): Promise<UserToken | null> {
     return this.repository.findOne({
-      refreshToken,
+      where: {
+        refreshToken,
+        deletedAt: null,
+      },
     });
   }
 
@@ -59,14 +66,17 @@ export class UserTokenRepository implements IUserTokenRepository {
   }
 
   async delete(id: string): Promise<void> {
-    await this.repository.softDelete(id);
+    await this.repository.delete(id);
   }
 
   async deleteByUserId(userId: string): Promise<void> {
-    await this.repository.softDelete({ userId });
+    await this.repository.update({ userId }, { deletedAt: new Date() });
   }
 
   async deleteByUserIdAndToken(userId: string, token: string): Promise<void> {
-    await this.repository.softDelete({ userId, refreshToken: token });
+    await this.repository.update(
+      { userId, refreshToken: token },
+      { deletedAt: new Date() }
+    );
   }
 }

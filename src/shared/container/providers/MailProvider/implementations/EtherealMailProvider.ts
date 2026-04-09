@@ -47,7 +47,7 @@ export class EtherealMailProvider implements IMailProvider {
     const { path, subject, to, variables } = data;
     const mailTemplate = await this.mailTemplateProvider.parse({
       file: path,
-      variables: variables as IMailTemplateVariablesDTO,
+      variables: (variables as unknown) as IMailTemplateVariablesDTO,
     });
 
     const message = await this.client.sendMail({
