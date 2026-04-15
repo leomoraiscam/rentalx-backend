@@ -74,7 +74,7 @@ describe('CancelUseCase', () => {
       userId: 'fake-user-id',
       status: RentalStatus.CONFIRMED,
     });
-    await cancelRentalUseCase.execute(rental.id);
+    await cancelRentalUseCase.execute(rental.id, 'fake-user-id');
 
     expect(spiedRentalSaveMethod).toHaveBeenNthCalledWith(1, {
       ...rental,
@@ -87,9 +87,9 @@ describe('CancelUseCase', () => {
   });
 
   it('should not be able to cancel rental when the same a non exist', async () => {
-    await expect(cancelRentalUseCase.execute('fake-id')).rejects.toBeInstanceOf(
-      AppError
-    );
+    await expect(
+      cancelRentalUseCase.execute('fake-id', 'fake-user-id')
+    ).rejects.toBeInstanceOf(AppError);
   });
 
   it('should not be able to cancel rental when status is different from confirmed', async () => {
@@ -101,6 +101,22 @@ describe('CancelUseCase', () => {
       status: RentalStatus.PICKED_UP,
     });
 
-    expect(cancelRentalUseCase.execute(id)).rejects.toBeInstanceOf(AppError);
+    expect(
+      cancelRentalUseCase.execute(id, 'fake-user-id')
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should not be able to cancel a rental that belongs to another user', async () => {
+    const rental = await inMemoryRentalRepository.create({
+      carId: car.id,
+      startDate: new Date(2024, 2, 20),
+      expectedReturnDate: new Date(2024, 2, 23),
+      userId: 'correct-user-id',
+      status: RentalStatus.CONFIRMED,
+    });
+
+    await expect(
+      cancelRentalUseCase.execute(rental.id, 'wrong-user-id')
+    ).rejects.toBeInstanceOf(AppError);
   });
 });

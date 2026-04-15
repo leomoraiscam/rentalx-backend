@@ -8,7 +8,7 @@ import { FindOptionsOrdernation } from '@shared/common/enums/findOptionsOrder';
 import { InMemoryRentalRepository } from '../../repositories/in-memory/InMemoryRentalRepository';
 import { ListRentalsUseCase } from './ListRentalsUseCase';
 
-describe.skip('ListRentalsUseCase', () => {
+describe('ListRentalsUseCase', () => {
   let inMemoryRentalRepository: InMemoryRentalRepository;
   let inMemoryCarRepository: InMemoryCarRepository;
   let listRentalsUseCase: ListRentalsUseCase;
@@ -84,14 +84,30 @@ describe.skip('ListRentalsUseCase', () => {
         status: RentalStatus.CONFIRMED,
       }),
       inMemoryRentalRepository.create({
-        carId: 'faked-car-id',
+        carId: 'other-car-id',
+        car: ({
+          id: 'other-car-id',
+          brand: 'Other',
+          name: 'Other',
+          licensePlate: 'ABC-000',
+          categoryId: 'other-category',
+          images: [],
+        } as unknown) as Car,
         startDate: new Date(2024, 2, 21, 10),
         expectedReturnDate: new Date(2024, 2, 23),
         userId: 'fake-user-id',
         status: RentalStatus.CONFIRMED,
       }),
       inMemoryRentalRepository.create({
-        carId: 'faked-car-id',
+        carId: 'other-car-id',
+        car: ({
+          id: 'other-car-id',
+          brand: 'Other',
+          name: 'Other',
+          licensePlate: 'ABC-000',
+          categoryId: 'other-category',
+          images: [],
+        } as unknown) as Car,
         startDate: new Date(2024, 2, 22, 10),
         expectedReturnDate: new Date(2024, 2, 23),
         userId: 'fake-user-id',
@@ -153,13 +169,11 @@ describe.skip('ListRentalsUseCase', () => {
     });
 
     expect(data).toHaveLength(5);
-    expect(data).toEqual([
-      rentals[2],
-      rentals[1],
-      rentals[4],
-      rentals[3],
-      rentals[0],
-    ]);
+    expect(data[0].id).toEqual(rentals[2].id);
+    expect(data[1].id).toEqual(rentals[1].id);
+    expect(data[2].id).toEqual(rentals[4].id);
+    expect(data[3].id).toEqual(rentals[3].id);
+    expect(data[4].id).toEqual(rentals[0].id);
   });
 
   it('should be able to return only rentals with status PICKED_UP when received status parameter', async () => {

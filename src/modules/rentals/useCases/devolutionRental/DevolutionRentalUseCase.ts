@@ -65,6 +65,7 @@ export class DevolutionRentalUseCase {
       endDate: currentDate,
       total,
       status: RentalStatus.CLOSED,
+      car,
     });
     car.status = CarStatus.AVAILABLE;
 

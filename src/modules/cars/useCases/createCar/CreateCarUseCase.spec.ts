@@ -8,7 +8,7 @@ import { AppError } from '@shared/errors/AppError';
 
 import { CreateCarUseCase } from './CreateCarUseCase';
 
-describe.skip('CreateCarUseCase', () => {
+describe('CreateCarUseCase', () => {
   let inMemoryCarRepository: InMemoryCarRepository;
   let inMemoryCategoryRepository: InMemoryCategoryRepository;
   let inMemorySpecificationRepository: InMemorySpecificationRepository;
@@ -47,7 +47,7 @@ describe.skip('CreateCarUseCase', () => {
       fineAmount: 100,
       categoryId: category.id,
       category,
-      specifications: [specification],
+      specifications: [specification.id],
     });
 
     expect(car).toHaveProperty('id');
@@ -63,7 +63,7 @@ describe.skip('CreateCarUseCase', () => {
         licensePlate: 'JKL-294',
         fineAmount: 100,
         categoryId: 'fake-category-id',
-        specifications: [specification],
+        specifications: [specification.id],
       })
     ).rejects.toBeInstanceOf(AppError);
   });
@@ -78,7 +78,7 @@ describe.skip('CreateCarUseCase', () => {
       fineAmount: 75,
       categoryId: category.id,
       category,
-      specifications: [specification],
+      specifications: [specification.id],
     });
 
     await expect(
@@ -91,7 +91,22 @@ describe.skip('CreateCarUseCase', () => {
         fineAmount: 75,
         categoryId: category.id,
         category,
-        specifications: [specification],
+        specifications: [specification.id],
+      })
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should not be able to create a car when some specifications not found', async () => {
+    await expect(
+      createCarUseCase.execute({
+        name: 'A3',
+        brand: 'Audi',
+        description: 'executive',
+        dailyRate: 120,
+        licensePlate: 'JKL-294',
+        fineAmount: 100,
+        categoryId: category.id,
+        specifications: [specification.id, 'non-existent-id'],
       })
     ).rejects.toBeInstanceOf(AppError);
   });

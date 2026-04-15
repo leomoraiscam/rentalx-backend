@@ -1,3 +1,4 @@
+import { Category } from '@modules/cars/infra/typeorm/entities/Category';
 import { InMemoryCarRepository } from '@modules/cars/repositories/in-memory/InMemoryCarRepository';
 import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
 import { InMemoryDateProvider } from '@shared/container/providers/DateProvider/in-memory/InMemoryDateProvider';
@@ -6,7 +7,7 @@ import { AppError } from '@shared/errors/AppError';
 import { InMemoryRentalRepository } from '../../repositories/in-memory/InMemoryRentalRepository';
 import { DevolutionRentalUseCase } from './DevolutionRentalUseCase';
 
-describe.skip('DevolutionRentalUseCase', () => {
+describe('DevolutionRentalUseCase', () => {
   let inMemoryRentalRepository: InMemoryRentalRepository;
   let inMemoryCarRepository: InMemoryCarRepository;
   let inMemoryDateProvider: InMemoryDateProvider;
@@ -30,6 +31,9 @@ describe.skip('DevolutionRentalUseCase', () => {
       licensePlate: 'AJN-730',
       fineAmount: 80,
       categoryId: 'executive',
+      category: ({
+        name: 'executive',
+      } as unknown) as Category,
       specifications: [
         {
           id: 'fake-id',
@@ -56,8 +60,8 @@ describe.skip('DevolutionRentalUseCase', () => {
     });
     const rental = await devolutionRentalUseCase.execute(id);
 
-    expect(rental).toHaveProperty('endDate');
-    expect(rental.endDate).toEqual(new Date(2024, 3, 8));
+    expect(rental.period).toHaveProperty('endDate');
+    expect(rental.period.endDate).toEqual(new Date(2024, 3, 8));
   });
 
   it('should be able to return an devolution rental with total property when ocurred in less 24 hours', async () => {
@@ -74,7 +78,7 @@ describe.skip('DevolutionRentalUseCase', () => {
     });
     const devolutionRental = await devolutionRentalUseCase.execute(id);
 
-    expect(devolutionRental.total).toEqual(100);
+    expect(devolutionRental.finance.total).toEqual(100);
   });
 
   it('should be able to return an devolution rental when ocurred 1 days after', async () => {
@@ -91,7 +95,7 @@ describe.skip('DevolutionRentalUseCase', () => {
     });
     const devolutionRental = await devolutionRentalUseCase.execute(id);
 
-    expect(devolutionRental.total).toEqual(180);
+    expect(devolutionRental.finance.total).toEqual(180);
   });
 
   it('should not be able to return an devolution rental when the same a non-exist', async () => {

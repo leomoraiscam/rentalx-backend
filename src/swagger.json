@@ -2134,7 +2134,9 @@
         "properties": {
           "name": {
             "type": "string",
-            "example": "John"
+            "example": "John",
+            "minLength": 3,
+            "maxLength": 20
           },
           "email": {
             "type": "string",
@@ -2143,11 +2145,15 @@
           },
           "password": {
             "type": "string",
-            "example": "pass@123"
+            "example": "pass@123",
+            "minLength": 5,
+            "maxLength": 15
           },
           "driverLicense": {
             "type": "string",
-            "example": "5304286925"
+            "example": "5304286925",
+            "minLength": 9,
+            "maxLength": 11
           }
         }
       },
@@ -2217,7 +2223,8 @@
         "properties": {
           "token": {
             "type": "string",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVtYWlsQGVtYWlsLmNvbSIsImlhdCI6MTcyNzIyOTYyMiwiZXhwIjoxNzI5ODIxNjIyLCJzdWIiOiI0ZTc1NjcwYS1lZTE1LTRhMzMtYWNlZC1jNWM0N2E4ZTRiNjYifQ.Ym2Gll1Xttz6CZD0iOKJKo1WDCZ_R0PBLY4jbSlFABA"
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVtYWlsQGVtYWlsLmNvbSIsImlhdCI6MTcyNzIyOTYyMiwiZXhwIjoxNzI5ODIxNjIyLCJzdWIiOiI0ZTc1NjcwYS1lZTE1LTRhMzMtYWNlZC1jNWM0N2E4ZTRiNjYifQ.Ym2Gll1Xttz6CZD0iOKJKo1WDCZ_R0PBLY4jbSlFABA",
+            "pattern": "^[A-Za-z0-9-_=]+?\\.[A-Za-z0-9-_=]+?\\.[A-Za-z0-9-_.+/=]*$"
           }
         }
       },
@@ -2264,7 +2271,9 @@
         "properties": {
           "password": {
             "type": "string",
-            "example": "pass@12345"
+            "example": "pass@12345",
+            "minLength": 5,
+            "maxLength": 15
           }
         }
       },
@@ -2313,14 +2322,19 @@
         "properties": {
           "name": {
             "type": "string",
-            "example": "Hatch"
+            "example": "Hatch",
+            "minLength": 3,
+            "maxLength": 50
           },
           "description": {
             "type": "string",
-            "example": "Compact car category for travel"
+            "example": "Compact car category for travel",
+            "minLength": 5,
+            "maxLength": 255
           },
           "type": {
             "type": "string",
+            "enum": ["hatch", "sedan", "suv", "sport"],
             "example": "hatch"
           }
         }
@@ -2371,11 +2385,15 @@
         "properties": {
           "name": {
             "type": "string",
-            "example": "Manual transmission"
+            "example": "Manual transmission",
+            "minLength": 3,
+            "maxLength": 50
           },
           "description": {
             "type": "string",
-            "example": "system composed of gears manually operated by the driver"
+            "example": "system composed of gears manually operated by the driver",
+            "minLength": 5,
+            "maxLength": 255
           }
         }
       },
@@ -2453,7 +2471,9 @@
           },
           "dailyRate": {
             "type": "number",
-            "example": 600
+            "example": 600,
+            "minimum": 80,
+            "maximum": 1000
           },
           "licensePlate": {
             "type": "string",
@@ -2461,7 +2481,9 @@
           },
           "fineAmount": {
             "type": "number",
-            "example": 600
+            "example": 600,
+            "minimum": 60,
+            "maximum": 1000
           },
           "categoryId": {
             "type": "string",
@@ -2474,11 +2496,18 @@
               "type": "string",
               "format": "uuid",
               "example": "ba1d4a61-f635-4104-9167-4f3cb970d87a"
-            }
+            },
+            "minItems": 1
           },
           "status": {
             "type": "string",
-            "enum": ["AVAILABLE", "RENTED"],
+            "enum": [
+              "AVAILABLE",
+              "RENTED",
+              "UNDER_MAINTENANCE",
+              "RESERVED",
+              "OUT_OF_SERVICE"
+            ],
             "example": "AVAILABLE"
           }
         }
@@ -2572,7 +2601,13 @@
           },
           "status": {
             "type": "string",
-            "enum": ["AVAILABLE", "RENTED"],
+            "enum": [
+              "AVAILABLE",
+              "RENTED",
+              "UNDER_MAINTENANCE",
+              "RESERVED",
+              "OUT_OF_SERVICE"
+            ],
             "example": "AVAILABLE"
           },
           "images": {
@@ -2736,12 +2771,12 @@
           "startDate": {
             "type": "string",
             "example": "2024-05-26 08:00:00",
-            "format": "date-time"
+            "pattern": "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$"
           },
           "expectedReturnDate": {
             "type": "string",
             "example": "2024-05-29 10:00:00",
-            "format": "date-time"
+            "pattern": "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$"
           },
           "carId": {
             "type": "string",
@@ -2892,12 +2927,12 @@
           "startDate": {
             "type": "string",
             "example": "2024-05-26 08:00:00",
-            "format": "date-time"
+            "pattern": "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$"
           },
           "expectedReturnDate": {
             "type": "string",
             "example": "2024-05-29 10:00:00",
-            "format": "date-time"
+            "pattern": "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$"
           },
           "carId": {
             "type": "string",

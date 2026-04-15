@@ -26,11 +26,9 @@ describe('ProfileUserUseCase', () => {
       id: userId,
       name: 'Jennie McCoy',
       email: 'hiv@metja.lk',
-      driverLicense: '5304286925',
-      avatar: 'fake-avatar',
+      driverLicense: '*****925',
       avatarUrl: 'http://localhost:3333/avatar/fake-avatar',
       createdAt: undefined,
-      isAdmin: false,
     });
   });
 });

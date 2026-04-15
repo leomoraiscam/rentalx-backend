@@ -56,4 +56,32 @@ describe('SendForgotPasswordMailUseCase', () => {
     expect(sendMailSpied).not.toHaveBeenCalled();
     expect(sendMailSpied).toHaveBeenCalledTimes(0);
   });
+
+  it('should be able to delete existing user token before create a new one', async () => {
+    const deleteByUserIdAndTokenSpied = jest.spyOn(
+      inMemoryUserTokenRepository,
+      'deleteByUserIdAndToken'
+    );
+
+    const { email, id: userId } = await inMemoryUserRepository.create({
+      name: 'Todd Fisher',
+      email: 'ogimcak@zad.fj',
+      password: 'any-pass@123',
+      driverLicense: '8276259318',
+    });
+
+    await inMemoryUserTokenRepository.create({
+      userId,
+      refreshToken: 'any-token',
+      expiresDate: new Date(),
+      type: 'RESET_PASSWORD' as any,
+    });
+
+    await sendForgotPasswordMailUseCase.execute(email);
+
+    expect(deleteByUserIdAndTokenSpied).toHaveBeenCalledWith(
+      userId,
+      'any-token'
+    );
+  });
 });
