@@ -31,7 +31,7 @@ export class UpdateUserAvatarUseCase {
       const oldAvatarFile = user.avatar;
 
       try {
-        await this.storageProvider.save(avatar, UploadFolder.AVATAR);
+        await this.storageProvider.save(avatar, UploadFolder.Avatar);
       } catch (error) {
         throw new AppError('Failed to save new avatar file.', 500);
       }
@@ -42,14 +42,14 @@ export class UpdateUserAvatarUseCase {
       try {
         updatedUser = await this.userRepository.save(user);
       } catch (dbError) {
-        await this.storageProvider.delete(avatar, UploadFolder.AVATAR);
+        await this.storageProvider.delete(avatar, UploadFolder.Avatar);
 
         throw new AppError('Failed to update user avatar in database.', 500);
       }
 
       if (oldAvatarFile) {
         try {
-          await this.storageProvider.delete(oldAvatarFile, UploadFolder.AVATAR);
+          await this.storageProvider.delete(oldAvatarFile, UploadFolder.Avatar);
         } catch (error) {}
       }
 

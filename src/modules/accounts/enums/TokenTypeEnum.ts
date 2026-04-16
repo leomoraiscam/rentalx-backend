@@ -1,4 +1,4 @@
 export enum TokenTypeEnum {
-  REFRESH_TOKEN = 'REFRESH_TOKEN',
-  RESET_PASSWORD = 'RESET_PASSWORD',
+  RefreshToken = 'REFRESH_TOKEN',
+  ResetPassword = 'RESET_PASSWORD',
 }

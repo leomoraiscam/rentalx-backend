@@ -19,7 +19,7 @@ describe('CreateCategoryUseCase', () => {
     const category = await createCategoryUseCase.execute({
       name: 'Executive',
       description: 'cars executives',
-      type: CategoryType.SEDAN,
+      type: CategoryType.Sedan,
     });
 
     expect(category).toHaveProperty('id');
@@ -29,14 +29,14 @@ describe('CreateCategoryUseCase', () => {
     await inMemoryCategoryRepository.create({
       name: 'SUV',
       description: 'SUV`s cars',
-      type: CategoryType.SUV,
+      type: CategoryType.Suv,
     });
 
     await expect(
       createCategoryUseCase.execute({
         name: 'SUV',
         description: 'SUV`s cars',
-        type: CategoryType.SUV,
+        type: CategoryType.Suv,
       })
     ).rejects.toBeInstanceOf(AppError);
   });

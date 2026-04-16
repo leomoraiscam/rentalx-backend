@@ -1,7 +1,7 @@
 export enum CarStatus {
-  AVAILABLE = 'AVAILABLE',
-  RENTED = 'RENTED',
-  UNDER_MAINTENANCE = 'UNDER_MAINTENANCE',
-  RESERVED = 'RESERVED',
-  OUT_OF_SERVICE = 'OUT_OF_SERVICE',
+  Available = 'AVAILABLE',
+  Rented = 'RENTED',
+  UnderMaintenance = 'UNDER_MAINTENANCE',
+  Reserved = 'RESERVED',
+  OutOfService = 'OUT_OF_SERVICE',
 }

@@ -20,24 +20,24 @@ describe('ListCategoriesUseCase', () => {
       inMemoryCategoryRepository.create({
         name: 'SUV',
         description: 'SUV`s cars',
-        type: CategoryType.SUV,
+        type: CategoryType.Suv,
       }),
       inMemoryCategoryRepository.create({
         name: 'Hatch',
         description: 'Hatch`s cars',
-        type: CategoryType.HATCH,
+        type: CategoryType.Hatch,
       }),
       inMemoryCategoryRepository.create({
         name: 'Sedan',
         description: 'Sedan`s cars',
-        type: CategoryType.SEDAN,
+        type: CategoryType.Sedan,
       }),
     ]);
 
     const { data: categories } = await listCategoriesUseCase.execute({
       page: 1,
       perPage: 10,
-      order: FindOptionsOrdernation.ASC,
+      order: FindOptionsOrdernation.Asc,
     });
 
     expect(categories).toHaveLength(3);
@@ -55,24 +55,24 @@ describe('ListCategoriesUseCase', () => {
       inMemoryCategoryRepository.create({
         name: 'SUV',
         description: 'SUV cars',
-        type: CategoryType.SUV,
+        type: CategoryType.Suv,
       }),
       inMemoryCategoryRepository.create({
         name: 'Sedan',
         description: 'Sedan cars',
-        type: CategoryType.SEDAN,
+        type: CategoryType.Sedan,
       }),
       inMemoryCategoryRepository.create({
         name: 'Hatch',
         description: 'Hatch cars',
-        type: CategoryType.HATCH,
+        type: CategoryType.Hatch,
       }),
     ]);
 
     const { data: categories } = await listCategoriesUseCase.execute({
       page: 1,
       perPage: 10,
-      order: FindOptionsOrdernation.ASC,
+      order: FindOptionsOrdernation.Asc,
     });
 
     expect(categories[0].name).toBe('Hatch');
@@ -84,7 +84,7 @@ describe('ListCategoriesUseCase', () => {
     const { data: categories } = await listCategoriesUseCase.execute({
       page: 1,
       perPage: 10,
-      order: FindOptionsOrdernation.ASC,
+      order: FindOptionsOrdernation.Asc,
     });
 
     expect(categories).toEqual([]);

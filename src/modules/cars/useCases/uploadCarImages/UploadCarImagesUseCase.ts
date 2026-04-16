@@ -33,7 +33,7 @@ export class UploadCarImagesUseCase {
 
     try {
       const storagePromises = fileNames.map(async (fileName) => {
-        await this.storageProvider.save(fileName, UploadFolder.CARS);
+        await this.storageProvider.save(fileName, UploadFolder.Cars);
         savedFileNames.push(fileName);
       });
 
@@ -51,7 +51,7 @@ export class UploadCarImagesUseCase {
 
       try {
         const deletePromises = savedFileNames.map((fileName) =>
-          this.storageProvider.delete(fileName, UploadFolder.CARS)
+          this.storageProvider.delete(fileName, UploadFolder.Cars)
         );
         await Promise.all(deletePromises);
       } catch (err) {

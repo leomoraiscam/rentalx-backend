@@ -34,7 +34,7 @@ export class UpdateCarImageUseCase {
     const oldFileName = imageToUpdate.imageName;
 
     try {
-      await this.storageProvider.save(newFileName, UploadFolder.CARS);
+      await this.storageProvider.save(newFileName, UploadFolder.Cars);
       await this.carsImageRepository.update({
         imageId,
         fileName: newFileName,
@@ -47,7 +47,7 @@ export class UpdateCarImageUseCase {
       });
 
       try {
-        await this.storageProvider.delete(newFileName, UploadFolder.CARS);
+        await this.storageProvider.delete(newFileName, UploadFolder.Cars);
       } catch (deleteErr) {
         this.loggerProvider.log({
           level: 'error',
@@ -60,7 +60,7 @@ export class UpdateCarImageUseCase {
     }
 
     try {
-      await this.storageProvider.delete(oldFileName, UploadFolder.CARS);
+      await this.storageProvider.delete(oldFileName, UploadFolder.Cars);
     } catch (deleteErr) {
       this.loggerProvider.log({
         level: 'warn',

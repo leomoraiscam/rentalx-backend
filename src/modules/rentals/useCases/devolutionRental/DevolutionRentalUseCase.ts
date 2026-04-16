@@ -3,7 +3,7 @@ import { inject, injectable } from 'tsyringe';
 import { CarStatus } from '@modules/cars/enums/carStatus';
 import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
 import { IDevolutionResponseDTO } from '@modules/rentals/dtos/IDevolutionResponseDTO';
-import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
+import { RentalStatus } from '@modules/rentals/enums/rentalStatus';
 import { RentalMap } from '@modules/rentals/mapper/RentalMap';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
 import { IDateProvider } from '@shared/container/providers/DateProvider/models/IDateProvider';
@@ -29,13 +29,13 @@ export class DevolutionRentalUseCase {
       throw new AppError('Rental not found', 404);
     }
 
-    if (rental.status.includes(RentalStatus.CLOSED)) {
+    if (rental.status.includes(RentalStatus.Closed)) {
       throw new AppError('This rental already finished', 422);
     }
 
     if (
-      !rental.status.includes(RentalStatus.PICKED_UP) &&
-      !rental.status.includes(RentalStatus.OVERDUE)
+      !rental.status.includes(RentalStatus.PickedUp) &&
+      !rental.status.includes(RentalStatus.Overdue)
     ) {
       throw new AppError('This rental isn`t eligible for devolution', 422);
     }
@@ -64,9 +64,10 @@ export class DevolutionRentalUseCase {
     Object.assign(rental, {
       endDate: currentDate,
       total,
-      status: RentalStatus.CLOSED,
+      status: RentalStatus.Closed,
+      car,
     });
-    car.status = CarStatus.AVAILABLE;
+    car.status = CarStatus.Available;
 
     await Promise.all([
       this.rentalRepository.save(rental),

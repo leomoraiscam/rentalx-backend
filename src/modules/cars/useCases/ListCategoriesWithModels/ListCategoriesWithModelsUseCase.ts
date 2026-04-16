@@ -35,7 +35,7 @@ export class ListCategoriesWithModelsUseCase {
       const { startDate, expectedReturnDate } = data;
       const [categoriesResponse, cars] = await Promise.all([
         this.categoryRepository.list({
-          order: FindOptionsOrdernation.DESC,
+          order: FindOptionsOrdernation.Desc,
           page: 1,
           perPage: 15,
         }),
@@ -65,8 +65,8 @@ export class ListCategoriesWithModelsUseCase {
 
         for (const car of categoryCars) {
           const isBroken =
-            car.status === CarStatus.OUT_OF_SERVICE ||
-            car.status === CarStatus.UNDER_MAINTENANCE;
+            car.status === CarStatus.OutOfService ||
+            car.status === CarStatus.UnderMaintenance;
           const isRented = busyCarIds.has(car.id);
           const isAvailable = !isBroken && !isRented;
 

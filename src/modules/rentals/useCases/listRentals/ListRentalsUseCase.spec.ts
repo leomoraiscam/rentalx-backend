@@ -1,14 +1,14 @@
 import { CarStatus } from '@modules/cars/enums/carStatus';
 import { Car } from '@modules/cars/infra/typeorm/entities/Car';
 import { InMemoryCarRepository } from '@modules/cars/repositories/in-memory/InMemoryCarRepository';
-import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
+import { RentalStatus } from '@modules/rentals/enums/rentalStatus';
 import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
 import { FindOptionsOrdernation } from '@shared/common/enums/findOptionsOrder';
 
 import { InMemoryRentalRepository } from '../../repositories/in-memory/InMemoryRentalRepository';
 import { ListRentalsUseCase } from './ListRentalsUseCase';
 
-describe.skip('ListRentalsUseCase', () => {
+describe('ListRentalsUseCase', () => {
   let inMemoryRentalRepository: InMemoryRentalRepository;
   let inMemoryCarRepository: InMemoryCarRepository;
   let listRentalsUseCase: ListRentalsUseCase;
@@ -45,7 +45,7 @@ describe.skip('ListRentalsUseCase', () => {
             createdAt: new Date(),
           },
         ],
-        status: CarStatus.AVAILABLE,
+        status: CarStatus.Available,
       }),
       inMemoryCarRepository.create({
         name: 'Mustang',
@@ -70,7 +70,7 @@ describe.skip('ListRentalsUseCase', () => {
             createdAt: new Date(),
           },
         ],
-        status: CarStatus.AVAILABLE,
+        status: CarStatus.Available,
       }),
     ]);
 
@@ -81,21 +81,37 @@ describe.skip('ListRentalsUseCase', () => {
         startDate: new Date(2024, 2, 20, 10),
         expectedReturnDate: new Date(2024, 2, 23),
         userId: 'fake-user-id',
-        status: RentalStatus.CONFIRMED,
+        status: RentalStatus.Confirmed,
       }),
       inMemoryRentalRepository.create({
-        carId: 'faked-car-id',
+        carId: 'other-car-id',
+        car: ({
+          id: 'other-car-id',
+          brand: 'Other',
+          name: 'Other',
+          licensePlate: 'ABC-000',
+          categoryId: 'other-category',
+          images: [],
+        } as unknown) as Car,
         startDate: new Date(2024, 2, 21, 10),
         expectedReturnDate: new Date(2024, 2, 23),
         userId: 'fake-user-id',
-        status: RentalStatus.CONFIRMED,
+        status: RentalStatus.Confirmed,
       }),
       inMemoryRentalRepository.create({
-        carId: 'faked-car-id',
+        carId: 'other-car-id',
+        car: ({
+          id: 'other-car-id',
+          brand: 'Other',
+          name: 'Other',
+          licensePlate: 'ABC-000',
+          categoryId: 'other-category',
+          images: [],
+        } as unknown) as Car,
         startDate: new Date(2024, 2, 22, 10),
         expectedReturnDate: new Date(2024, 2, 23),
         userId: 'fake-user-id',
-        status: RentalStatus.CLOSED,
+        status: RentalStatus.Closed,
       }),
       inMemoryRentalRepository.create({
         carId: secondCar.id,
@@ -103,7 +119,7 @@ describe.skip('ListRentalsUseCase', () => {
         startDate: new Date(2024, 2, 20, 11),
         expectedReturnDate: new Date(2024, 2, 23),
         userId: 'fake-user-id',
-        status: RentalStatus.OVERDUE,
+        status: RentalStatus.Overdue,
       }),
       inMemoryRentalRepository.create({
         carId: secondCar.id,
@@ -111,7 +127,7 @@ describe.skip('ListRentalsUseCase', () => {
         startDate: new Date(2024, 2, 20, 12),
         expectedReturnDate: new Date(2024, 2, 23),
         userId: 'fake-user-id',
-        status: RentalStatus.PICKED_UP,
+        status: RentalStatus.PickedUp,
       }),
     ]);
   });
@@ -149,25 +165,23 @@ describe.skip('ListRentalsUseCase', () => {
     const { data } = await listRentalsUseCase.execute({
       page: 1,
       perPage: 10,
-      order: FindOptionsOrdernation.DESC,
+      order: FindOptionsOrdernation.Desc,
     });
 
     expect(data).toHaveLength(5);
-    expect(data).toEqual([
-      rentals[2],
-      rentals[1],
-      rentals[4],
-      rentals[3],
-      rentals[0],
-    ]);
+    expect(data[0].id).toEqual(rentals[2].id);
+    expect(data[1].id).toEqual(rentals[1].id);
+    expect(data[2].id).toEqual(rentals[4].id);
+    expect(data[3].id).toEqual(rentals[3].id);
+    expect(data[4].id).toEqual(rentals[0].id);
   });
 
   it('should be able to return only rentals with status PICKED_UP when received status parameter', async () => {
     const { data } = await listRentalsUseCase.execute({
       page: 1,
       perPage: 10,
-      order: FindOptionsOrdernation.DESC,
-      status: [RentalStatus.PICKED_UP, RentalStatus.CONFIRMED].toString(),
+      order: FindOptionsOrdernation.Desc,
+      status: [RentalStatus.PickedUp, RentalStatus.Confirmed].toString(),
     });
 
     expect(data).toHaveLength(3);
@@ -177,7 +191,7 @@ describe.skip('ListRentalsUseCase', () => {
     const { data } = await listRentalsUseCase.execute({
       page: 1,
       perPage: 10,
-      order: FindOptionsOrdernation.DESC,
+      order: FindOptionsOrdernation.Desc,
       startDate: new Date(2024, 2, 21, 8),
       endDate: new Date(2024, 2, 22, 18),
     });
@@ -189,7 +203,7 @@ describe.skip('ListRentalsUseCase', () => {
     const { data } = await listRentalsUseCase.execute({
       page: 1,
       perPage: 10,
-      order: FindOptionsOrdernation.DESC,
+      order: FindOptionsOrdernation.Desc,
       categoryIds: 'faked-sport-category',
     });
 
@@ -200,7 +214,7 @@ describe.skip('ListRentalsUseCase', () => {
     const { data } = await listRentalsUseCase.execute({
       page: 1,
       perPage: 10,
-      order: FindOptionsOrdernation.DESC,
+      order: FindOptionsOrdernation.Desc,
       categoryIds: 'faked-sport-category,faked-suv-category',
     });
 

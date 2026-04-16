@@ -2,7 +2,7 @@ import { inject, injectable } from 'tsyringe';
 
 import { CarStatus } from '@modules/cars/enums/carStatus';
 import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
-import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
+import { RentalStatus } from '@modules/rentals/enums/rentalStatus';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
 import { AppError } from '@shared/errors/AppError';
 
@@ -22,7 +22,7 @@ export class CancelRentalUseCase {
       throw new AppError('Rental not found', 404);
     }
 
-    if (!rental.status.includes(RentalStatus.CONFIRMED)) {
+    if (!rental.status.includes(RentalStatus.Confirmed)) {
       throw new AppError(
         'The rent cannot be cancelled as it has passed the period',
         422
@@ -38,8 +38,8 @@ export class CancelRentalUseCase {
 
     const car = await this.carRepository.findById(rental.carId);
 
-    car.status = CarStatus.AVAILABLE;
-    rental.status = RentalStatus.CANCELLED;
+    car.status = CarStatus.Available;
+    rental.status = RentalStatus.Cancelled;
 
     await Promise.all([
       this.rentalRepository.save(rental),

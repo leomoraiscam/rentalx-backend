@@ -1,6 +1,6 @@
 import { IQueryListCarsDTO } from '@modules/cars/dtos/IQueryListCarsDTO';
 import { IFindRentalsByCarsDTO } from '@modules/rentals/dtos/IFindRentalsByCarsDTO';
-import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
+import { RentalStatus } from '@modules/rentals/enums/rentalStatus';
 import { IPaginationQueryResponseDTO } from '@shared/common/dtos/IPaginationResponseDTO';
 
 import { ICreateRentalDTO } from '../../dtos/ICreateRentalDTO';
@@ -48,8 +48,8 @@ export class InMemoryRentalRepository implements IRentalRepository {
       const isCarInList = carIds.includes(rental.carId);
 
       const isStatusActive =
-        rental.status !== RentalStatus.CLOSED &&
-        rental.status !== RentalStatus.CANCELLED;
+        rental.status !== RentalStatus.Closed &&
+        rental.status !== RentalStatus.Cancelled;
 
       const hasDateConflict =
         rental.startDate < expectedReturnDate &&

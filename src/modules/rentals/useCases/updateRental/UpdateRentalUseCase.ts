@@ -3,7 +3,7 @@ import { getConnection } from 'typeorm';
 
 import { CarStatus } from '@modules/cars/enums/carStatus';
 import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
-import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
+import { RentalStatus } from '@modules/rentals/enums/rentalStatus';
 import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
 import { IRentalDateService } from '@modules/rentals/services/IRentalDateService';
@@ -33,7 +33,7 @@ export class UpdateRentalUseCase {
       throw new AppError('Rental not found', 404);
     }
 
-    if (!rental.status.includes(RentalStatus.CONFIRMED)) {
+    if (!rental.status.includes(RentalStatus.Confirmed)) {
       throw new AppError(
         'The rent cannot be updated as it has passed the period',
         422
@@ -79,18 +79,18 @@ export class UpdateRentalUseCase {
           throw new AppError('Car not found', 404);
         }
 
-        if (!car.status.includes(CarStatus.AVAILABLE)) {
+        if (!car.status.includes(CarStatus.Available)) {
           throw new AppError('This car is not available', 422);
         }
 
         const currentCar = await this.carRepository.findById(rental.carId);
 
         if (currentCar) {
-          currentCar.status = CarStatus.AVAILABLE;
+          currentCar.status = CarStatus.Available;
           await transactionalEntityManager.save(currentCar);
         }
 
-        car.status = CarStatus.RESERVED;
+        car.status = CarStatus.Reserved;
         await transactionalEntityManager.save(car);
 
         const total = this.rentalDateService.calculateTotal(

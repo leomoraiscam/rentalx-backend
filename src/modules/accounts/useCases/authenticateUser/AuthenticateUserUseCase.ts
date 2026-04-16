@@ -4,7 +4,7 @@ import { inject, injectable } from 'tsyringe';
 import { auth } from '@config/auth';
 import { IAuthenticatedUserDTO } from '@modules/accounts/dtos/IAuthenticatedUserDTO';
 import { IAuthenticateUserDTO } from '@modules/accounts/dtos/IAuthenticateUserDTO';
-import { TokenTypeEnum } from '@modules/accounts/enums/TokenTypeEnum';
+import { TokenTypeEnum } from '@modules/accounts/enums/tokenTypeEnum';
 import { UserMap } from '@modules/accounts/mapper/UserMap';
 import { IUserRepository } from '@modules/accounts/repositories/IUserRepository';
 import { IUserTokenRepository } from '@modules/accounts/repositories/IUserTokenRepository';
@@ -78,7 +78,7 @@ export class AuthenticateUserUseCase {
 
     const userHasToken = await this.userTokenRepository.findByUserId(
       userId,
-      TokenTypeEnum.REFRESH_TOKEN
+      TokenTypeEnum.RefreshToken
     );
 
     if (userHasToken) {
@@ -88,7 +88,7 @@ export class AuthenticateUserUseCase {
           userId,
           refreshToken,
           expiresDate: expiresDateLimitRefreshToken,
-          type: TokenTypeEnum.REFRESH_TOKEN,
+          type: TokenTypeEnum.RefreshToken,
         }),
       ]);
     } else {
@@ -96,7 +96,7 @@ export class AuthenticateUserUseCase {
         userId,
         refreshToken,
         expiresDate: expiresDateLimitRefreshToken,
-        type: TokenTypeEnum.REFRESH_TOKEN,
+        type: TokenTypeEnum.RefreshToken,
       });
     }
 

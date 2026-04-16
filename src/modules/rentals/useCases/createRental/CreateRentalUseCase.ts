@@ -3,7 +3,7 @@ import { inject, injectable } from 'tsyringe';
 import { CarStatus } from '@modules/cars/enums/carStatus';
 import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
 import { ICreateRentalDTO } from '@modules/rentals/dtos/ICreateRentalDTO';
-import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
+import { RentalStatus } from '@modules/rentals/enums/rentalStatus';
 import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
 import { IRentalDateService } from '@modules/rentals/services/IRentalDateService';
 import { IDateProvider } from '@shared/container/providers/DateProvider/models/IDateProvider';
@@ -77,7 +77,7 @@ export class CreateRentalUseCase {
       expectedReturnDate
     );
 
-    car.status = CarStatus.RESERVED;
+    car.status = CarStatus.Reserved;
 
     const [rental] = await Promise.all([
       await this.rentalRepository.create({
@@ -86,7 +86,7 @@ export class CreateRentalUseCase {
         expectedReturnDate,
         startDate,
         total,
-        status: RentalStatus.CONFIRMED,
+        status: RentalStatus.Confirmed,
       }),
       await this.carRepository.save({ ...car }),
     ]);

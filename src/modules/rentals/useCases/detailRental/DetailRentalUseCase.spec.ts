@@ -9,7 +9,7 @@ import { AppError } from '@shared/errors/AppError';
 
 import { DetailRentalUseCase } from './DetailRentalUseCase';
 
-describe.skip('DetailRentalUseCase', () => {
+describe('DetailRentalUseCase', () => {
   let inMemoryCategoryRepository: InMemoryCategoryRepository;
   let inMemorySpecificationRepository: InMemorySpecificationRepository;
   let inMemoryCarRepository: InMemoryCarRepository;
@@ -33,7 +33,7 @@ describe.skip('DetailRentalUseCase', () => {
       name: 'GROUP L - SPORT',
       description:
         'Designed to optimize aerodynamics, reach higher speeds and offer high performance.',
-      type: CategoryType.SPORT,
+      type: CategoryType.Sport,
     });
     const specification = await inMemorySpecificationRepository.create({
       name: 'Direção Elétrica',
@@ -70,8 +70,8 @@ describe.skip('DetailRentalUseCase', () => {
     });
     const rental = await detailRentalUseCase.execute(id);
 
-    expect(rental).toHaveProperty('car');
-    expect(rental).toHaveProperty('offer');
+    expect(rental).toHaveProperty('vehicle');
+    expect(rental).toHaveProperty('finance');
   });
 
   it('should not be able to return details of rental when rental a non exist', async () => {

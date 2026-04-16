@@ -33,7 +33,7 @@ describe('ListSpecificationsUseCase', () => {
     const { data: specifications } = await listSpecificationsUseCase.execute({
       page: 1,
       perPage: 10,
-      order: FindOptionsOrdernation.ASC,
+      order: FindOptionsOrdernation.Asc,
     });
 
     expect(specifications).toHaveLength(3);
@@ -65,7 +65,7 @@ describe('ListSpecificationsUseCase', () => {
     const { data: specifications } = await listSpecificationsUseCase.execute({
       page: 1,
       perPage: 10,
-      order: FindOptionsOrdernation.ASC,
+      order: FindOptionsOrdernation.Asc,
     });
 
     expect(specifications[0].name).toBe('1.0');
@@ -77,7 +77,7 @@ describe('ListSpecificationsUseCase', () => {
     const { data: specifications } = await listSpecificationsUseCase.execute({
       page: 1,
       perPage: 10,
-      order: FindOptionsOrdernation.ASC,
+      order: FindOptionsOrdernation.Asc,
     });
 
     expect(specifications).toEqual([]);

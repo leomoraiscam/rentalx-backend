@@ -1,5 +1,5 @@
 export enum UploadFolder {
-  AVATAR = 'avatar',
-  CARS = 'cars',
-  TMP = 'tmp',
+  Avatar = 'avatar',
+  Cars = 'cars',
+  Tmp = 'tmp',
 }

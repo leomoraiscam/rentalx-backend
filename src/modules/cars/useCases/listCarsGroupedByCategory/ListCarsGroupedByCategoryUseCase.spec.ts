@@ -43,12 +43,12 @@ describe('ListCarsGroupedByCategoryUseCase', () => {
         name: 'GROUP L - SPORT',
         description:
           'Designed to optimize aerodynamics, reach higher speeds and offer high performance.',
-        type: CategoryType.SPORT,
+        type: CategoryType.Sport,
       }),
       inMemoryCategoryRepository.create({
         name: 'GROUP L - SUV',
         description: '',
-        type: CategoryType.SUV,
+        type: CategoryType.Suv,
       }),
       inMemorySpecificationRepository.create({
         name: 'Direção Elétrica',
@@ -77,7 +77,7 @@ describe('ListCarsGroupedByCategoryUseCase', () => {
             createdAt: new Date(2024, 2, 10),
           },
         ],
-        status: CarStatus.AVAILABLE,
+        status: CarStatus.Available,
       }),
       inMemoryCarRepository.create({
         name: 'R8',
@@ -96,7 +96,7 @@ describe('ListCarsGroupedByCategoryUseCase', () => {
             createdAt: new Date(2024, 2, 10),
           },
         ],
-        status: CarStatus.RENTED,
+        status: CarStatus.Rented,
       }),
     ]);
 
@@ -168,7 +168,7 @@ describe('ListCarsGroupedByCategoryUseCase', () => {
             createdAt: new Date(2024, 2, 10),
           },
         ],
-        status: CarStatus.AVAILABLE,
+        status: CarStatus.Available,
       }),
       inMemoryCarRepository.create({
         name: 'R8',
@@ -187,7 +187,7 @@ describe('ListCarsGroupedByCategoryUseCase', () => {
             createdAt: new Date(2024, 2, 10),
           },
         ],
-        status: CarStatus.RENTED,
+        status: CarStatus.Rented,
       }),
     ]);
 
@@ -266,7 +266,7 @@ describe('ListCarsGroupedByCategoryUseCase', () => {
             createdAt: new Date(2024, 2, 10),
           },
         ],
-        status: CarStatus.AVAILABLE,
+        status: CarStatus.Available,
       }),
       inMemoryCarRepository.create({
         name: 'R8',
@@ -285,7 +285,7 @@ describe('ListCarsGroupedByCategoryUseCase', () => {
             createdAt: new Date(2024, 2, 10),
           },
         ],
-        status: CarStatus.RENTED,
+        status: CarStatus.Rented,
       }),
     ]);
 

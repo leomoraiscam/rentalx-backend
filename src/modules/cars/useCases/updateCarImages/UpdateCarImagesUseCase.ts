@@ -39,7 +39,7 @@ export class UpdateCarImagesUseCase {
 
     try {
       const uploadFilePromises = fileNames.map(async (fileName) => {
-        await this.storageProvider.save(fileName, UploadFolder.CARS);
+        await this.storageProvider.save(fileName, UploadFolder.Cars);
         savedFileNames.push(fileName);
       });
 
@@ -53,7 +53,7 @@ export class UpdateCarImagesUseCase {
       if (oldFileNamesToDelete.length > 0) {
         const deleteStoragePromises = oldFileNamesToDelete.map(
           async (imageName) => {
-            await this.storageProvider.delete(imageName, UploadFolder.CARS);
+            await this.storageProvider.delete(imageName, UploadFolder.Cars);
           }
         );
         await Promise.all(deleteStoragePromises);
@@ -67,7 +67,7 @@ export class UpdateCarImagesUseCase {
 
       try {
         const deletePromises = savedFileNames.map((fileName) =>
-          this.storageProvider.delete(fileName, UploadFolder.CARS)
+          this.storageProvider.delete(fileName, UploadFolder.Cars)
         );
         await Promise.all(deletePromises);
       } catch (err) {

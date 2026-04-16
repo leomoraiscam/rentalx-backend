@@ -11,7 +11,7 @@ import {
 import { IQueryListCarsDTO } from '@modules/cars/dtos/IQueryListCarsDTO';
 import { ICreateRentalDTO } from '@modules/rentals/dtos/ICreateRentalDTO';
 import { IFindRentalsByCarsDTO } from '@modules/rentals/dtos/IFindRentalsByCarsDTO';
-import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
+import { RentalStatus } from '@modules/rentals/enums/rentalStatus';
 import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
 import { IPaginationQueryResponseDTO } from '@shared/common/dtos/IPaginationResponseDTO';
@@ -53,7 +53,7 @@ export class RentalRepository implements IRentalRepository {
         carId,
         startDate: LessThanOrEqual(expectedReturnDate),
         expectedReturnDate: MoreThanOrEqual(startDate),
-        status: Not(In([RentalStatus.CLOSED, RentalStatus.CANCELLED])),
+        status: Not(In([RentalStatus.Closed, RentalStatus.Cancelled])),
       },
     });
   }
@@ -180,7 +180,7 @@ export class RentalRepository implements IRentalRepository {
       .createQueryBuilder('rental')
       .where('rental.car_id IN (:...carIds)', { carIds })
       .andWhere('rental.status NOT IN (:...statuses)', {
-        statuses: [RentalStatus.CLOSED, RentalStatus.CANCELLED],
+        statuses: [RentalStatus.Closed, RentalStatus.Cancelled],
       })
       .andWhere(
         new Brackets((qb) => {

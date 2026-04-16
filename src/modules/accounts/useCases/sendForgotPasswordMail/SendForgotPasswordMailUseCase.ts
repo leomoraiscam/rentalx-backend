@@ -3,7 +3,7 @@ import { inject, injectable } from 'tsyringe';
 import { v4 as uuidV4 } from 'uuid';
 
 import { IForgotPasswordMailDTO } from '@modules/accounts/dtos/IForgotPasswordMailDTO';
-import { TokenTypeEnum } from '@modules/accounts/enums/TokenTypeEnum';
+import { TokenTypeEnum } from '@modules/accounts/enums/tokenTypeEnum';
 import { IUserRepository } from '@modules/accounts/repositories/IUserRepository';
 import { IUserTokenRepository } from '@modules/accounts/repositories/IUserTokenRepository';
 import { buildResetPasswordUrl } from '@modules/accounts/util/buildResetPasswordUrl';
@@ -35,7 +35,7 @@ export class SendForgotPasswordMailUseCase {
 
     const existingUserTokenAvailable = await this.userTokenRepository.findByUserId(
       user.id,
-      TokenTypeEnum.RESET_PASSWORD
+      TokenTypeEnum.ResetPassword
     );
 
     if (existingUserTokenAvailable) {
@@ -55,7 +55,7 @@ export class SendForgotPasswordMailUseCase {
       refreshToken: token,
       userId,
       expiresDate: expiresDateLimitToken,
-      type: TokenTypeEnum.RESET_PASSWORD,
+      type: TokenTypeEnum.ResetPassword,
     });
 
     const templatePath = path.resolve(

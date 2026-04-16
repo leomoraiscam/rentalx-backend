@@ -42,12 +42,12 @@ describe('ListCategoriesWithModelsUseCase', () => {
         name: 'GROUP L - SPORT',
         description:
           'Designed to optimize aerodynamics, reach higher speeds and offer high performance.',
-        type: CategoryType.SPORT,
+        type: CategoryType.Sport,
       }),
       inMemoryCategoryRepository.create({
         name: 'GROUP L - SUV',
         description: '',
-        type: CategoryType.SUV,
+        type: CategoryType.Suv,
       }),
       inMemorySpecificationRepository.create({
         name: 'Direção Elétrica',
@@ -348,7 +348,7 @@ describe('ListCategoriesWithModelsUseCase', () => {
     ]);
 
     const cars = await listCategoriesWithModelsUseCase.execute({
-      type: CategoryType.SPORT,
+      type: CategoryType.Sport,
     });
 
     expect(cars).toEqual([
@@ -454,7 +454,7 @@ describe('ListCategoriesWithModelsUseCase', () => {
     ]);
 
     const cars = await listCategoriesWithModelsUseCase.execute({
-      type: CategoryType.SPORT,
+      type: CategoryType.Sport,
       brand: 'BMW',
     });
 
