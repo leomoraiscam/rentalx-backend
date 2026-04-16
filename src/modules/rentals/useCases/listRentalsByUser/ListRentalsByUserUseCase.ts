@@ -21,7 +21,7 @@ export class ListRentalsByUserUseCase {
     const {
       page = 1,
       perPage = 10,
-      order = FindOptionsOrdernation.DESC,
+      order = FindOptionsOrdernation.Desc,
       userId,
     } = options;
     const { total, result } = await this.rentalRepository.list({

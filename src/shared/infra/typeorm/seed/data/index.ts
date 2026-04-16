@@ -16,13 +16,13 @@ export const CATEGORIES: ICreateCategoryDTO[] = [
     name: 'Esportivo Seed',
     description:
       'Projetados para otimizar a aerodinâmica, atingir velocidades maiores e oferecer um alto desempenho.',
-    type: CategoryType.SPORT,
+    type: CategoryType.Sport,
   },
   {
     name: 'Sedã Seed',
     description:
       'Categoria de carros que possui três volumes: o porta-malas, a cabine e o compartimento do motor.',
-    type: CategoryType.SEDAN,
+    type: CategoryType.Sedan,
   },
 ];
 

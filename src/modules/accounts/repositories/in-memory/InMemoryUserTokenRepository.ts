@@ -1,6 +1,6 @@
 import { ICreateUserTokenDTO } from '@modules/accounts/dtos/ICreateUserTokenDTO';
 import { IFindTokenByUserIdDTO } from '@modules/accounts/dtos/IFindTokenByUserIdDTO';
-import { TokenTypeEnum } from '@modules/accounts/enums/TokenTypeEnum';
+import { TokenTypeEnum } from '@modules/accounts/enums/tokenTypeEnum';
 import { UserToken } from '@modules/accounts/infra/typeorm/entities/UserToken';
 
 import { IUserTokenRepository } from '../IUserTokenRepository';

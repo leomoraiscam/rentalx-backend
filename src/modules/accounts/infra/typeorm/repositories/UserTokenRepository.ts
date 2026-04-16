@@ -2,7 +2,7 @@ import { getRepository, Repository } from 'typeorm';
 
 import { ICreateUserTokenDTO } from '@modules/accounts/dtos/ICreateUserTokenDTO';
 import { IFindTokenByUserIdDTO } from '@modules/accounts/dtos/IFindTokenByUserIdDTO';
-import { TokenTypeEnum } from '@modules/accounts/enums/TokenTypeEnum';
+import { TokenTypeEnum } from '@modules/accounts/enums/tokenTypeEnum';
 import { IUserTokenRepository } from '@modules/accounts/repositories/IUserTokenRepository';
 
 import { UserToken } from '../entities/UserToken';

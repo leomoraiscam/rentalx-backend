@@ -62,8 +62,8 @@ export class ListCarsGroupedByCategoryUseCase {
         const group = groupedModels[car.name];
 
         const isCarBroken =
-          car.status === CarStatus.OUT_OF_SERVICE ||
-          car.status === CarStatus.UNDER_MAINTENANCE;
+          car.status === CarStatus.OutOfService ||
+          car.status === CarStatus.UnderMaintenance;
         const isCarRented = busyCarIds.has(car.id);
         const isAvailable = !isCarBroken && !isCarRented;
 

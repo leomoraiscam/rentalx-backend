@@ -1,4 +1,4 @@
 export enum FindOptionsOrdernation {
-  ASC = 'ASC',
-  DESC = 'DESC',
+  Asc = 'ASC',
+  Desc = 'DESC',
 }

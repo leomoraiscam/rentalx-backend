@@ -3,7 +3,7 @@ import { inject, injectable } from 'tsyringe';
 
 import { auth } from '@config/auth';
 import { IRefreshedTokenDTO } from '@modules/accounts/dtos/IRefreshedTokenDTO';
-import { TokenTypeEnum } from '@modules/accounts/enums/TokenTypeEnum';
+import { TokenTypeEnum } from '@modules/accounts/enums/tokenTypeEnum';
 import { IUserTokenRepository } from '@modules/accounts/repositories/IUserTokenRepository';
 import { IDateProvider } from '@shared/container/providers/DateProvider/models/IDateProvider';
 import { ILoggerProvider } from '@shared/container/providers/LoggerProvider/models/ILoggerProvider';
@@ -39,7 +39,7 @@ export class RefreshTokenUseCase {
       {
         userId,
         refreshToken: token,
-        type: TokenTypeEnum.REFRESH_TOKEN,
+        type: TokenTypeEnum.RefreshToken,
       }
     );
 
@@ -71,7 +71,7 @@ export class RefreshTokenUseCase {
       expiresDate: expiresDateLimitRefreshToken,
       refreshToken,
       userId,
-      type: TokenTypeEnum.REFRESH_TOKEN,
+      type: TokenTypeEnum.RefreshToken,
     });
 
     return {

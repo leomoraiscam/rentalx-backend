@@ -1,6 +1,6 @@
 export enum CategoryType {
-  HATCH = 'hatch',
-  SEDAN = 'sedan',
-  SUV = 'suv',
-  SPORT = 'sport',
+  Hatch = 'hatch',
+  Sedan = 'sedan',
+  Suv = 'suv',
+  Sport = 'sport',
 }

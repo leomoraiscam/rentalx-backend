@@ -1,7 +1,7 @@
 import { CarStatus } from '@modules/cars/enums/carStatus';
 import { Car } from '@modules/cars/infra/typeorm/entities/Car';
 import { InMemoryCarRepository } from '@modules/cars/repositories/in-memory/InMemoryCarRepository';
-import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
+import { RentalStatus } from '@modules/rentals/enums/rentalStatus';
 import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
 import { FindOptionsOrdernation } from '@shared/common/enums/findOptionsOrder';
 
@@ -45,7 +45,7 @@ describe('ListRentalsUseCase', () => {
             createdAt: new Date(),
           },
         ],
-        status: CarStatus.AVAILABLE,
+        status: CarStatus.Available,
       }),
       inMemoryCarRepository.create({
         name: 'Mustang',
@@ -70,7 +70,7 @@ describe('ListRentalsUseCase', () => {
             createdAt: new Date(),
           },
         ],
-        status: CarStatus.AVAILABLE,
+        status: CarStatus.Available,
       }),
     ]);
 
@@ -81,7 +81,7 @@ describe('ListRentalsUseCase', () => {
         startDate: new Date(2024, 2, 20, 10),
         expectedReturnDate: new Date(2024, 2, 23),
         userId: 'fake-user-id',
-        status: RentalStatus.CONFIRMED,
+        status: RentalStatus.Confirmed,
       }),
       inMemoryRentalRepository.create({
         carId: 'other-car-id',
@@ -96,7 +96,7 @@ describe('ListRentalsUseCase', () => {
         startDate: new Date(2024, 2, 21, 10),
         expectedReturnDate: new Date(2024, 2, 23),
         userId: 'fake-user-id',
-        status: RentalStatus.CONFIRMED,
+        status: RentalStatus.Confirmed,
       }),
       inMemoryRentalRepository.create({
         carId: 'other-car-id',
@@ -111,7 +111,7 @@ describe('ListRentalsUseCase', () => {
         startDate: new Date(2024, 2, 22, 10),
         expectedReturnDate: new Date(2024, 2, 23),
         userId: 'fake-user-id',
-        status: RentalStatus.CLOSED,
+        status: RentalStatus.Closed,
       }),
       inMemoryRentalRepository.create({
         carId: secondCar.id,
@@ -119,7 +119,7 @@ describe('ListRentalsUseCase', () => {
         startDate: new Date(2024, 2, 20, 11),
         expectedReturnDate: new Date(2024, 2, 23),
         userId: 'fake-user-id',
-        status: RentalStatus.OVERDUE,
+        status: RentalStatus.Overdue,
       }),
       inMemoryRentalRepository.create({
         carId: secondCar.id,
@@ -127,7 +127,7 @@ describe('ListRentalsUseCase', () => {
         startDate: new Date(2024, 2, 20, 12),
         expectedReturnDate: new Date(2024, 2, 23),
         userId: 'fake-user-id',
-        status: RentalStatus.PICKED_UP,
+        status: RentalStatus.PickedUp,
       }),
     ]);
   });
@@ -165,7 +165,7 @@ describe('ListRentalsUseCase', () => {
     const { data } = await listRentalsUseCase.execute({
       page: 1,
       perPage: 10,
-      order: FindOptionsOrdernation.DESC,
+      order: FindOptionsOrdernation.Desc,
     });
 
     expect(data).toHaveLength(5);
@@ -180,8 +180,8 @@ describe('ListRentalsUseCase', () => {
     const { data } = await listRentalsUseCase.execute({
       page: 1,
       perPage: 10,
-      order: FindOptionsOrdernation.DESC,
-      status: [RentalStatus.PICKED_UP, RentalStatus.CONFIRMED].toString(),
+      order: FindOptionsOrdernation.Desc,
+      status: [RentalStatus.PickedUp, RentalStatus.Confirmed].toString(),
     });
 
     expect(data).toHaveLength(3);
@@ -191,7 +191,7 @@ describe('ListRentalsUseCase', () => {
     const { data } = await listRentalsUseCase.execute({
       page: 1,
       perPage: 10,
-      order: FindOptionsOrdernation.DESC,
+      order: FindOptionsOrdernation.Desc,
       startDate: new Date(2024, 2, 21, 8),
       endDate: new Date(2024, 2, 22, 18),
     });
@@ -203,7 +203,7 @@ describe('ListRentalsUseCase', () => {
     const { data } = await listRentalsUseCase.execute({
       page: 1,
       perPage: 10,
-      order: FindOptionsOrdernation.DESC,
+      order: FindOptionsOrdernation.Desc,
       categoryIds: 'faked-sport-category',
     });
 
@@ -214,7 +214,7 @@ describe('ListRentalsUseCase', () => {
     const { data } = await listRentalsUseCase.execute({
       page: 1,
       perPage: 10,
-      order: FindOptionsOrdernation.DESC,
+      order: FindOptionsOrdernation.Desc,
       categoryIds: 'faked-sport-category,faked-suv-category',
     });
 

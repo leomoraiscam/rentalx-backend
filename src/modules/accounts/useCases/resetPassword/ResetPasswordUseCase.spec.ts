@@ -1,4 +1,4 @@
-import { TokenTypeEnum } from '@modules/accounts/enums/TokenTypeEnum';
+import { TokenTypeEnum } from '@modules/accounts/enums/tokenTypeEnum';
 import { InMemoryUserRepository } from '@modules/accounts/repositories/in-memory/InMemoryUserRepository';
 import { InMemoryUserTokenRepository } from '@modules/accounts/repositories/in-memory/InMemoryUserTokenRepository';
 import { InMemoryDateProvider } from '@shared/container/providers/DateProvider/in-memory/InMemoryDateProvider';
@@ -41,7 +41,7 @@ describe('ResetPasswordUseCase', () => {
         expiresDate: new Date(),
         refreshToken: 'example-token',
         userId,
-        type: TokenTypeEnum.RESET_PASSWORD,
+        type: TokenTypeEnum.ResetPassword,
       }),
       resetPasswordUseCase.execute({
         password: 'new-password@123',
@@ -66,7 +66,7 @@ describe('ResetPasswordUseCase', () => {
       expiresDate: new Date(),
       refreshToken: 'example-token',
       userId: 'a-non-existing-user',
-      type: TokenTypeEnum.RESET_PASSWORD,
+      type: TokenTypeEnum.ResetPassword,
     });
 
     await expect(
@@ -90,7 +90,7 @@ describe('ResetPasswordUseCase', () => {
       expiresDate: expiredDate,
       refreshToken: 'expired-token',
       userId,
-      type: TokenTypeEnum.RESET_PASSWORD,
+      type: TokenTypeEnum.ResetPassword,
     });
 
     const mockedHour = inMemoryDateProvider.addHours(3);

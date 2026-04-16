@@ -1,4 +1,4 @@
-import { TokenTypeEnum } from '../enums/TokenTypeEnum';
+import { TokenTypeEnum } from '../enums/tokenTypeEnum';
 
 export interface IFindTokenByUserIdDTO {
   userId: string;

@@ -1,7 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 
 import { IResetPasswordDTO } from '@modules/accounts/dtos/IResetPasswordDTO';
-import { TokenTypeEnum } from '@modules/accounts/enums/TokenTypeEnum';
+import { TokenTypeEnum } from '@modules/accounts/enums/tokenTypeEnum';
 import { IUserRepository } from '@modules/accounts/repositories/IUserRepository';
 import { IUserTokenRepository } from '@modules/accounts/repositories/IUserTokenRepository';
 import { IDateProvider } from '@shared/container/providers/DateProvider/models/IDateProvider';
@@ -25,7 +25,7 @@ export class ResetPasswordUseCase {
     const { token, password } = data;
     const userToken = await this.userTokenRepository.findByRefreshToken(
       token,
-      TokenTypeEnum.RESET_PASSWORD
+      TokenTypeEnum.ResetPassword
     );
 
     if (!userToken) {

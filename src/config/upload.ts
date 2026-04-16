@@ -18,11 +18,11 @@ import {
 } from './constants/upload';
 import { ILimitMulterConfig, IMulterConfig } from './dtos/multerConfigDTO';
 
-export const TMP_FOLDER = resolve(__dirname, '..', '..', UploadFolder.TMP);
+export const TMP_FOLDER = resolve(__dirname, '..', '..', UploadFolder.Tmp);
 
 export const setupUploadFolders = (): void => {
-  const tmpAvatarPath = resolve(TMP_FOLDER, UploadFolder.AVATAR);
-  const tmpCarsPath = resolve(TMP_FOLDER, UploadFolder.CARS);
+  const tmpAvatarPath = resolve(TMP_FOLDER, UploadFolder.Avatar);
+  const tmpCarsPath = resolve(TMP_FOLDER, UploadFolder.Cars);
 
   fs.mkdirSync(TMP_FOLDER, { recursive: true });
   fs.mkdirSync(tmpAvatarPath, { recursive: true });

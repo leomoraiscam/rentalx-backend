@@ -23,7 +23,7 @@ export class ListRentalsUseCase {
     const {
       page = 1,
       perPage = 10,
-      order = FindOptionsOrdernation.DESC,
+      order = FindOptionsOrdernation.Desc,
       categoryIds,
       status,
       ...rest

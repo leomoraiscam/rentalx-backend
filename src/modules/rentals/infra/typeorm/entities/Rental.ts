@@ -10,7 +10,7 @@ import {
 import { v4 as uuidV4 } from 'uuid';
 
 import { Car } from '@modules/cars/infra/typeorm/entities/Car';
-import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
+import { RentalStatus } from '@modules/rentals/enums/rentalStatus';
 
 @Entity('rentals')
 export class Rental {

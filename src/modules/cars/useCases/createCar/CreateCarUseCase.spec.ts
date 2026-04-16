@@ -29,7 +29,7 @@ describe('CreateCarUseCase', () => {
       name: 'GROUP L - SPORT',
       description:
         'Designed to optimize aerodynamics, reach higher speeds and offer high performance.',
-      type: CategoryType.SPORT,
+      type: CategoryType.Sport,
     });
     specification = await inMemorySpecificationRepository.create({
       name: 'Turbo',

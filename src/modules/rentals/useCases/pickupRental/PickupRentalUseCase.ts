@@ -2,7 +2,7 @@ import { inject, injectable } from 'tsyringe';
 
 import { CarStatus } from '@modules/cars/enums/carStatus';
 import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
-import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
+import { RentalStatus } from '@modules/rentals/enums/rentalStatus';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
 import { AppError } from '@shared/errors/AppError';
 
@@ -22,14 +22,14 @@ export class PickupRentalUseCase {
       throw new AppError('Rental not found', 404);
     }
 
-    if (!rental.status.includes(RentalStatus.CONFIRMED)) {
+    if (!rental.status.includes(RentalStatus.Confirmed)) {
       throw new AppError('This rental isn`t eligible for picked up', 422);
     }
 
     const car = await this.carRepository.findById(rental.carId);
 
-    rental.status = RentalStatus.PICKED_UP;
-    car.status = CarStatus.RENTED;
+    rental.status = RentalStatus.PickedUp;
+    car.status = CarStatus.Rented;
 
     await Promise.all([
       this.rentalRepository.save(rental),

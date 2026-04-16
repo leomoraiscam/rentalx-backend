@@ -6,7 +6,7 @@ import { Specification } from '@modules/cars/infra/typeorm/entities/Specificatio
 import { InMemoryCarRepository } from '@modules/cars/repositories/in-memory/InMemoryCarRepository';
 import { InMemoryCategoryRepository } from '@modules/cars/repositories/in-memory/InMemoryCategoryRepository';
 import { InMemorySpecificationRepository } from '@modules/cars/repositories/in-memory/InMemorySpecificationRepository';
-import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
+import { RentalStatus } from '@modules/rentals/enums/rentalStatus';
 import { InMemoryRentalRepository } from '@modules/rentals/repositories/in-memory/InMemoryRentalRepository';
 import { AppError } from '@shared/errors/AppError';
 
@@ -36,7 +36,7 @@ describe('CancelUseCase', () => {
       name: 'GROUP L - SPORT',
       description:
         'Designed to optimize aerodynamics, reach higher speeds and offer high performance.',
-      type: CategoryType.SPORT,
+      type: CategoryType.Sport,
     });
     specification = await inMemorySpecificationRepository.create({
       name: 'Direção Elétrica',
@@ -60,7 +60,7 @@ describe('CancelUseCase', () => {
           createdAt: new Date(),
         },
       ],
-      status: CarStatus.AVAILABLE,
+      status: CarStatus.Available,
     });
   });
 
@@ -72,17 +72,17 @@ describe('CancelUseCase', () => {
       startDate: new Date(2024, 2, 20),
       expectedReturnDate: new Date(2024, 2, 23),
       userId: 'fake-user-id',
-      status: RentalStatus.CONFIRMED,
+      status: RentalStatus.Confirmed,
     });
     await cancelRentalUseCase.execute(rental.id, 'fake-user-id');
 
     expect(spiedRentalSaveMethod).toHaveBeenNthCalledWith(1, {
       ...rental,
-      status: RentalStatus.CANCELLED,
+      status: RentalStatus.Cancelled,
     });
     expect(spiedCarSaveMethod).toHaveBeenNthCalledWith(1, {
       ...car,
-      status: CarStatus.AVAILABLE,
+      status: CarStatus.Available,
     });
   });
 
@@ -98,7 +98,7 @@ describe('CancelUseCase', () => {
       carId: car.id,
       startDate: new Date(2024, 2, 10, 8),
       expectedReturnDate: new Date(2024, 2, 13, 8),
-      status: RentalStatus.PICKED_UP,
+      status: RentalStatus.PickedUp,
     });
 
     expect(
@@ -112,7 +112,7 @@ describe('CancelUseCase', () => {
       startDate: new Date(2024, 2, 20),
       expectedReturnDate: new Date(2024, 2, 23),
       userId: 'correct-user-id',
-      status: RentalStatus.CONFIRMED,
+      status: RentalStatus.Confirmed,
     });
 
     await expect(

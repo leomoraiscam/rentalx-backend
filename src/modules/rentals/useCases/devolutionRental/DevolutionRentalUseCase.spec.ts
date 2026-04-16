@@ -1,6 +1,6 @@
 import { Category } from '@modules/cars/infra/typeorm/entities/Category';
 import { InMemoryCarRepository } from '@modules/cars/repositories/in-memory/InMemoryCarRepository';
-import { RentalStatus } from '@modules/rentals/enums/RentatStatus';
+import { RentalStatus } from '@modules/rentals/enums/rentalStatus';
 import { InMemoryDateProvider } from '@shared/container/providers/DateProvider/in-memory/InMemoryDateProvider';
 import { AppError } from '@shared/errors/AppError';
 
@@ -54,7 +54,7 @@ describe('DevolutionRentalUseCase', () => {
     const { id } = await inMemoryRentalRepository.create({
       userId: 'fake-user-id',
       carId,
-      status: RentalStatus.PICKED_UP,
+      status: RentalStatus.PickedUp,
       expectedReturnDate: new Date(2024, 3, 11, 12),
       startDate: new Date(2024, 3, 10, 12),
     });
@@ -74,7 +74,7 @@ describe('DevolutionRentalUseCase', () => {
       carId,
       startDate: new Date(2024, 3, 3, 10),
       expectedReturnDate: new Date(2024, 3, 3, 12),
-      status: RentalStatus.PICKED_UP,
+      status: RentalStatus.PickedUp,
     });
     const devolutionRental = await devolutionRentalUseCase.execute(id);
 
@@ -91,7 +91,7 @@ describe('DevolutionRentalUseCase', () => {
       carId,
       expectedReturnDate: new Date(2024, 3, 4, 11),
       startDate: new Date(2024, 3, 3, 11),
-      status: RentalStatus.PICKED_UP,
+      status: RentalStatus.PickedUp,
     });
     const devolutionRental = await devolutionRentalUseCase.execute(id);
 
@@ -116,7 +116,7 @@ describe('DevolutionRentalUseCase', () => {
       carId,
       expectedReturnDate: new Date(2024, 3, 11, 12),
       startDate: new Date(2024, 3, 10, 12),
-      status: RentalStatus.CONFIRMED,
+      status: RentalStatus.Confirmed,
     });
     await expect(devolutionRentalUseCase.execute(id)).rejects.toBeInstanceOf(
       AppError
@@ -133,7 +133,7 @@ describe('DevolutionRentalUseCase', () => {
       carId,
       expectedReturnDate: new Date(2024, 3, 11, 12),
       startDate: new Date(2024, 3, 10, 12),
-      status: RentalStatus.CLOSED,
+      status: RentalStatus.Closed,
     });
     await expect(devolutionRentalUseCase.execute(id)).rejects.toBeInstanceOf(
       AppError
@@ -146,7 +146,7 @@ describe('DevolutionRentalUseCase', () => {
       carId: 'faked-car',
       expectedReturnDate: new Date(2024, 3, 11, 12),
       startDate: new Date(2024, 3, 10, 12),
-      status: RentalStatus.PICKED_UP,
+      status: RentalStatus.PickedUp,
     });
 
     await expect(devolutionRentalUseCase.execute(id)).rejects.toBeInstanceOf(
