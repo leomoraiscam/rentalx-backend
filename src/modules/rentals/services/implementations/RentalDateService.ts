@@ -35,6 +35,18 @@ export class RentalDateService {
     }
   }
 
+  validateRentalDuration(startDate: Date, endDate: Date): void {
+    const MINIMUM_HOURS = 24;
+    const rentalDurationInHours = this.dateProvider.compareInHours(
+      startDate,
+      endDate
+    );
+
+    if (rentalDurationInHours < MINIMUM_HOURS) {
+      throw new AppError('Invalid return time!', 422);
+    }
+  }
+
   calculateTotal(car: Car, startDate: Date, endDate: Date): number {
     const days = this.dateProvider.compareInDays(startDate, endDate);
 

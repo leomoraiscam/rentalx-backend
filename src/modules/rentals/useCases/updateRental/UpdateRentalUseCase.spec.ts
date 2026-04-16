@@ -11,6 +11,8 @@ import { InMemoryRentalRepository } from '@modules/rentals/repositories/in-memor
 import { InMemoryRentalDateService } from '@modules/rentals/services/in-memory/InMemoryRentalDateService';
 import { IRentalDateService } from '@modules/rentals/services/IRentalDateService';
 import { InMemoryDateProvider } from '@shared/container/providers/DateProvider/in-memory/InMemoryDateProvider';
+import { InMemoryTransactionProvider } from '@shared/container/providers/TransactionProvider/in-memory/InMemoryTransactionProvider';
+import { ITransactionProvider } from '@shared/container/providers/TransactionProvider/models/ITransactionProvider';
 import { AppError } from '@shared/errors/AppError';
 
 import { UpdateRentalUseCase } from './UpdateRentalUseCase';
@@ -22,6 +24,7 @@ describe('UpdateRentalUseCase', () => {
   let inMemoryRentalRepository: InMemoryRentalRepository;
   let inMemoryDateProvider: InMemoryDateProvider;
   let inMemoryRentalDateService: IRentalDateService;
+  let inMemoryTransactionProvider: ITransactionProvider;
   let updateRentalUseCase: UpdateRentalUseCase;
   let category: Category;
   let specification: Specification;
@@ -35,11 +38,13 @@ describe('UpdateRentalUseCase', () => {
     inMemoryRentalRepository = new InMemoryRentalRepository();
     inMemoryDateProvider = new InMemoryDateProvider();
     inMemoryRentalDateService = new InMemoryRentalDateService();
+    inMemoryTransactionProvider = new InMemoryTransactionProvider();
+
     updateRentalUseCase = new UpdateRentalUseCase(
       inMemoryRentalRepository,
       inMemoryCarRepository,
-      inMemoryDateProvider,
-      inMemoryRentalDateService
+      inMemoryRentalDateService,
+      inMemoryTransactionProvider
     );
 
     category = await inMemoryCategoryRepository.create({

@@ -187,5 +187,5 @@ export default {
 
   // Whether to use watchman for file crawling
   // watchman: true,
-  setupFiles: ['dotenv/config'],
+  setupFiles: ['dotenv/config', '<rootDir>/jest.setup.ts'],
 };

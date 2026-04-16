@@ -1,5 +1,4 @@
 import { inject, injectable } from 'tsyringe';
-import { getConnection } from 'typeorm';
 
 import { CarStatus } from '@modules/cars/enums/carStatus';
 import { ICarRepository } from '@modules/cars/repositories/ICarRepository';
@@ -7,22 +6,20 @@ import { RentalStatus } from '@modules/rentals/enums/rentalStatus';
 import { Rental } from '@modules/rentals/infra/typeorm/entities/Rental';
 import { IRentalRepository } from '@modules/rentals/repositories/IRentalRepository';
 import { IRentalDateService } from '@modules/rentals/services/IRentalDateService';
-import { IDateProvider } from '@shared/container/providers/DateProvider/models/IDateProvider';
+import { ITransactionProvider } from '@shared/container/providers/TransactionProvider/models/ITransactionProvider';
 import { AppError } from '@shared/errors/AppError';
 
 @injectable()
 export class UpdateRentalUseCase {
-  private MINIMUM_HOURS = 24;
-
   constructor(
     @inject('RentalRepository')
     private rentalRepository: IRentalRepository,
     @inject('CarRepository')
     private carRepository: ICarRepository,
-    @inject('DateProvider')
-    private dateProvider: IDateProvider,
     @inject('RentalDateService')
-    private rentalDateService: IRentalDateService
+    private rentalDateService: IRentalDateService,
+    @inject('TransactionProvider')
+    private transactionProvider: ITransactionProvider
   ) {}
 
   async execute(data: Partial<Rental>): Promise<Rental> {
@@ -40,77 +37,71 @@ export class UpdateRentalUseCase {
       );
     }
 
-    return getConnection().transaction(async (transactionalEntityManager) => {
-      if (startDate || expectedReturnDate) {
-        const targetStartDate = startDate || rental.startDate;
-        const targetReturnDate =
-          expectedReturnDate || rental.expectedReturnDate;
+    return this.transactionProvider.transaction(
+      async (transactionalEntityManager) => {
+        if (startDate || expectedReturnDate) {
+          const targetStartDate = startDate || rental.startDate;
+          const targetReturnDate =
+            expectedReturnDate || rental.expectedReturnDate;
 
-        if (startDate) {
           this.rentalDateService.validateStartDate(targetStartDate);
+          this.rentalDateService.validateRentalHours(targetStartDate);
+          this.rentalDateService.validateRentalHours(targetReturnDate);
+          this.rentalDateService.validateRentalDuration(
+            targetStartDate,
+            targetReturnDate
+          );
+
+          rental.total = this.rentalDateService.calculateTotal(
+            rental.car,
+            targetStartDate,
+            targetReturnDate
+          );
+
+          rental.startDate = targetStartDate;
+          rental.expectedReturnDate = targetReturnDate;
         }
 
-        this.rentalDateService.validateRentalHours(targetStartDate);
-        this.rentalDateService.validateRentalHours(targetReturnDate);
+        if (carId && rental.carId !== carId) {
+          const car = await this.carRepository.findById(carId);
 
-        const rentalDurationInHours = this.dateProvider.compareInHours(
-          targetStartDate,
-          targetReturnDate
-        );
+          if (!car) {
+            throw new AppError('Car not found', 404);
+          }
 
-        if (rentalDurationInHours < this.MINIMUM_HOURS) {
-          throw new AppError('Invalid return time!', 422);
+          if (!car.status.includes(CarStatus.Available)) {
+            throw new AppError('This car is not available', 422);
+          }
+
+          const currentCar = await this.carRepository.findById(rental.carId);
+
+          if (currentCar) {
+            currentCar.status = CarStatus.Available;
+            await transactionalEntityManager.save(currentCar);
+          }
+
+          car.status = CarStatus.Reserved;
+          await transactionalEntityManager.save(car);
+
+          const total = this.rentalDateService.calculateTotal(
+            car,
+            rental.startDate,
+            rental.expectedReturnDate
+          );
+
+          Object.assign(rental, {
+            carId: car.id,
+            car,
+            total,
+          });
         }
-
-        rental.total = this.rentalDateService.calculateTotal(
-          rental.car,
-          targetStartDate,
-          targetReturnDate
-        );
-
-        rental.startDate = targetStartDate;
-        rental.expectedReturnDate = targetReturnDate;
-      }
-
-      if (carId && rental.carId !== carId) {
-        const car = await this.carRepository.findById(carId);
-
-        if (!car) {
-          throw new AppError('Car not found', 404);
-        }
-
-        if (!car.status.includes(CarStatus.Available)) {
-          throw new AppError('This car is not available', 422);
-        }
-
-        const currentCar = await this.carRepository.findById(rental.carId);
-
-        if (currentCar) {
-          currentCar.status = CarStatus.Available;
-          await transactionalEntityManager.save(currentCar);
-        }
-
-        car.status = CarStatus.Reserved;
-        await transactionalEntityManager.save(car);
-
-        const total = this.rentalDateService.calculateTotal(
-          car,
-          rental.startDate,
-          rental.expectedReturnDate
-        );
 
         Object.assign(rental, {
-          carId: car.id,
-          car,
-          total,
+          ...data,
         });
+
+        return transactionalEntityManager.save(rental);
       }
-
-      Object.assign(rental, {
-        ...data,
-      });
-
-      return transactionalEntityManager.save(rental);
-    });
+    );
   }
 }

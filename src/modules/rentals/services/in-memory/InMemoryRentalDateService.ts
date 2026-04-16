@@ -23,6 +23,15 @@ export class InMemoryRentalDateService implements IRentalDateService {
     }
   }
 
+  validateRentalDuration(startDate: Date, endDate: Date): void {
+    const ONE_DAY_IN_MILLISECONDS = 86_400_000;
+    const duration = endDate.getTime() - startDate.getTime();
+
+    if (duration < ONE_DAY_IN_MILLISECONDS) {
+      throw new AppError('Invalid return time!', 422);
+    }
+  }
+
   calculateTotal(car: Car, startDate: Date, expectedReturnDate: Date): number {
     const rentalDays = Math.ceil(
       (expectedReturnDate.getTime() - startDate.getTime()) /

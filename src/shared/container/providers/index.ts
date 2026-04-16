@@ -11,13 +11,14 @@ import { WinstonLoggerProvider } from './LoggerProvider/implementations/WintsonL
 import { ILoggerProvider } from './LoggerProvider/models/ILoggerProvider';
 import { EtherealMailProvider } from './MailProvider/implementations/EtherealMailProvider';
 import { InMemoryMailProvider } from './MailProvider/implementations/InMemoryMailProvider';
-
 import { IMailProvider } from './MailProvider/models/IMailProvider';
 import { HandlebarsMailTemplateProvider } from './MailTemplateProvider/implementations/HandlebarsMailTemplateProvider';
 import { IMailTemplateProvider } from './MailTemplateProvider/models/IMailTemplateProvider';
 import { LocalStorageProvider } from './StorageProvider/implementations/LocalStorageProvider';
 import { S3StorageProvider } from './StorageProvider/implementations/S3StorageProvider';
 import { IStorageProvider } from './StorageProvider/models/IStorageProvider';
+import { TypeORMTransactionProvider } from './TransactionProvider/implementations/TypeORMTransactionProvider';
+import { ITransactionProvider } from './TransactionProvider/models/ITransactionProvider';
 
 dotenv.config();
 
@@ -55,4 +56,8 @@ container.registerSingleton<ICSVStreamParserProvider>(
 container.registerSingleton<IStorageProvider>(
   'StorageProvider',
   diskStorage[process.env.DISK]
+);
+container.registerSingleton<ITransactionProvider>(
+  'TransactionProvider',
+  TypeORMTransactionProvider
 );

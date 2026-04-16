@@ -333,7 +333,7 @@ describe('🛍️ Jornada do Locatário (RentFlow E2E)', () => {
           ? avatarField.split('/').pop()
           : avatarField;
 
-      const avatarPath = resolve(TMP_FOLDER, UploadFolder.AVATAR, fileName);
+      const avatarPath = resolve(TMP_FOLDER, UploadFolder.Avatar, fileName);
       expect(fs.existsSync(avatarPath)).toBe(true);
 
       // ✅ Validação RNF3: Nome do arquivo deve conter um hash (geralmente via Multer/Crypto)
@@ -359,7 +359,7 @@ describe('🛍️ Jornada do Locatário (RentFlow E2E)', () => {
           ? beforeField.split('/').pop()
           : beforeField;
 
-      const oldPath = resolve(TMP_FOLDER, UploadFolder.AVATAR, prevFileName);
+      const oldPath = resolve(TMP_FOLDER, UploadFolder.Avatar, prevFileName);
 
       // 2. Upload de um novo (usando outro arquivo para diferenciar)
       const updateResponse = await request(app)
@@ -385,7 +385,7 @@ describe('🛍️ Jornada do Locatário (RentFlow E2E)', () => {
           ? afterField.split('/').pop()
           : afterField;
 
-      const newPath = resolve(TMP_FOLDER, UploadFolder.AVATAR, newFileName);
+      const newPath = resolve(TMP_FOLDER, UploadFolder.Avatar, newFileName);
       expect(fs.existsSync(newPath)).toBe(true);
     });
 

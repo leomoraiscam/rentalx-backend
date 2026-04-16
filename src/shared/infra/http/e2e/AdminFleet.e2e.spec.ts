@@ -7,7 +7,6 @@ import { v4 as uuidV4 } from 'uuid';
 import { TMP_FOLDER } from '@config/upload';
 import { UploadFolder } from '@shared/common/enums/uploadFolder';
 import app from '@shared/infra/http/appTest';
-
 import createConnection from '@shared/infra/typeorm';
 
 let connection: Connection;
@@ -432,8 +431,8 @@ describe('🚗 Jornada da Frota (AdminFleet E2E)', () => {
       expect(response.status).toBe(404);
 
       // Verificar se não há arquivos no storage (rollback manual no UseCase ou automático no Multer)
-      const filesInDir = fs.readdirSync(resolve(TMP_FOLDER, UploadFolder.CARS));
-      // Se houvesse arquivos órfãos, eles estariam aqui. 
+      const filesInDir = fs.readdirSync(resolve(TMP_FOLDER, UploadFolder.Cars));
+      // Se houvesse arquivos órfãos, eles estariam aqui.
       // Nota: Este teste assume que o diretório pode conter arquivos de outros testes bem-sucedidos.
       // Uma validação melhor seria contar antes e depois, mas o isolamento do AfterAll limpa tudo.
       expect(filesInDir.length).toBeGreaterThanOrEqual(0);
